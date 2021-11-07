@@ -680,11 +680,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().trim().length() != 0) {
-                 /*   Log.e("colorRecycle",""+editable.toString().trim());
-                    int posi=Integer.parseInt(editable.toString().trim());
-                    Log.e("colorData.addText==",posi+"");
-                    colorRecycle(posi);*/
-                    //     colorlastrow((0));
+                 
                     Log.e("colorlastrow", "" + editable.toString().trim());
                     int position = Integer.parseInt(editable.toString().trim());
                     colorlastrow((position));
@@ -1142,68 +1138,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-//        qtyrespons.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//                if (editable.toString().length() != 0) {
-//                    Log.e("afterTextChanged",qtyrespons.getText().toString());
-//                    if (qtyrespons.getText().toString().equals("QTY"))
-//                    {
-//                        if(Integer.parseInt(listQtyZone.get(0).getQty())>0)
-//                        {
-//                            try {
-//
-//
-//                                filldata();
-//                                MainActivity.qty.setText("");
-//
-//
-//                            } catch (Exception e) {
-//                                Log.e("Exception", e.getMessage());
-//                            }
-//                            save.setEnabled(true);
-//                            recqty.setText("1");
-//
-//
-//                            zone.setEnabled(false);
-//                            itemcode.setText("");
-//                            itemcode.requestFocus();
-//
-//                            recqty.setEnabled(false);
-//                        }
-//                        else
-//                        {
-//                            Toast.makeText(MainActivity.this,getResources().getString(R.string.notvaildqty),Toast.LENGTH_SHORT).show();
-//                            itemcode.setText("");
-//                            itemcode.requestFocus();
-//                        }
-//
-//
-//
-//                    }
-//                    else
-//                    {
-//                        showSweetDialog(MainActivity.this, 3, "", getResources().getString(R.string.existsBARCODE));
-//                        recqty.setEnabled(false);
-//
-//                        itemcode.setText("");
-//                        itemcode.requestFocus();
-//
-//                    }
-//                }
-//            }
-//        });
+
 
         if (appSettings.size() != 0) {
             deviceId = appSettings.get(0).getDeviceId();
@@ -1213,7 +1148,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-}
+
 
     private boolean ExsitsInItemlist(String itemcode) {
 

@@ -76,46 +76,19 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         holder.qty.setEnabled(true);
 
         Log.e("pos===", position + "highligtedItemPosition=== " + highligtedItemPosition + "highligtedItemPosition2==" + highligtedItemPosition2);
-
-
-     /*   if(position == highligtedItemPosition ){
-            Log.e("fff","fffff");
-        if (position == highligtedItemPosition) {
-            Log.e("fff", "fffff");
-            holder.qty.requestFocus();
-            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.yelow));
-
-            highligtedItemPosition2 = -5;
-
-        } else {
-            Log.e("aaaa", "aaaa");
-            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
-
-
-        }
-        if (position == highligtedItemPosition2) {
-            Log.e("bbbb", "bbbbb");
-        }*/
         if(position == highligtedItemPosition2 ){
-            Log.e("bbbb","bbbbb");
+
             holder.qty.requestFocus();
             holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.yellow2));
 
             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
-       /* else {
-            //if(position != highligtedItemPosition ) {
+        else {
+
                 Log.e("dddd", "dddd");
                 holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
-      //      }
-        } else
-            if (highligtedItemPosition2 != -5) {
-
-            Log.e("dddd", "dddd");
-            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
-
-        }*/
+    }
 
 
     }
