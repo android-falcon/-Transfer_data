@@ -680,7 +680,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().trim().length() != 0) {
-                 
+
                     Log.e("colorlastrow", "" + editable.toString().trim());
                     int position = Integer.parseInt(editable.toString().trim());
                     colorlastrow((position));
@@ -813,43 +813,8 @@ public class MainActivity extends AppCompatActivity {
                                 itemcode.setText("");
                             }
 
+                        }
 
-                            if (ExistsInLocallist(replacementModel)) {
-                                int sum = Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
-                                replacementlist.get(position).setRecQty(sum + "");
-                                my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(), replacementlist.get(position).getRecQty(), replacementlist.get(position).getTransNumber());
-
-                                Log.e("hereposition===", position + "");
-                                colorlastrow.setText(position + "");
-                                //  colorData.setText(position+"");
-
-                                fillAdapter();
-                                itemcode.setText("");
-                                Log.e("case1", "case1");
-                                save.setEnabled(true);
-                            }
-//                        else if (replacementModel1 != null) {
-//                            Log.e(" Case2 ", "Exists in replacement table but not in local list");
-//
-//                            if ((Integer.parseInt(replacementModel1.getAvailableQty())) > 0) {
-//                                replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(replacementModel1.getAvailableQty()) - 1));
-//                                replacementModel1.setAvailableQty(String.valueOf(Integer.parseInt(replacementModel1.getAvailableQty()) - 1));
-//                                replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
-//                                replacementModel.setRecQty("1");
-//                                replacementlist.add(replacementModel);
-//                                SaveRow(replacementModel);
-//                                fillAdapter();
-////                                Log.e("case3", "case3");
-//                                save.setEnabled(true);
-//
-//                                fromSpinner.setEnabled(false);
-//                                toSpinner.setEnabled(false);
-//                            } else {
-//                                showSweetDialog(MainActivity.this, 3, getResources().getString(R.string.no_enough_amount), "");
-//                            }
-//
-//
-//                        }
                             else {
                                 if (ExsitsInItemlist(itemcode.getText().toString())) {
 
@@ -907,7 +872,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
-            }
+
         });
 
 
