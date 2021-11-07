@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:gravity="center">
+
+    <TableRow
+        android:id="@+id/bodyRowParent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="2dp"
+        android:background="@color/notPostedBackground"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+
+        <TextView
+            android:id="@+id/tvTransNo"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/TransferNo"
+            android:textColor="@color/dark_blue_3"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_margin="10dp"-->
+        <!--                android:visibility="visible"-->
+        <!--                android:gravity="center"-->
+        <!--                android:textSize="12sp"-->
+        <!--                android:textStyle="bold"-->
+        <!--                -->
+        <!--                />-->
+
+
+        <TextView
+            android:id="@+id/tvFromStore"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="17dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/fromStore"
+            android:textColor="@color/dark_blue_3"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/tvToStore"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="25dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/toStore"
+            android:textColor="@color/dark_blue_3"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvItemName"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/Itemname"
+            android:textColor="@color/dark_blue_3"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvItemCode"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/itemCode"
+            android:textColor="@color/dark_blue_3"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!--            <TextView-->
+        <!--                android:layout_width="2dp"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_margin="10dp"-->
+        <!--                android:visibility="visible"-->
+        <!--                android:gravity="center"-->
+        <!--                android:textSize="12sp"-->
+        <!--                android:textStyle="bold"-->
+        <!--                />-->
+
+
+        <TextView
+            android:id="@+id/tvQty"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/Qty"
+            android:textColor="@color/dark_blue_3"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+    </TableRow>
+
+</LinearLayout>
