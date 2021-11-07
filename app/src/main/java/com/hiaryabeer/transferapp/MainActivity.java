@@ -1,5 +1,6 @@
 package com.hiaryabeer.transferapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -18,6 +19,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -128,7 +131,7 @@ public static int saveflage;
     public   static int highligtedItemPosition=-1;
     public   static int highligtedItemPosition2=-1;
 
-
+    private SweetAlertDialog dataNotSaved;
 
 
     @Override
@@ -179,23 +182,38 @@ public static int saveflage;
         }
 
 
+        dataNotSaved = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                .setContentText(getString(R.string.unsaved_data))
+                .setConfirmText(getResources().getString(R.string.save))
+                .setConfirmClickListener(sweetAlertDialog -> {
 
+                    exportAllData();
+                    maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
+                    if (maxVochNum != null) {
+                        Log.e(" maxVochNum", maxVochNum);
+                        max = Integer.parseInt(maxVochNum) + 1;
+                    }
+
+                });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String sss="";
-                if((AllItemDBlist.size())>0)
-                    opensearchDailog();
-                else
-                {
-                    AllItemDBlist.addAll(my_dataBase.itemDao().getAll());
-                    if((AllItemDBlist.size())>0)
-                    {
+                if (!isSaved()) {
+
+                    dataNotSaved.show();
+
+                } else {
+                    String sss = "";
+                    if ((AllItemDBlist.size()) > 0)
                         opensearchDailog();
-                    }
                     else {
-                        Toast.makeText(MainActivity.this,"No Data",Toast.LENGTH_LONG).show();
-                        itemcode.setText("");
+                        AllItemDBlist.addAll(my_dataBase.itemDao().getAll());
+                        if ((AllItemDBlist.size()) > 0) {
+                            opensearchDailog();
+                        } else {
+                            Toast.makeText(MainActivity.this, "No Data", Toast.LENGTH_LONG).show();
+                            itemcode.setText("");
+                        }
                     }
                 }
 
@@ -396,7 +414,18 @@ public static int saveflage;
 
 
     }
+    public boolean isSaved() {
 
+        boolean saved = true;
+        for (int i = 0; i < my_dataBase.replacementDao().getAllReplacements(String.valueOf(max)).size(); i++) {
+            if (my_dataBase.replacementDao().getAllReplacements(String.valueOf(max)).get(i).getIsPosted().equals("0")) {
+                saved = false;
+                break;
+            }
+
+        }
+        return saved;
+    }
     private void opensearchDailog() {
         AllItemstest.clear();
         dialog1 = new Dialog(MainActivity.this);
@@ -780,84 +809,136 @@ public static int saveflage;
                 if (editable.toString().length() != 0) {
 
                     {
+
                         From = fromSpinner.getSelectedItem().toString();
                         To = toSpinner.getSelectedItem().toString();
-                        FromNo=From.substring(0,From.indexOf(" "));
-                        ToNo=To.substring(0,To.indexOf(" "));
+                        FromNo = From.substring(0, From.indexOf(" "));
+                        ToNo = To.substring(0, To.indexOf(" "));
 
-                        ReplacementModel replacementModel=new ReplacementModel();
+                        ReplacementModel replacementModel = new ReplacementModel();
 
-
-                        replacementModel.setTransNumber(max+"");
+                        replacementModel.setTransNumber(max + "");
                         replacementModel.setFromName(From);
                         replacementModel.setIsPosted("0");
                         replacementModel.setToName(To);
-                        replacementModel.setFrom( FromNo);
+                        replacementModel.setFrom(FromNo);
                         replacementModel.setDeviceId(deviceId);
-                        replacementModel.setTo( ToNo);
-                        replacementModel.setZone( "");
+                        replacementModel.setTo(ToNo);
+                        replacementModel.setZone("");
                         replacementModel.setReplacementDate(generalMethod.getCurentTimeDate(1));
                         replacementModel.setItemcode(itemcode.getText().toString());
 
-                        if(ExistsInLocallist( replacementModel)) {
-                            int sum=Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
-                            replacementlist.get(position).setRecQty(sum+"");
-                            my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(),replacementlist.get(position).getRecQty(),replacementlist.get(position).getTransNumber());
+//                        ReplacementModel replacementModel1 = null;
+//                        List<ReplacementModel> replacementModels1 = my_dataBase.replacementDao().isItemExist(itemcode.getText().toString());
+//                        if (replacementModels1.size() != 0) {
+//                            replacementModel1 = replacementModels1.get(replacementModels1.size() - 1);
+//                        }
 
-                            Log.e("hereposition===",position+"");
+                        if (ExistsInLocallist(replacementModel)) {
 
-                            colorData.setText(position+"");
+                            itemcode.setError(null);
 
-                       fillAdapter();
-                       itemcode.setText("");
-                            Log.e("case1","case1");
-                            save.setEnabled(true);
-                        }
-                     else
-                        {
-//                            ReplacementModel replacementModel1 = my_dataBase.replacementDao().getReplacement(itemcode.getText().toString());
-//                            if (replacementModel1 != null)
-//                            {
-//                                int sum=Integer.parseInt(replacementModel1.getRecQty())+1;
-//                                replacementModel1.setRecQty(sum+"" );
-//                                my_dataBase.replacementDao().updateQTY(itemcode.getText().toString(), replacementModel1.getRecQty());
-//                            replacementlist.add(replacementModel1);
-//                            fillAdapter();
-//                                Log.e("case2","case2");
-//                                save.setEnabled(true);
-//                            }
-
-//                            else
-//                            {
-                             if(ExsitsInItemlist(itemcode.getText().toString()))
-                             {
-
-
-                                 replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
-                                 replacementModel.setRecQty("1");
-                                replacementlist.add(0,replacementModel);
-
-                                 SaveRow( replacementModel);
+                            Log.e(" Case1 ", "Exists in Local List:");
+                            if ((Integer.parseInt(replacementlist.get(position).getAvailableQty())) > 0) {
+                                int sum = Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
+                                replacementlist.get(position).setAvailableQty(String.valueOf((Integer.parseInt(replacementlist.get(position).getAvailableQty())) - 1));
+                                replacementlist.get(position).setRecQty(sum + "");
+                                my_dataBase.replacementDao().updateQTY(max + "", replacementlist.get(position).getItemcode(), replacementlist.get(position).getRecQty());
+                                my_dataBase.replacementDao().updateAvailableQTY(max + "", replacementlist.get(position).getItemcode(), replacementlist.get(position).getAvailableQty());
                                 fillAdapter();
-                                 Log.e("case3","case3");
-                                 save.setEnabled(true);
+                                Log.e("case1", "case1");
+                                save.setEnabled(true);
+                                replacementModel.setAvailableQty(String.valueOf((Integer.parseInt(replacementlist.get(position).getAvailableQty())) - 1));
 
 
-                             }
-                             else
-                                 itemcode.setError("InValid");
+                            } else {
+                                showSweetDialog(MainActivity.this, 3, getResources().getString(R.string.no_enough_amount), "");
                                 itemcode.setText("");
-                                Log.e("case4","case4");
+                            }
+
+
+
+                        }
+//                        else if (replacementModel1 != null) {
+//                            Log.e(" Case2 ", "Exists in replacement table but not in local list");
+//
+//                            if ((Integer.parseInt(replacementModel1.getAvailableQty())) > 0) {
+//                                replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(replacementModel1.getAvailableQty()) - 1));
+//                                replacementModel1.setAvailableQty(String.valueOf(Integer.parseInt(replacementModel1.getAvailableQty()) - 1));
+//                                replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+//                                replacementModel.setRecQty("1");
+//                                replacementlist.add(replacementModel);
+//                                SaveRow(replacementModel);
+//                                fillAdapter();
+////                                Log.e("case3", "case3");
+//                                save.setEnabled(true);
+//
+//                                fromSpinner.setEnabled(false);
+//                                toSpinner.setEnabled(false);
+//                            } else {
+//                                showSweetDialog(MainActivity.this, 3, getResources().getString(R.string.no_enough_amount), "");
 //                            }
+//
+//
+//                        }
+                        else {
+                            if (ExsitsInItemlist(itemcode.getText().toString())) {
+
+                                itemcode.setError(null);
+                                Log.e(" Case3 ", "Not in local but in ItemList");
+
+                                importData.getItemQty(editable.toString(), FromNo, new ImportData.GetItemQtyCallBack() {
+                                    @Override
+                                    public void onResponse(String qty) {
+                                        Log.e("QTY Response ", qty);
+                                        replacementModel.setAvailableQty(qty);
+
+                                        if ((Integer.parseInt(qty)) > 0) {
+                                            replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(qty) - 1));
+                                            replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+                                            replacementModel.setRecQty("1");
+                                            replacementlist.add(replacementModel);
+                                            SaveRow(replacementModel);
+                                            fillAdapter();
+                                            Log.e("case3", "case3");
+                                            save.setEnabled(true);
+
+                                            fromSpinner.setEnabled(false);
+                                            toSpinner.setEnabled(false);
+
+
+                                        } else {
+                                            showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
+                                            itemcode.setText("");
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        showSweetDialog(MainActivity.this, 3, "Error!",getString(R.string.checkConnection));
+                                        itemcode.setText("");
+                                    }
+                                });
+
+
+                            } else {
+                                Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
+                                itemcode.setError("InValid Code");
+                                itemcode.setText("");
+                            }
+
+//                            Log.e("case4", "case4");
                         }
 
-fromSpinner.setEnabled(false);
-                     toSpinner.setEnabled(false);
                     }
 
-
                 }
+
+
             }
+
         });
 
 
@@ -962,6 +1043,9 @@ fromSpinner.setEnabled(false);
                             Log.e("max+++",max+"");
                             Log.e("TransferNo===",TransferNo+"");
                             my_dataBase.replacementDao().updatepostState(minVo);
+                            if (dataNotSaved.isShowing()) {
+                                dataNotSaved.dismissWithAnimation();
+                            }
                            exportAllData();
 
                        //   if(MaxVo.equals(TransferNo))  showSweetDialog(MainActivity.this, 1, getResources().getString(R.string.savedSuccsesfule), "");
@@ -1423,43 +1507,43 @@ fromSpinner.setEnabled(false);
         return  false;
 
     }
-    private String getusernum() {
-        return "";
-    }
-    private void filldata() {
-
-        Qty = recqty.getText().toString().trim();
-        if (Zone.toString().trim().equals("")) zone.setError("required");
-
-        else if (Itemcode.toString().trim().equals("")) itemcode.setError("required");
-
-
-        else if (Qty.toString().trim().equals(""))
-            recqty.setError("required");
-        else {
-
-
-            replacement.setRecQty(Qty);
-            replacement.setUserNO(UserNo);
-            Log.e("replacement","1=="+qty.getText().toString());
-            replacement.setQty( listQtyZone.get(0).getQty());
-            Log.e("replacement","2=="+replacement.getQty());
-            replacement.setIsPosted("0");
-            replacement.setUserNO(getusernum());
-            replacement.setDeviceId(deviceId);
-            replacement.setReplacementDate(generalMethod.getCurentTimeDate(1) + "");
-            Log.e("else","AddInCaseDuplicates");
-            Log.e("replacementlist.size", replacementlist.size()+"");
-            replacementlist.add(replacement);
-            Log.e("replacementlist.size", replacementlist.size()+""+replacementlist.get(0).getFrom());
-            fillAdapter();
-            SaveRow(replacement);
-        }
-
-
-
-
-    }
+//    private String getusernum() {
+//        return "";
+//    }
+//    private void filldata() {
+//
+//        Qty = recqty.getText().toString().trim();
+//        if (Zone.toString().trim().equals("")) zone.setError("required");
+//
+//        else if (Itemcode.toString().trim().equals("")) itemcode.setError("required");
+//
+//
+//        else if (Qty.toString().trim().equals(""))
+//            recqty.setError("required");
+//        else {
+//
+//
+//            replacement.setRecQty(Qty);
+//            replacement.setUserNO(UserNo);
+//            Log.e("replacement","1=="+qty.getText().toString());
+//            replacement.setQty( listQtyZone.get(0).getQty());
+//            Log.e("replacement","2=="+replacement.getQty());
+//            replacement.setIsPosted("0");
+//            replacement.setUserNO(getusernum());
+//            replacement.setDeviceId(deviceId);
+//            replacement.setReplacementDate(generalMethod.getCurentTimeDate(1) + "");
+//            Log.e("else","AddInCaseDuplicates");
+//            Log.e("replacementlist.size", replacementlist.size()+"");
+//            replacementlist.add(replacement);
+//            Log.e("replacementlist.size", replacementlist.size()+""+replacementlist.get(0).getFrom());
+//            fillAdapter();
+//            SaveRow(replacement);
+//        }
+//
+//
+//
+//
+//    }
 
     private void SaveRow(ReplacementModel replacement) {
         Log.e("SaveRow","replacement"+replacement.getDeviceId());
@@ -1558,6 +1642,28 @@ fromSpinner.setEnabled(false);
     public static void updateAdpapter() {
         adapter.notifyDataSetChanged();
     }
+
+    ///////////////B
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.goToReports: {
+                Intent i = new Intent(MainActivity.this, TransferReports.class);
+                startActivity(i);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //////////
 
     public  boolean checkQtyValidate(String recqty) {
         Log.e("checkQtyValidate","heckQtyValidate");

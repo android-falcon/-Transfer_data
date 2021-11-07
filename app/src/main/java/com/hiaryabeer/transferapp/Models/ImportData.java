@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.hiaryabeer.transferapp.MainActivity;
 import com.hiaryabeer.transferapp.RoomAllData;
 import com.hiaryabeer.transferapp.Store;
@@ -58,6 +61,42 @@ public class ImportData {
     public static   SweetAlertDialog pdRepla,pdRepla2;
     public JSONArray jsonArrayPo;
     public JSONObject stringNoObject;
+
+
+    /******** Bara' *********/
+
+    public interface GetItemQtyCallBack {
+        void onResponse (String qty);
+        void onError (String error);
+    }
+
+    public void getItemQty(String itemCode, String storeNo, GetItemQtyCallBack getItemQtyCallBack) {
+//        RequestQueue queue = RequestQueueSingleton.getInstance(context.getApplicationContext()).
+//                getRequestQueue();
+
+        String myQty = "";
+
+        String url = "http://"+ ipAddress.trim()+ "/GetItemQtyInStore?CONO=" + CONO.trim() + "&strno="+ storeNo + "&ITEMCODE=" + itemCode;
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    JSONObject object = response.getJSONObject(0);
+                    getItemQtyCallBack.onResponse(object.getString("QTY"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getItemQtyCallBack.onError(error.getMessage());
+            }
+        });
+        RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(arrayRequest);
+    }
+
+    /*************/
 
     public ImportData(Context context) {
         this.context = context;

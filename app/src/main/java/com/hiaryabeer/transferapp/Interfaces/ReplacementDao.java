@@ -42,8 +42,10 @@ public interface ReplacementDao {
     @Query("DELETE FROM REPLACEMENT_TABLE WHERE ITEMCODE= :barcode AND FROMSTORE= :FrSt AND TOSTORE= :ToSt AND ISPOSTED='0' AND TransNumber= :TNo")
     int  deleteReplacement(String barcode, String FrSt, String ToSt,String TNo);
 
-
-
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE TransNumber != :transNo")
+    List<ReplacementModel> getAllReplacements(String transNo);
+    @Query("UPDATE REPLACEMENT_TABLE SET availableQty = :qty WHERE ITEMCODE= :barcode AND TransNumber = :transNo")
+    int updateAvailableQTY(String transNo, String barcode, String qty);
 
     @Query("SELECT * FROM REPLACEMENT_TABLE WHERE ITEMCODE = :s AND ISPOSTED='0'")
     ReplacementModel getReplacement(String s);
@@ -75,5 +77,9 @@ public interface ReplacementDao {
 
     @Query("UPDATE REPLACEMENT_TABLE SET ISPOSTED= '1' WHERE TransNumber= :TransNumber ")
     int   updatepostState(String TransNumber);
+
+    /*** Get Replacements By Date ****/
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date")
+    List<ReplacementModel> getReplacementsByDate(String date);
 
 }

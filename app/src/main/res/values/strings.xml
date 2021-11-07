@@ -12,7 +12,7 @@
     <string name="open_drawer">open drawer</string>
     <string name="close_drawer">close drawer</string>
     <string name="settings_ip">Settings Ip</string>
-    <string name="server_ip">Server ip</string>
+    <string name="server_ip">Server Ip</string>
     <string name="IP_PORT">IP PORT</string>
     <string name="CONO">CoNo</string>
     <string name="year">Year</string>
@@ -38,7 +38,7 @@
     <string name="notvaildqty">There is no enough quantity </string>
     <string name="notvaildqty2">There is no enough quantity in </string>
     <string name="reqired_filled">*Reqired</string>
-    <string name="savedSuccsesfule">Saved Succsesfule</string>
+    <string name="savedSuccsesfule">Saved Successfully</string>
 
     <string name="msg3">all data already posted</string>
     <string name="barcodeexists">invalid itemcode</string>
@@ -138,5 +138,31 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="Reports">Reports</string>
     <string name="msg">To Transfer to other zones</string>
 
-    <string name="trsnferNo">trsnfer No</string>
+    <string name="trsnferNo">Transfer No</string>
+    <string name="transactionDate">Transaction Date:</string>
+    <string name="previewBtn">Preview</string>
+    <string name="SearchByItemName">Search By Name</string>
+    <string name="SearchByItemNo">Search By Item No.</string>
+    <string name="TransferNo">Transfer No.</string>
+    <string name="fromStore">From Store</string>
+    <string name="toStore">To Store</string>
+    <string name="chooseDate">Choose Date</string>
+
+    <string name="TransfersReportTitle">Transfers Report</string>
+    <string name="AddTransferTitle">Add Transfer</string>
+    <string name="password">Password</string>
+    <string name="user_name">User Name</string>
+    <string name="device_id">Device Id</string>
+    <string name="posted_items">Posted Items</string>
+    <string name="not_posted_items">Unposted Items</string>
+    <string name="no_enough_amount">There is not enough quantity of this item</string>
+    <string name="unsaved_data">There is previous data to be saved, export it to add a new transaction</string>
+    <string name="checkConnection">Check Connection</string>
+
+    <string name="notEnoughQuantity">Invalid Quantity\nMaximum quantity available for this item is: </string>
+    <string name="search">Search</string>
+    <string name="error">Error!</string>
+    <string name="searchByToStore"> Search By To Store:</string>
+    <string name="allStores">All Stores</string>
+    <string name="Empty">No Data</string>
 </resources>

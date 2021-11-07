@@ -19,15 +19,15 @@
     <string name="login_failed">فشل تسجيل الدخول</string>
     <string name="save">حفظ</string>
     <string name="year">السنة</string>
-    <string name="server_ip">server_ip</string>
-    <string name="settings_ip">settings_ip</string>
+    <string name="server_ip">رقم السيرفر</string>
+    <string name="settings_ip">الإعدادات</string>
     <string name="IP_PORT">IP_PORT</string>
     <string name="Items">عدد المواد</string>
     <string name="ZoneCode">رقم المنطقة</string>
     <string name="setting">الإعدادات</string>
     <string name="signout">تسجيل خروج</string>
     <string name="CONO">رقم الشركة</string>
-    <string name="action_sign_in">تسجيل دخول</string>
+    <string name="action_sign_in">تسجيل الدخول</string>
     <string name="invalid_username">اسم مستخدم غير صالح</string>
     <string name="invalid_password">رقم سري غير صالح</string>
     <string name="enter_password">ادخل كلمة المرور</string>
@@ -56,7 +56,7 @@
     <string name="barcodeexists">رقم الماده غير صحيح</string>
     <string name="confirm_title">تأكيد</string>
     <string name="messageExit">هل تريد الخروج؟</string>
-    <string name="ok">نعم</string>
+    <string name="ok">حسناً</string>
     <string name="required">حقل فارغ</string>
     <string name="warning">تحذير</string>
     <string name="fillYourList">الجدول فارغ!!</string>
@@ -123,4 +123,38 @@
     <string name="msg">للتحويل إلى الزونات الأخرى</string>
     <string name="notvaildqty2">  لا توجد كمية كافية في </string>
     <string name="trsnferNo">رقم السند </string>
+
+    <string name="transactionDate">اختار التاريخ</string>
+    <string name="previewBtn">عرض النتائج</string>
+    <string name="SearchByItemName">اكتب اسم المادة</string>
+    <string name="SearchByItemNo">اكتب رقم المادة</string>
+    <string name="TransferNo">رقم السند</string>
+    <string name="fromStore">المستودع المُصدِّر</string>
+    <string name="toStore">المستودع المنقول اليه</string>
+    <string name="chooseDate">اختار التاريخ</string>
+
+    <string name="TransfersReportTitle">تقرير العمليات</string>
+    <string name="AddTransferTitle">ادخال حركات</string>
+
+    <string name="delete">هل أنت متأكد انك تريد حذف هذا المُدخَل؟</string>
+
+    <string name="existsBARCODE">يوجد خطأ في الباركود يرجى اعادة المحاولة</string>
+
+    <string name="Login">تسجيل الدخول</string>
+    <string name="password">كلمة السر</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="device_id">رقم الجهاز</string>
+
+    <string name="title_activity_login">تسجيل الدخول</string>
+    <string name="posted_items"> العناصر المُثَبتة</string>
+    <string name="not_posted_items"> العناصر غير المُثَبتة</string>
+    <string name="no_enough_amount">لا يوجد كمية كافية من هذا العنصر</string>
+    <string name="unsaved_data">يوجد بيانات سابقة لم يتم حفظها، يرجى تصديرها لاضافة سند جديد</string>
+    <string name="checkConnection">يرجى التحقق من الاتصال</string>
+    <string name="notEnoughQuantity">كمية غير متوفرة\n أقصى كمية يمكن ادخالها هي: </string>
+    <string name="search">بحث</string>
+    <string name="error">يوجد خطأ!</string>
+    <string name="searchByToStore">اسم المستودع المنقول له:</string>
+    <string name="allStores">جميع المستودعات</string>
+    <string name="Empty">لا يوجد بيانات</string>
 </resources>

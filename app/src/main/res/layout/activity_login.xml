@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    tools:context=".Login">
+    tools:context=".Activities.Login">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
 
                 android:id="@+id/Version"
@@ -29,21 +30,15 @@
                 android:textColor="@color/white"
 
                 />
-            <TextView
 
+            <TextView
                 android:id="@+id/setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableEnd="@drawable/ic_baseline_settings_24"
-                android:drawableRight="@drawable/ic_baseline_settings_24"
-
-                />
-
+                app:drawableEndCompat="@drawable/ic_baseline_settings_24"
+                app:drawableRightCompat="@drawable/ic_baseline_settings_24" />
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>
@@ -54,10 +49,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginTop="2dp"
-        android:visibility="gone"
         android:layout_weight="7.5"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,20 +60,17 @@
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
             android:layout_weight="1"
-
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-
                 android:gravity="center"
                 android:text="@string/selectCompany"
-                android:textStyle="bold"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/companyName"
@@ -96,18 +88,14 @@
 
         <TextView
             android:id="@+id/selectedCompany"
-
-            android:textColor="@color/dark_blue_3"
-            android:background="@drawable/back_without_border"
-
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
+            android:layout_weight="1"
+            android:background="@drawable/back_without_border"
             android:gravity="center|bottom"
-            android:layout_weight="1" />
+            android:textColor="@color/dark_blue_3" />
 
     </LinearLayout>
-
 
 
     <RelativeLayout
@@ -116,67 +104,70 @@
         android:layout_marginLeft="62dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="62dp"
-        android:layout_weight="8.3"
+        android:layout_weight="7.5"
         android:background="@drawable/blue_border_rounded_cornwe">
         <!-- INPUT -->
         <EditText
             android:id="@+id/username_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            android:layout_toRightOf="@+id/username_icon"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@+id/username_icon"
             android:background="@android:color/transparent"
-
-            android:hint="UsernNme"
+            android:hint="@string/user_name"
             android:inputType="text"
             android:maxLines="1"
             android:padding="2dp"
-            android:text="6"
+            android:textAlignment="viewStart"
             android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="14sp" />
         <!-- ICON -->
         <ImageView
             android:id="@+id/username_icon"
-            android:layout_width="14.7dp"
-            android:layout_height="10.3dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="17dp"
-            app:srcCompat="@drawable/ic_person_black_24dp"
+            android:layout_marginStart="17dp"
+            app:srcCompat="@drawable/ic_person"
             tools:ignore="VectorDrawableCompat" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="62dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="62dp"
-        android:layout_weight="8.3"
+        android:layout_weight="7.5"
         android:background="@drawable/blue_border_rounded_cornwe">
         <!-- INPUT -->
         <EditText
             android:id="@+id/pass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/icon"
+            android:layout_marginStart="14dp"
+            android:layout_toEndOf="@+id/icon"
             android:background="@android:color/transparent"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:maxLength="10"
             android:maxLines="1"
             android:padding="2dp"
-            android:text="123"
+            android:textAlignment="viewStart"
             android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="14sp" />
         <!-- ICON -->
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="14.7dp"
-            android:layout_height="10.3dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="17dp"
-            app:srcCompat="@drawable/ic_baseline_vpn_key_24"
+            android:layout_marginStart="17dp"
+            app:srcCompat="@drawable/ic_key"
             tools:ignore="VectorDrawableCompat" />
     </RelativeLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -201,10 +192,8 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/loginbtn"
-
             android:gravity="top|center"
-
-            android:padding="2dp"
+            android:padding="10dp"
             android:text="@string/Login"
             android:textColor="#ffffff"
             android:textSize="16sp"

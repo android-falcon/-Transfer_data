@@ -33,12 +33,21 @@ public  class ReplacementModel {
     String IsPosted;
     @ColumnInfo(name = "REPLACEMENTDATE")
     String ReplacementDate;
-    @ColumnInfo(name = "QTY")
-    String Qty;
+
     @ColumnInfo(name = "ITEMNAME")
     String itemname;
     @ColumnInfo(name = "TransNumber")
     String transNumber;
+    @ColumnInfo(name = "availableQty")
+    String availableQty;
+    public String getAvailableQty() {
+        return availableQty;
+    }
+
+    public void setAvailableQty(String qty) {
+        availableQty = qty;
+    }
+
 
     public String getTransNumber() {
         return transNumber;
@@ -79,12 +88,12 @@ public  class ReplacementModel {
     @PrimaryKey(autoGenerate = true)
     int SERIALZONE;
 
-    public ReplacementModel(String from, String to, String zone, String itemcode, String qty) {
+    public ReplacementModel(String from, String to, String zone, String itemcode, String availableQty) {
         From = from;
         To = to;
         Zone = zone;
         Itemcode = itemcode;
-        Qty = qty;
+        this.availableQty = availableQty;
     }
     String ToName;
 
@@ -165,13 +174,7 @@ public  class ReplacementModel {
         Itemcode = itemcode;
     }
 
-    public String getQty() {
-        return Qty;
-    }
 
-    public void setQty(String qty) {
-        Qty = qty;
-    }
     public JSONObject getJSONObjectDelphi() {
         JSONObject obj = new JSONObject();
         try {

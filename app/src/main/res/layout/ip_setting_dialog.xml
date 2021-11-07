@@ -21,8 +21,6 @@
         android:layoutDirection="locale"
         android:orientation="horizontal"
         android:padding="5dp"
-
-
         android:textDirection="locale">
 
         <RelativeLayout
@@ -37,11 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
-
                 android:background="@drawable/background_container"
                 android:elevation="2dp"
                 android:gravity="center"
-
                 android:orientation="vertical"
                 android:padding="2dp">
 
@@ -49,12 +45,10 @@
                     android:id="@+id/action_settings_ip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-
                     android:layout_gravity="center_horizontal"
+                    android:gravity="center"
                     android:text="@string/settings_ip"
                     android:textColor="@color/colorblue_dark"
-
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -86,11 +80,9 @@
                         android:layout_marginBottom="1dp"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-
                         android:text="@string/server_ip"
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
 
                     <EditText
@@ -100,19 +92,20 @@
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
-                        android:maxLines="1"
-
                         android:background="@drawable/back_border_edit"
+                        android:maxLines="1"
                         android:textColor="@color/colorblue_dark"
                         android:textSize="13sp" />
+
                     <TextView
-                        android:layout_width="25dp"
-                        android:visibility="invisible"
-                        android:layout_height="30dp"
                         android:id="@+id/editip"
-                        android:background="@drawable/ic_baseline_edit_24"/>
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_baseline_edit_24"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -126,35 +119,31 @@
                         android:layout_marginBottom="1dp"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-
                         android:text="@string/CONO"
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/cono"
-
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
-                        android:maxLines="1"
                         android:background="@drawable/edittextofsetting"
-
                         android:inputType="number"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/colorblue_dark"
-
                         android:textSize="13sp" />
+
                     <TextView
                         android:layout_width="25dp"
                         android:layout_height="30dp"
-                       android:visibility="visible"
-                        />
+                        android:visibility="visible" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -168,40 +157,36 @@
                         android:layout_marginBottom="1dp"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-
                         android:text="@string/IP_PORT"
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/portSetting"
-
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
-                        android:maxLines="1"
                         android:background="@drawable/edittextofsetting"
-
                         android:inputType="number"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/colorblue_dark"
-
                         android:textSize="13sp" />
+
                     <TextView
                         android:layout_width="25dp"
                         android:layout_height="30dp"
-                        android:visibility="visible"
-                        />
+                        android:visibility="visible" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -211,11 +196,9 @@ android:visibility="gone"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-
                         android:text="@string/year"
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
 
                     <EditText
@@ -225,25 +208,24 @@ android:visibility="gone"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
-
-                        android:maxLines="1"
-
                         android:background="@drawable/edittextofsetting"
                         android:inputType="number"
+                        android:maxLines="1"
                         android:text=""
                         android:textColor="@color/colorblue_dark"
                         android:textSize="13sp" />
+
                     <TextView
                         android:layout_width="25dp"
                         android:layout_height="30dp"
-                        android:visibility="visible"
-                        />
+                        android:visibility="visible" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -254,27 +236,24 @@ android:visibility="gone"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Update Qty"
-
-
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
 
                     <CheckBox
                         android:id="@+id/qtycheck"
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="5" />
 
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -285,12 +264,10 @@ android:visibility="gone"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="User No"
-
-
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/usernumber"
                         android:layout_width="match_parent"
@@ -298,20 +275,20 @@ android:visibility="gone"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
-                        android:inputType="number"
-                        android:text=""
                         android:background="@drawable/edittextofsetting"
-                        android:textColor="@color/colorblue_dark"
+                        android:inputType="number"
                         android:maxLines="1"
+                        android:text=""
+                        android:textColor="@color/colorblue_dark"
                         android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="25dp"
                         android:layout_height="30dp"
-                        android:visibility="visible"
-                        />
+                        android:visibility="visible" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -326,12 +303,10 @@ android:visibility="gone"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
                         android:text="Device Id"
-
-
                         android:textColor="@color/colorblue_dark"
                         android:textSize="14sp"
-
                         android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/deviceId"
                         android:layout_width="match_parent"
@@ -339,31 +314,31 @@ android:visibility="gone"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="1dp"
                         android:layout_weight="1"
-                        android:inputType="text"
-                        android:text=""
                         android:background="@drawable/edittextofsetting"
-                        android:textColor="@color/colorblue_dark"
+                        android:inputType="text"
                         android:maxLines="1"
+                        android:text=""
+                        android:textColor="@color/colorblue_dark"
                         android:textSize="13sp" />
 
                     <TextView
                         android:layout_width="25dp"
                         android:layout_height="30dp"
-                        android:visibility="visible"
-                        />
+                        android:visibility="visible" />
 
                 </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content">
-    </LinearLayout>
+        android:gravity="center_horizontal" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -375,33 +350,34 @@ android:visibility="gone"
         <Button
             android:id="@+id/saveSetting"
             android:layout_width="match_parent"
-            android:layout_weight="2"
             android:layout_height="match_parent"
-            android:background="@drawable/done_button"
-            android:text="@string/save"
             android:layout_margin="2dp"
+            android:layout_weight="2"
+            android:background="@drawable/done_button"
             android:elevation="3dp"
+            android:text="@string/save"
             android:textColor="@color/dark_blue_3"
             android:textSize="14sp" />
+
         <Button
             android:id="@+id/importData"
             android:layout_width="match_parent"
-            android:layout_weight="4"
             android:layout_height="match_parent"
-            android:visibility="invisible"
-
-            android:textColor="@color/colorblue_dark"
             android:layout_margin="2dp"
-            android:textSize="14sp" />
+            android:layout_weight="4"
+            android:textColor="@color/colorblue_dark"
+            android:textSize="14sp"
+            android:visibility="invisible" />
+
         <Button
             android:id="@+id/cancelBtn"
             android:layout_width="match_parent"
-            android:layout_weight="2"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
+            android:layout_weight="2"
             android:background="@drawable/cancel_button"
-            android:text="@string/cancel"
             android:elevation="3dp"
+            android:text="@string/cancel"
             android:textColor="@color/red"
             android:textSize="14sp" />
 
