@@ -847,21 +847,20 @@ public static int saveflage;
                             }
 
 
+                            if (ExistsInLocallist(replacementModel)) {
+                                int sum = Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
+                                replacementlist.get(position).setRecQty(sum + "");
+                                my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(), replacementlist.get(position).getRecQty(), replacementlist.get(position).getTransNumber());
 
-                        if(ExistsInLocallist( replacementModel)) {
-                            int sum=Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
-                            replacementlist.get(position).setRecQty(sum+"");
-                            my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(),replacementlist.get(position).getRecQty(),replacementlist.get(position).getTransNumber());
+                                Log.e("hereposition===", position + "");
+                                colorlastrow.setText(position + "");
+                                //  colorData.setText(position+"");
 
-                            Log.e("hereposition===",position+"");
-                            colorlastrow.setText(position+"");
-                          //  colorData.setText(position+"");
-
-                       fillAdapter();
-                       itemcode.setText("");
-                            Log.e("case1","case1");
-                            save.setEnabled(true);
-                        }
+                                fillAdapter();
+                                itemcode.setText("");
+                                Log.e("case1", "case1");
+                                save.setEnabled(true);
+                            }
 //                        else if (replacementModel1 != null) {
 //                            Log.e(" Case2 ", "Exists in replacement table but not in local list");
 //
@@ -884,62 +883,63 @@ public static int saveflage;
 //
 //
 //                        }
-                        else {
-                            if (ExsitsInItemlist(itemcode.getText().toString())) {
+                            else {
+                                if (ExsitsInItemlist(itemcode.getText().toString())) {
 
-                                itemcode.setError(null);
-                                Log.e(" Case3 ", "Not in local but in ItemList");
+                                    itemcode.setError(null);
+                                    Log.e(" Case3 ", "Not in local but in ItemList");
 
-                                importData.getItemQty(editable.toString(), FromNo, new ImportData.GetItemQtyCallBack() {
-                                    @Override
-                                    public void onResponse(String qty) {
-                                        Log.e("QTY Response ", qty);
-                                        replacementModel.setAvailableQty(qty);
+                                    importData.getItemQty(editable.toString(), FromNo, new ImportData.GetItemQtyCallBack() {
+                                        @Override
+                                        public void onResponse(String qty) {
+                                            Log.e("QTY Response ", qty);
+                                            replacementModel.setAvailableQty(qty);
 
-                                        if ((Integer.parseInt(qty)) > 0) {
-                                            replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(qty) - 1));
-                                            replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
-                                            replacementModel.setRecQty("1");
-                                            replacementlist.add(replacementModel);
-                                            SaveRow(replacementModel);
-                                            fillAdapter();
-                                            Log.e("case3", "case3");
-                                            save.setEnabled(true);
+                                            if ((Integer.parseInt(qty)) > 0) {
+                                                replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(qty) - 1));
+                                                replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+                                                replacementModel.setRecQty("1");
+                                                replacementlist.add(replacementModel);
+                                                SaveRow(replacementModel);
+                                                fillAdapter();
+                                                Log.e("case3", "case3");
+                                                save.setEnabled(true);
 
-                                            fromSpinner.setEnabled(false);
-                                            toSpinner.setEnabled(false);
+                                                fromSpinner.setEnabled(false);
+                                                toSpinner.setEnabled(false);
 
 
-                                        } else {
-                                            showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
-                                            itemcode.setText("");
+                                            } else {
+                                                showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
+                                                itemcode.setText("");
+                                            }
+
+
                                         }
 
-
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-                                        showSweetDialog(MainActivity.this, 3, "Error!",getString(R.string.checkConnection));
-                                        itemcode.setText("");
-                                    }
-                                });
+                                        @Override
+                                        public void onError(String error) {
+                                            showSweetDialog(MainActivity.this, 3, "Error!", getString(R.string.checkConnection));
+                                            itemcode.setText("");
+                                        }
+                                    });
 
 
-                            } else {
-                                Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
-                                itemcode.setError("InValid Code");
-                                itemcode.setText("");
-                            }
+                                } else {
+                                    Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
+                                    itemcode.setError("InValid Code");
+                                    itemcode.setText("");
+                                }
 
 //                            Log.e("case4", "case4");
+                            }
+
                         }
 
                     }
 
+
                 }
-
-
             }
 
         });

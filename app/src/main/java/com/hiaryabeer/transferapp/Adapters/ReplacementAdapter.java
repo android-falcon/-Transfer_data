@@ -104,17 +104,18 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
-        else {
+       /* else {
             //if(position != highligtedItemPosition ) {
                 Log.e("dddd", "dddd");
                 holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
       //      }
-        } else if (highligtedItemPosition2 != -5) {
+        } else
+            if (highligtedItemPosition2 != -5) {
 
             Log.e("dddd", "dddd");
             holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
 
-        }
+        }*/
 
 
     }
