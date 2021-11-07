@@ -16,7 +16,7 @@ import com.hiaryabeer.transferapp.Interfaces.ZoneDao;
 import com.hiaryabeer.transferapp.Models.AllItems;
 
 
-@Database(entities =  {AllItems.class,ZoneModel.class, ReplacementModel.class, appSettings.class ,Store.class}, version = 8,exportSchema = false)
+@Database(entities =  {AllItems.class,ZoneModel.class, ReplacementModel.class, appSettings.class ,Store.class}, version = 9,exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private  static  RoomAllData database;
     public  static  String dataBaseName="DBRoomTransfer";

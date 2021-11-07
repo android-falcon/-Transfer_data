@@ -77,6 +77,7 @@ public class ImportData {
         String myQty = "";
 
         String url = "http://"+ ipAddress.trim()+ "/GetItemQtyInStore?CONO=" + CONO.trim() + "&strno="+ storeNo + "&ITEMCODE=" + itemCode;
+        Log.e(" url", url);
         JsonArrayRequest arrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
