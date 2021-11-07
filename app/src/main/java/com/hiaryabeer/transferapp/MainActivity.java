@@ -12,6 +12,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -646,24 +647,11 @@ public static int saveflage;
     }
 
     private void colorRecycle(int pos) {
-        //
-        //  recyclerView2.getChildAt(pos).setBackgroundColor(MainActivity.this.getResources().getColor(R.color.yelow2));
 
-//        RecyclerView.ViewHolder holder = (RecyclerView.ViewHolder)
-//                recyclerView2.findViewHolderForAdapterPosition(pos);
-//        if (null != holder) {
-//            holder.itemView.findViewById(R.id.row).setBackgroundColor(MainActivity.this.getResources().getColor(R.color.yelow2));
-//        }
-
-
-
-//        adapter2.highligtedItemPosition
         Log.e("colorRecycle",""+pos);
-        //adapter2 =new TransferAdapter(MainActivity.this,finalList);
-        highligtedItemPosition = pos;
-  //      highligtedItemPosition2 =-1;
-
         highligtedItemPosition2=-5;
+        highligtedItemPosition = pos;
+
         adapter.notifyDataSetChanged();
      replacmentRecycler.scrollToPosition(pos);
 
@@ -687,12 +675,14 @@ public static int saveflage;
             public void afterTextChanged(Editable editable) {
                 if(editable.toString().trim().length()!=0)
                 {
-                    Log.e("colorRecycle",""+editable.toString().trim());
+                 /*   Log.e("colorRecycle",""+editable.toString().trim());
                     int posi=Integer.parseInt(editable.toString().trim());
                     Log.e("colorData.addText==",posi+"");
-                    colorRecycle(posi);
+                    colorRecycle(posi);*/
                //     colorlastrow((0));
-
+                    Log.e("colorlastrow",""+editable.toString().trim());
+                    int position=Integer.parseInt(editable.toString().trim());
+                    colorlastrow((position));
                 }
 
             }
@@ -805,8 +795,8 @@ public static int saveflage;
                             my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(),replacementlist.get(position).getRecQty(),replacementlist.get(position).getTransNumber());
 
                             Log.e("hereposition===",position+"");
-
-                            colorData.setText(position+"");
+                            colorlastrow.setText(position+"");
+                          //  colorData.setText(position+"");
 
                        fillAdapter();
                        itemcode.setText("");
@@ -1484,7 +1474,8 @@ fromSpinner.setEnabled(false);
         replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         adapter = new ReplacementAdapter(replacementlist,MainActivity.this);
         replacmentRecycler.setAdapter(adapter);
-        colorlastrow.setText((0)+"");
+        colorlastrow   .setText(position+"");
+    //    colorlastrow.setText((0)+"");
         if(replacementlist.size()>1) {
             replacmentRecycler.smoothScrollToPosition(1);
 

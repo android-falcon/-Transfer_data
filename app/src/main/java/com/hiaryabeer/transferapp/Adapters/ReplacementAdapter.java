@@ -81,11 +81,12 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
         Log.e("pos===",position+"highligtedItemPosition=== "+highligtedItemPosition+"highligtedItemPosition2=="+highligtedItemPosition2);
 
-        if(position == highligtedItemPosition ){
+
+     /*   if(position == highligtedItemPosition ){
             Log.e("fff","fffff");
             holder.qty.requestFocus();
             holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.yelow));
-            highligtedItemPosition2=-5;
+
 
         }
         else{
@@ -93,20 +94,20 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
 
 
-        }
+        }*/
         if(position == highligtedItemPosition2 ){
             Log.e("bbbb","bbbbb");
             holder.qty.requestFocus();
-          /*  InputMethodManager imm = (InputMethodManager) getSystemService(context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(yourEditText, InputMethodManager.SHOW_IMPLICIT);
-            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.yelow));
-*/
+            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.yellow2));
 
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
-        else if(highligtedItemPosition2!=-5) {
-
-            Log.e("dddd","dddd");
-            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else {
+            //if(position != highligtedItemPosition ) {
+                Log.e("dddd", "dddd");
+                holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.white));
+      //      }
 
         }
 
