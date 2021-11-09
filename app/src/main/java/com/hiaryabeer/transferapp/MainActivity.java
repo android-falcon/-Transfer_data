@@ -1046,7 +1046,9 @@ public class MainActivity extends AppCompatActivity {
                                                                       showSweetDialog(MainActivity.this, 0, "Internal server error", "");
 
 
-                                                                  } else {
+                                                                  }
+
+                                                                   else    {
                                                                       Log.e("editable.t", editable.toString() + "");
                                                                       saved = 0;
                                                                       replacementlist.clear();
