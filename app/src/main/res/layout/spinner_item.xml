@@ -3,9 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textAlignment="inherit"
-    android:textSize="17sp"
-    android:textColor="#F2627178"
-    android:padding="5dp"
-    >
+    android:textColor="#F23E474A"
+    android:textSize="16sp" />
 
-</TextView>

@@ -28,7 +28,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".TransferReports"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ScanActivity"
             android:screenOrientation="fullSensor"
@@ -43,7 +44,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"/>
 
         <uses-library
             android:name="org.apache.http.legacy"

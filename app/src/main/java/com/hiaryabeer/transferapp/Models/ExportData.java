@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 
@@ -36,70 +37,74 @@ import static com.hiaryabeer.transferapp.MainActivity.saveflage;
 
 public class ExportData {
     private Context context;
-    public  String ipAddress="",CONO="",headerDll="",link="",PONO="",portIp="";
+    public String ipAddress = "", CONO = "", headerDll = "", link = "", PONO = "", portIp = "";
     public RoomAllData my_dataBase;
-    public  static  SweetAlertDialog pdVoucher,pdshipmant,pdRepla,pdstock,pdzone;
+    public static SweetAlertDialog pdVoucher, pdshipmant, pdRepla, pdstock, pdzone;
     JSONObject vouchersObject;
     JSONObject ShipmentObject;
-    JSONObject ReplacmentObject,StockObject,ZoneRepObject;
+    JSONObject ReplacmentObject, StockObject, ZoneRepObject;
     private JSONArray jsonArrayShipment;
-    private JSONArray jsonArrayReplacement,jsonArrayStock,jsonArrayZoneRep;
+    private JSONArray jsonArrayReplacement, jsonArrayStock, jsonArrayZoneRep;
     private JSONArray jsonArrayVouchers;
 
-    public  ArrayList<ReplacementModel> listAllReplacment =new ArrayList<>();
-    int typeExportZone=0;
-    int typeExportShipment=0;
-    int typeExportReplacement=0;
+    public ArrayList<ReplacementModel> listAllReplacment = new ArrayList<>();
+    int typeExportZone = 0;
+    int typeExportShipment = 0;
+    int typeExportReplacement = 0;
+
     public ExportData(Context context) {
         this.context = context;
-        my_dataBase= RoomAllData.getInstanceDataBase(context);
+        my_dataBase = RoomAllData.getInstanceDataBase(context);
         try {
             getIpAddress();
-        }catch (Exception e){
-            Toast.makeText(context, "Fill Ip and Company No", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
         }
-//headerDll="/Falcons/VAN.Dll/";
-headerDll="";
+headerDll="/Falcons/VAN.Dll/";
+   //     headerDll = "";
 
     }
+
     private void getIpAddress() {
 //
-        ipAddress=my_dataBase.settingDao().getIpAddress().trim();
-        CONO=my_dataBase.settingDao().getCono().trim();
-        portIp=my_dataBase.settingDao().getPort().trim();
-        ipAddress=ipAddress+":"+portIp;
-        Log.e("getIpAddress","1"+ipAddress+"port="+portIp);
+        ipAddress = my_dataBase.settingDao().getIpAddress().trim();
+        CONO = my_dataBase.settingDao().getCono().trim();
+        portIp = my_dataBase.settingDao().getPort().trim();
+        ipAddress = ipAddress + ":" + portIp;
+        Log.e("getIpAddress", "1" + ipAddress + "port=" + portIp);
 //        Log.e("getIpAddress",""+ipAddress);
 
 
     }
-    public void exportReplacementList(List<ReplacementModel>replacementlist) {
+
+    public void exportReplacementList(List<ReplacementModel> replacementlist) {
         getReplacmentObject(replacementlist);
         pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pdRepla.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
-        pdRepla.setTitleText(" Start export Replenishments");
+        pdRepla.setTitleText(context.getString(R.string.exportRep));
         pdRepla.setCancelable(false);
         pdRepla.show();
 
         new JSONTask_AddReplacment(replacementlist).execute();
     }
-    private void  getReplacmentObject(List<ReplacementModel>replacementlist) {
+
+    private void getReplacmentObject(List<ReplacementModel> replacementlist) {
         jsonArrayReplacement = new JSONArray();
-        for (int i = 0; i < replacementlist.size(); i++)
-        {
+        for (int i = 0; i < replacementlist.size(); i++) {
 
             jsonArrayReplacement.put(replacementlist.get(i).getJSONObjectDelphi());
 
         }
         try {
-            ReplacmentObject=new JSONObject();
-            ReplacmentObject.put("JSN",jsonArrayReplacement);
+            ReplacmentObject = new JSONObject();
+            ReplacmentObject.put("JSN", jsonArrayReplacement);
 //            Log.e("vouchersObject",""+ReplacmentObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public class  JSONTask_AddReplacment extends AsyncTask<String, String, String> {
+
+    public class JSONTask_AddReplacment extends AsyncTask<String, String, String> {
         private String JsonResponse = null;
 
         List<ReplacementModel> replacementList = new ArrayList<>();
@@ -184,11 +189,11 @@ headerDll="";
             pdRepla.dismissWithAnimation();
 
             if (result != null && !result.equals("")) {
-                if(result.contains("Internal server error"))
-                {
+                if (result.contains("Internal server error")) {
                     exportAllState.setText("server error");
-                }
-                else {
+                } else if (result.contains("unique constraint")) {
+                    exportAllState.setText("unique constraint");
+                } else {
                     if (result.contains("Saved Successfully")) {
                         //  poststateRE.setText("exported");
 
@@ -196,29 +201,20 @@ headerDll="";
                         exportAllState.setText("exported");
 
 
+                    } else {
 
-                    }
-
-                    else
-
-                    {
-
-                        Log.e("aaaaaaa1===","aaaaaaa");
+                        Log.e("aaaaaaa1===", "aaaaaaa");
                         exportAllState.setText("err");
 
                     }
                 }
 
 
-
-
-
-
             } else {
 
-                Log.e("aaaaaaa2===","aaaaaaa");
+                Log.e("aaaaaaa2===", "aaaaaaa");
 //                Log.e("aaaaaaa2===","aaaaaaa");
-               exportAllState.setText("not");
+                exportAllState.setText("not");
 
 
             }

@@ -1,6 +1,7 @@
 package com.hiaryabeer.transferapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -31,34 +32,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Login extends AppCompatActivity {
-TextView login,settings;
+    TextView login, settings;
     public appSettings setting;
     List<appSettings> appSettings;
     public String COMPANYNO;
-    public  String SET_qtyup;
+    public String SET_qtyup;
     GeneralMethod generalMethod;
     public RoomAllData my_dataBase;
-    public  static   TextView getListCom,selectedCompany;
+    public static TextView getListCom, selectedCompany;
     private String selectedCom;
-    private String cono,coYear;
-     ListView listCompany;
+    private String cono, coYear;
+    ListView listCompany;
 
     public static EditText itemKintText1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         init();
         my_dataBase = RoomAllData.getInstanceDataBase(Login.this);
     }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int id=v.getId();
-            switch (id){
+            int id = v.getId();
+            switch (id) {
                 case R.id.login:
-                    Intent intent=new Intent(Login.this,MainActivity.class);
+                    Intent intent = new Intent(Login.this, MainActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.setting:
@@ -68,10 +74,10 @@ TextView login,settings;
             }
         }
     };
+
     public void showCompanyDialog(View view) {
-        if(view.getId()==R.id.companyName)
-        {
-            if(existCoNo(2))
+        if (view.getId() == R.id.companyName) {
+            if (existCoNo(2))
                 showCompany(Login.this);
             else {
                 openSettingDialog();
@@ -79,6 +85,7 @@ TextView login,settings;
             }
         }
     }
+
     private void showCompany(final Context context1) {
 
         final Dialog dialog = new Dialog(context1);
@@ -90,13 +97,13 @@ TextView login,settings;
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.CENTER;
-       appSettings settings;
-       ImportData importData=new ImportData(Login.this);
-        ArrayList<String> nameOfEngi=new ArrayList<>();
-   listCompany = dialog.findViewById(R.id.listViewEngineering);
+        appSettings settings;
+        ImportData importData = new ImportData(Login.this);
+        ArrayList<String> nameOfEngi = new ArrayList<>();
+        listCompany = dialog.findViewById(R.id.listViewEngineering);
         importData.getCompanyInfo();
 
-        getListCom=dialog.findViewById(R.id.getListCom);
+        getListCom = dialog.findViewById(R.id.getListCom);
 
         getListCom.addTextChangedListener(new TextWatcher() {
             @Override
@@ -111,11 +118,9 @@ TextView login,settings;
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.toString().length()!=0)
-                {
-                    if(editable.toString().equals("fill"))
-                    {
-                        if( importData.companyInList.size()!=0) {
+                if (editable.toString().length() != 0) {
+                    if (editable.toString().equals("fill")) {
+                        if (importData.companyInList.size() != 0) {
                             for (int i = 0; i < importData.companyInList.size(); i++) {
                                 nameOfEngi.add(importData.companyInList.get(i).getCoNo() + "\t\t" + importData.companyInList.get(i).getCoYear() + "\t\t" + importData.companyInList.get(i).getCoNameA());
                             }
@@ -151,18 +156,19 @@ TextView login,settings;
 
 
         final int[] rowZone = new int[1];
-        selectedCom="";
+        selectedCom = "";
 
         listCompany.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                cono="";coYear="";
-                rowZone[0] =position;
+                cono = "";
+                coYear = "";
+                rowZone[0] = position;
                 listCompany.requestFocusFromTouch();
                 listCompany.setSelection(position);
-                selectedCom =importData.companyInList.get(position).getCoNameA();
-                cono=importData.companyInList.get(position).getCoNo();
-                coYear=importData.companyInList.get(position).getCoYear();
+                selectedCom = importData.companyInList.get(position).getCoNameA();
+                cono = importData.companyInList.get(position).getCoNo();
+                coYear = importData.companyInList.get(position).getCoYear();
 
             }
         });
@@ -175,7 +181,7 @@ TextView login,settings;
             public void onClick(View view) {
                 selectedCompany.setText(selectedCom);
 
-                updateCono(cono,coYear);
+                updateCono(cono, coYear);
 
                 dialog.dismiss();
 
@@ -185,36 +191,35 @@ TextView login,settings;
         dialog.show();
 
     }
-    private boolean existCoNo(int flag ) {
+
+    private boolean existCoNo(int flag) {
         // ipAddress=my_dataBase.settingDao().getIpAddress().trim();
-        String  CONO="";
+        String CONO = "";
         try {
-            if(flag==1)
-            {
-                CONO=my_dataBase.settingDao().getCono();
-            }else {
-                if(flag==2)
-                    CONO=my_dataBase.settingDao().getIpAddress();
+            if (flag == 1) {
+                CONO = my_dataBase.settingDao().getCono();
+            } else {
+                if (flag == 2)
+                    CONO = my_dataBase.settingDao().getIpAddress();
             }
 
-            Log.e("CONO",""+CONO);
-            if(CONO!=null)
-            {
-                if(CONO.length()!=0)
-                {
+            Log.e("CONO", "" + CONO);
+            if (CONO != null) {
+                if (CONO.length() != 0) {
                     return true;
                 }
 
             }
-        }catch (Exception e){
-            return  false;
+        } catch (Exception e) {
+            return false;
         }
 
 
-        return  false;
+        return false;
 
 
     }
+
     private void updateCono(String cono, String coYear) {
         my_dataBase.settingDao().updateCompanyInfo(cono);
         my_dataBase.settingDao().updateCompanyYear(coYear);
@@ -222,15 +227,16 @@ TextView login,settings;
         //Log.e("updateCono",""+up);
     }
 
-    public void init(){
-        selectedCompany=findViewById(R.id.selectedCompany);
-      //  itemKintText1 = findViewById(R.id.itemKintTextRE);
-     login=findViewById(R.id.login) ;
-     login.setOnClickListener(onClickListener );
-       settings=findViewById(R.id.setting) ;
-       settings.setOnClickListener(onClickListener );
+    public void init() {
+        selectedCompany = findViewById(R.id.selectedCompany);
+        //  itemKintText1 = findViewById(R.id.itemKintTextRE);
+        login = findViewById(R.id.login);
+        login.setOnClickListener(onClickListener);
+        settings = findViewById(R.id.setting);
+        settings.setOnClickListener(onClickListener);
 
     }
+
     private void openSettingDialog() {
         final Dialog dialog = new Dialog(Login.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -239,18 +245,18 @@ TextView login,settings;
         dialog.show();
 
 
-        final EditText ip= dialog.findViewById(R.id.ipEditText);
-        final EditText portSetting=dialog.findViewById(R.id.portSetting);
-        final TextView editip= dialog.findViewById(R.id.editip);
+        final EditText ip = dialog.findViewById(R.id.ipEditText);
+        final EditText portSetting = dialog.findViewById(R.id.portSetting);
+        final TextView editip = dialog.findViewById(R.id.editip);
         // ip.setEnabled(false);
-        final EditText conNO= dialog.findViewById(R.id.cono);
-      //  final EditText years=dialog.findViewById(R.id.storeNo_edit);
-        final CheckBox qtyUP=(CheckBox)dialog.findViewById(R.id.qtycheck);
-   //     final EditText usernum= dialog.findViewById(R.id.usernumber);
-        final EditText deviceId= dialog.findViewById(R.id.deviceId);
+        final EditText conNO = dialog.findViewById(R.id.cono);
+        //  final EditText years=dialog.findViewById(R.id.storeNo_edit);
+        final CheckBox qtyUP = (CheckBox) dialog.findViewById(R.id.qtycheck);
+        //     final EditText usernum= dialog.findViewById(R.id.usernumber);
+        final EditText deviceId = dialog.findViewById(R.id.deviceId);
 
-
-
+        ///////B
+        final CheckBox checkboxQtyCheck = dialog.findViewById(R.id.checkboxQtyCheck);
 
         // conNO.setEnabled(false);
         //  years.setEnabled(false);
@@ -271,14 +277,13 @@ TextView login,settings;
                     dialog1.getWindow().setAttributes(lp);
 
 
-                    EditText editText=dialog1.findViewById(R.id.passwordd);
-                    Button donebutton=dialog1.findViewById(R.id.done);
-                    Button cancelbutton=dialog1.findViewById(R.id.cancel);
+                    EditText editText = dialog1.findViewById(R.id.passwordd);
+                    Button donebutton = dialog1.findViewById(R.id.done);
+                    Button cancelbutton = dialog1.findViewById(R.id.cancel);
                     donebutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if(editText.getText().toString().trim().equals("304555"))
-                            {
+                            if (editText.getText().toString().trim().equals("304555")) {
                                 ip.setEnabled(true);
                                 dialog1.dismiss();
                             }
@@ -287,83 +292,97 @@ TextView login,settings;
                     cancelbutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                         //   ip.setEnabled(false);
+                            //   ip.setEnabled(false);
                             dialog1.dismiss();
                         }
                     });
 
 
-
-
-
                     dialog1.show();
-                }else {
-                    Log.e("dd","dd");
+                } else {
+                    Log.e("dd", "dd");
                     ip.setEnabled(true);
                     ip.requestFocus();
-                }}
+                }
+            }
 
         });
         getDataZone();
-        if(appSettings.size()!=0) {
+        if (appSettings.size() != 0) {
 
             ip.setText(appSettings.get(0).getIP());
             conNO.setText(appSettings.get(0).getCompanyNum());
-            COMPANYNO=appSettings.get(0).getCompanyNum();
+            COMPANYNO = appSettings.get(0).getCompanyNum();
             portSetting.setText(appSettings.get(0).getPort().trim());
-        //    usernum.setText(appSettings.get(0).getUserNumber());
-          //  years.setText(appSettings.get(0).getYears());
+            //    usernum.setText(appSettings.get(0).getUserNumber());
+            //  years.setText(appSettings.get(0).getYears());
             try {
                 deviceId.setText(appSettings.get(0).getDeviceId());
-            }catch ( Exception e){
-                Log.e("deviceId",""+e.getMessage());
+            } catch (Exception e) {
+                Log.e("deviceId", "" + e.getMessage());
             }
 
             if (appSettings.get(0).getUpdateQTY().equals("1"))
                 qtyUP.setChecked(true);
-        }
-else{
-          //  if(ip.getText().toString().equals(""))
+
+            if (appSettings.get(0).getCheckQty() != null) {
+
+                if (appSettings.get(0).getCheckQty().equals("1")) {
+                    checkboxQtyCheck.setChecked(true);
+                } else {
+                    checkboxQtyCheck.setChecked(false);
+                }
+            }
+
+            } else {
+                //  if(ip.getText().toString().equals(""))
                 ip.setEnabled(true);
                 // usernum.setText(SET_userNO);
 
-         //   else ip.setEnabled(false);
-        }
+                //   else ip.setEnabled(false);
+            }
 
-        //****************************
-        dialog.findViewById(R.id.saveSetting).setOnClickListener(new View.OnClickListener() {
+            //****************************
+            dialog.findViewById(R.id.saveSetting).setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                deletesettings();
-                final String SET_IP = ip.getText().toString();
-                final String SET_conNO = conNO.getText().toString();
-                COMPANYNO = conNO.getText().toString();
-              //  final String SET_years = years.getText().toString();
-                String device_Id = deviceId.getText().toString().trim();
-                String port=portSetting.getText().toString().trim();
+                @Override
+                public void onClick(View view) {
+                    deletesettings();
+                    final String SET_IP = ip.getText().toString();
+                    final String SET_conNO = conNO.getText().toString();
+                    COMPANYNO = conNO.getText().toString();
+                    //  final String SET_years = years.getText().toString();
+                    String device_Id = deviceId.getText().toString().trim();
+                    String port = portSetting.getText().toString().trim();
+
+                    ///////B
+                    String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
+
+
 //                Log.e("port",""+port);
-                //usernum.setText(SET_userNO);
+                    //usernum.setText(SET_userNO);
 
-                if (qtyUP.isChecked())
-                    SET_qtyup = "1";
-                else
-                    SET_qtyup = "0";
+                    if (qtyUP.isChecked())
+                        SET_qtyup = "1";
+                    else
+                        SET_qtyup = "0";
 
-                setting = new appSettings();
-                setting.setIP(SET_IP);
-                setting.setCompanyNum(SET_conNO);
-                setting.setUpdateQTY(SET_qtyup);
-                setting.setPort(port);
-              //  setting.setYears(SET_years);
-              //  setting.setUserNumber(usernum.getText().toString().trim());
-                setting.setDeviceId(deviceId.getText().toString().trim());
+                    setting = new appSettings();
+                    setting.setIP(SET_IP);
+                    setting.setCompanyNum(SET_conNO);
+                    setting.setUpdateQTY(SET_qtyup);
+                    setting.setPort(port);
+                    //  setting.setYears(SET_years);
+                    //  setting.setUserNumber(usernum.getText().toString().trim());
+                    setting.setDeviceId(deviceId.getText().toString().trim());
 //                Log.e("setting", "==" + setting.getDeviceId());
 
-                if (deviceId.getText().toString().trim().length() != 0) {
-                    if (ip.getText().toString().trim().length() != 0) {
-                        if (conNO.getText().toString().trim().length() != 0) {
+                    ////B
+                    setting.setCheckQty(checkQty);
 
+                    if (deviceId.getText().toString().trim().length() != 0) {
+                        if (ip.getText().toString().trim().length() != 0) {
+                            if (conNO.getText().toString().trim().length() != 0) {
 
 
                                 saveData(setting);
@@ -371,43 +390,47 @@ else{
                                 my_dataBase.itemDao().dELETEAll();
 
 
+                            } else {
+                                conNO.setError("Empty");
+                            }
+
                         } else {
-                            conNO.setError("Empty");
+                            ip.setError("Empty");
                         }
 
-                    } else {
-                        ip.setError("Empty");
-                    }
+                    } else
+                        deviceId.setError("Empty");
+                }
+            });
+            dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
 
-                } else
-                    deviceId.setError("Empty");
-            }
-        });
-        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-    }
-    private void getDataZone() {
-        appSettings=new ArrayList();
-        try {
-            appSettings=my_dataBase.settingDao().getallsetting();
         }
-        catch (Exception e){}
-    }
-    private void deletesettings(){
-        if(appSettings.size()!=0)
+
+        private void getDataZone () {
+            appSettings = new ArrayList();
+            try {
+                appSettings = my_dataBase.settingDao().getallsetting();
+            } catch (Exception e) {
+                Log.e("Getting app settings",e.getMessage());
+            }
+        }
+
+        private void deletesettings () {
+            if (appSettings.size() != 0)
+                my_dataBase.settingDao().deleteALL();
+        }
+
+        private void saveData (appSettings settings){
             my_dataBase.settingDao().deleteALL();
-    }
-    private void saveData(appSettings settings) {
-        my_dataBase.settingDao().deleteALL();
-        my_dataBase.storeDao().deleteall();
-        my_dataBase.settingDao().insert(settings);
+            my_dataBase.storeDao().deleteall();
+            my_dataBase.settingDao().insert(settings);
 
-        generalMethod.showSweetDialog(this,1,this.getResources().getString(R.string.savedSuccsesfule),"");
+            generalMethod.showSweetDialog(this, 1, this.getResources().getString(R.string.savedSuccsesfule), "");
 
+        }
     }
-}

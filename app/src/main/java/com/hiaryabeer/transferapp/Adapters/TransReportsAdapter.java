@@ -49,8 +49,7 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
 
         if (reportsList.get(position).getIsPosted().equals("1")) {
             holder.bodyRowParent.setBackgroundResource(R.color.postedBackground);
-        }
-        else {
+        } else {
             holder.bodyRowParent.setBackgroundResource(R.color.notPostedBackground);
         }
 

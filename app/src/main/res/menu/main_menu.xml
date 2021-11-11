@@ -4,5 +4,7 @@
 
     <item android:id="@+id/goToReports"
         android:title="@string/TransfersReportTitle"
-        app:showAsAction="never"/>
+        app:showAsAction="never"
+        android:icon="@drawable/ic_report"
+        />
 </menu>

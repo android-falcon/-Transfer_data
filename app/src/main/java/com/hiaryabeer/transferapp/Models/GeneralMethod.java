@@ -35,18 +35,21 @@ public class GeneralMethod {
                 new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText(title)
                         .setContentText(content)
+                        .setConfirmText(context.getString(R.string.ok))
                         .show();
                 break;
             case 1://Succes Type
                 new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText(title)
                         .setContentText(content)
+                        .setConfirmText(context.getString(R.string.ok))
                         .show();
                 break;
             case 3://warning Type
                 new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText(title)
                         .setContentText(content)
+                        .setConfirmText(context.getString(R.string.ok))
                         .show();
                 break;
 

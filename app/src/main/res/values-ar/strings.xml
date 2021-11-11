@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Transferapp</string>
+    <string name="app_name">Transfer App</string>
     <string name="reqired_filled">مطلوب</string>
     <string name="about">المطور</string>
     <string name="barcode">الباركود</string>
@@ -8,7 +8,7 @@
     <string name="cancel">إلغاء</string>
     <string name="export">تصدير</string>
     <string name="from">من</string>
-    <string name="itemCode">كود المادة</string>
+    <string name="itemCode">رقم المادة</string>
     <string name="to">إلى</string>
     <string name="pono">رقم الطلبية</string>
     <string name="savedSuccsesfule">تم الحفظ بنجاح</string>
@@ -21,7 +21,7 @@
     <string name="year">السنة</string>
     <string name="server_ip">رقم السيرفر</string>
     <string name="settings_ip">الإعدادات</string>
-    <string name="IP_PORT">IP_PORT</string>
+    <string name="IP_PORT">مَنفذ IP</string>
     <string name="Items">عدد المواد</string>
     <string name="ZoneCode">رقم المنطقة</string>
     <string name="setting">الإعدادات</string>
@@ -45,8 +45,8 @@
     <string name="Import">استيراد</string>
     <string name="ZoneName">اسم المنطقة</string>
     <string name="finish">إنهاء</string>
-    <string name="recQty">الكمية المدخلة</string>
-    <string name="Itemname">إسم المادة</string>
+    <string name="recQty">الكمية المُدخلة</string>
+    <string name="Itemname">اسم المادة</string>
     <string name="Differ">الفرق</string>
     <string name="Arabic">عربي</string>
     <string name="boxnovalidate">الصندوق غير موجود بهذه الطلبية</string>
@@ -82,7 +82,7 @@
     <string name="barcodeconfirm">
 هذه المادة غير موجودة بهذه الطلبية، هل تريد أضافتها؟ </string>
     <string name="reduceqty">تعديل كمية المادة </string>
-    <string name="qtyerror3">كمية غير صحيحة  </string>
+    <string name="qtyerror3">كمية غير صالحة  </string>
     <string name="deleteitemt">حذف مادة </string>
     <string name="deletezone"> حذف منطقة </string>
     <string name="delete1">حذف  </string>
@@ -133,21 +133,21 @@
     <string name="toStore">المستودع المنقول اليه</string>
     <string name="chooseDate">اختار التاريخ</string>
 
-    <string name="TransfersReportTitle">تقرير العمليات</string>
-    <string name="AddTransferTitle">ادخال حركات</string>
+    <string name="TransfersReportTitle">تقرير التحويلات</string>
+    <string name="AddTransferTitle">إضافة سند تحويل</string>
 
-    <string name="delete">هل أنت متأكد انك تريد حذف هذا المُدخَل؟</string>
+    <string name="delete">هل أنت متأكد من حذف هذا المُدخَل؟</string>
 
     <string name="existsBARCODE">يوجد خطأ في الباركود يرجى اعادة المحاولة</string>
 
     <string name="Login">تسجيل الدخول</string>
-    <string name="password">كلمة السر</string>
+    <string name="password">كلمة المرور</string>
     <string name="user_name">اسم المستخدم</string>
     <string name="device_id">رقم الجهاز</string>
 
     <string name="title_activity_login">تسجيل الدخول</string>
-    <string name="posted_items"> العناصر المُثَبتة</string>
-    <string name="not_posted_items"> العناصر غير المُثَبتة</string>
+    <string name="posted_items"> العناصر التي تم تصديرها</string>
+    <string name="not_posted_items"> العناصر التي لم يتم تصديرها</string>
     <string name="no_enough_amount">لا يوجد كمية كافية من هذا العنصر</string>
     <string name="unsaved_data">يوجد بيانات سابقة لم يتم حفظها، يرجى تصديرها لاضافة سند جديد</string>
     <string name="checkConnection">يرجى التحقق من الاتصال</string>
@@ -157,4 +157,18 @@
     <string name="searchByToStore">اسم المستودع المنقول له:</string>
     <string name="allStores">جميع المستودعات</string>
     <string name="Empty">لا يوجد بيانات</string>
+
+    <string name="exportRep">جاري تصدير التحويلات</string>
+    <string name="importData">استيراد البيانات</string>
+    <string name="getStore">يتم تحميل معلومات المستودعات</string>
+
+    <string name="fillIpAndComNo">املأ معلومات الIP ورقم الشركة</string>
+    <string name="fillIp"> املأ الIP</string>
+    <string name="ipConnectionFailed">خطأ في اتصال السيرفر</string>
+    <string name="netWorkError">خطأ في الشبكة</string>
+    <string name="cancelled">تم الإلغاء</string>
+    <string name="getAllData">تم حفظ جميع البيانات</string>
+    <string name="or">أو</string>
+    <string name="activateCheckQty">تفعيل خاصية التحقق من الكميات</string>
+
 </resources>

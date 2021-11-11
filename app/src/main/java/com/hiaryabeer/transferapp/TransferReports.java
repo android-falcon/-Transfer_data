@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class TransferReports extends AppCompatActivity {
-
-    private EditText etPickDate, etSearchByName, etSearchByNo;
+    TextView etPickDate;
+    private EditText etSearchByName, etSearchByNo;
     private Button btnPreview;
     private RecyclerView rvTransferReports;
 
@@ -62,7 +62,10 @@ public class TransferReports extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_reports);
-        setTitle(R.string.TransfersReportTitle);
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);

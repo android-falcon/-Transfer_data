@@ -9,9 +9,9 @@ public class Store {
     @PrimaryKey(autoGenerate = true)
     int SERIAL;
     @ColumnInfo(name = "STORENO")
-   String STORENO ;
+    String STORENO;
     @ColumnInfo(name = "STORENAME")
-    String     STORENAME;
+    String STORENAME;
 
     public Store() {
     }

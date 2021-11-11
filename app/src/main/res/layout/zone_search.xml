@@ -87,6 +87,7 @@
             android:onClick="addToHoldList"
             android:text="@string/ok"
             android:textColor="@color/darkblue_" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -10,22 +10,33 @@ public class appSettings {
     @ColumnInfo(name = "IP_ADDRESS")
     String IP;
     @ColumnInfo(name = "COMPANYNO")
-String CompanyNum;
+    String CompanyNum;
     @ColumnInfo(name = "YEARS")
-String years;
+    String years;
     @ColumnInfo(name = "UPDATEQTY")
-String UpdateQTY;
+    String UpdateQTY;
     @ColumnInfo(name = "USERNO")
-String userNumber;
+    String userNumber;
     @PrimaryKey(autoGenerate = true)
-    public    int SERIALZONE;
+    public int SERIALZONE;
 
     @ColumnInfo(name = "DEVICEID")
     String deviceId;
     @ColumnInfo(name = "PORT")
     String port;
 
+    //////B
+    @ColumnInfo(name = "Check_Qty")
+    private String checkQty;
 
+    public String getCheckQty() {
+        return checkQty;
+    }
+
+    public void setCheckQty(String checkQty) {
+        this.checkQty = checkQty;
+    }
+    /////
 
     public String getPort() {
         return port;
@@ -35,12 +46,14 @@ String userNumber;
         this.port = port;
     }
 
-    public appSettings(String IP, String companyNum, String years, String updateQTY, String userNumber) {
+    public appSettings(String IP, String companyNum, String years, String updateQTY, String userNumber, String checkQty) {
         this.IP = IP;
         CompanyNum = companyNum;
         this.years = years;
         UpdateQTY = updateQTY;
         this.userNumber = userNumber;
+        ///////B
+        this.checkQty = checkQty;
 
     }
 

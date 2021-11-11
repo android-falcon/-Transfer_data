@@ -10,10 +10,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "REPLACEMENT_TABLE")
-public  class ReplacementModel {
+public class ReplacementModel {
 
     @ColumnInfo(name = "UserNO")
     String UserNO;
+
     public String getUserNO() {
         return UserNO;
     }
@@ -21,6 +22,7 @@ public  class ReplacementModel {
     public void setUserNO(String userNO) {
         UserNO = userNO;
     }
+
     @ColumnInfo(name = "FROMSTORE")
     String From;
     @ColumnInfo(name = "TOSTORE")
@@ -38,8 +40,10 @@ public  class ReplacementModel {
     String itemname;
     @ColumnInfo(name = "TransNumber")
     String transNumber;
+
     @ColumnInfo(name = "availableQty")
     String availableQty;
+
     public String getAvailableQty() {
         return availableQty;
     }
@@ -64,6 +68,7 @@ public  class ReplacementModel {
     public void setItemname(String itemname) {
         this.itemname = itemname;
     }
+
     @ColumnInfo(name = "DEVICEID")
     String deviceId;
 
@@ -84,7 +89,7 @@ public  class ReplacementModel {
     }
 
     @ColumnInfo(name = "RECQTY")
-    private   String recQty;
+    private String recQty;
     @PrimaryKey(autoGenerate = true)
     int SERIALZONE;
 
@@ -95,6 +100,7 @@ public  class ReplacementModel {
         Itemcode = itemcode;
         this.availableQty = availableQty;
     }
+
     String ToName;
 
     String FromName;
@@ -186,7 +192,7 @@ public  class ReplacementModel {
             obj.put("DEVICEID", deviceId);
 
         } catch (JSONException e) {
-            Log.e("Tag" , "JSONException");
+            Log.e("Tag", "JSONException");
         }
         return obj;
     }

@@ -59,13 +59,13 @@ public class Adapterr extends BaseAdapter {
         // get the TextView for item name and item description
         TextView textViewItemName = (TextView)
                 convertView.findViewById(R.id.itemname);
-        LinearLayout linearLayout= convertView.findViewById(R.id.linear);
+        LinearLayout linearLayout = convertView.findViewById(R.id.linear);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 itemcode.setText(items.get(position).getItemOcode());
-                Log.e("position6===",position+"");
+                Log.e("position6===", position + "");
                 //colorData.setText(position+"");
 
                 dialog1.dismiss();
@@ -74,7 +74,7 @@ public class Adapterr extends BaseAdapter {
         });
         //sets the text for item name and item description from the current item object
         textViewItemName.setText(currentItem.getItemName());
- //linearLayout.setBackgroundColor(context.getResources().getColor(R.color.yelow));
+        //linearLayout.setBackgroundColor(context.getResources().getColor(R.color.yelow));
 
         // returns the view for the current row
         return convertView;

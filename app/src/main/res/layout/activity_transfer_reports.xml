@@ -7,47 +7,51 @@
     android:orientation="vertical"
     tools:context=".TransferReports">
 
-    <!--    <androidx.appcompat.widget.Toolbar-->
-    <!--        android:id="@+id/toolbar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="?attr/colorPrimary"-->
-    <!--        android:elevation="4dp"-->
-    <!--        android:minHeight="?attr/actionBarSize"-->
-    <!--       >-->
-    <LinearLayout
-        android:id="@+id/labels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="1dp"
-        android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="@string/TransfersReportTitle"
+        app:titleTextColor="@color/white">
 
-        <TextView
-            android:id="@+id/postedLabel"
+        <LinearLayout
+            android:id="@+id/labels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginBottom="2dp"
+            android:layout_gravity="end"
             android:gravity="start"
-            android:text="@string/posted_items"
-            android:textSize="12sp"
-            app:drawableStartCompat="@drawable/ic_square"
-            app:layout_constraintBottom_toTopOf="@+id/notPostedLabel"
-            app:layout_constraintStart_toStartOf="@+id/notPostedLabel"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/postedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="@string/posted_items"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_blue_square" />
 
 
-        <TextView
-            android:id="@+id/notPostedLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:gravity="start"
-            android:text="@string/not_posted_items"
-            android:textSize="12sp"
-            app:drawableStartCompat="@drawable/ic_unposted_square" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/notPostedLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/not_posted_items"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_grey_square" />
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
 
     <!--    </androidx.appcompat.widget.Toolbar>-->
 
@@ -90,7 +94,7 @@
             android:layout_gravity="center"
             android:layout_weight="0.3"
             android:text="@string/transactionDate"
-            android:textColor="@color/dark_blue_3"
+            android:textColor="#3E3F47"
             android:textSize="16sp" />
 
         <EditText
@@ -99,13 +103,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
             android:layout_weight="6"
-            android:drawableStart="@drawable/ic_date"
             android:focusable="false"
             android:gravity="center"
             android:hint="@string/chooseDate"
             android:inputType="date"
-            android:textColor="@color/colorblue1"
-            android:textSize="15sp" />
+            android:textColor="#F2627178"
+            android:textSize="17sp"
+            app:drawableStartCompat="@drawable/ic_date2" />
+
 
         <Button
             android:id="@+id/btnPreview"
@@ -121,30 +126,32 @@
 
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="2dp"
-        android:weightSum="10">
+        android:layout_gravity="start"
+        android:gravity="start"
+        android:padding="5dp">
 
-        <EditText
-            android:id="@+id/etSearchByName"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="5"
-            android:drawableEnd="@drawable/ic_search"
-            android:hint="@string/SearchByItemName" />
+            android:layout_gravity="center"
+            android:text="@string/searchByToStore"
+            android:textColor="#3E3F47"
+            android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/etSearchByNo"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/spinnerToStore"
+            style="@style/spinner_style"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_weight="5"
-            android:drawableEnd="@drawable/ic_search"
-            android:hint="@string/SearchByItemNo" />
+            android:layout_gravity="center"
+            android:layout_marginStart="2dp"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textDirection="locale" />
 
 
     </LinearLayout>
@@ -152,25 +159,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="11dp"
-        android:layout_marginVertical="5dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/etSearchByName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_search2"
+            android:gravity="start"
+            android:hint="@string/SearchByItemName" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/searchByToStore"
-            android:textColor="@color/dark_blue_3"
-            android:textSize="17sp" />
-
-        <Spinner
-            android:id="@+id/spinnerToStore"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:textAlignment="center"
-            android:textDirection="locale"/>
+            android:text="@string/or"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/etSearchByNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_search2"
+            android:gravity="start"
+            android:hint="@string/SearchByItemNo" />
 
 
     </LinearLayout>
@@ -201,7 +220,7 @@
 
 
                     <TextView
-                        android:layout_width="60dp"
+                        android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -221,7 +240,7 @@
 
 
                     <TextView
-                        android:layout_width="130dp"
+                        android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -241,7 +260,7 @@
 
 
                     <TextView
-                        android:layout_width="130dp"
+                        android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -260,7 +279,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="130dp"
+                        android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -279,7 +298,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="130dp"
+                        android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -298,7 +317,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="40dp"
+                        android:layout_width="60dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -332,7 +351,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="130dp"
         android:alpha="0.1"
-        android:src="@drawable/empty"
+        android:src="@drawable/nodata"
         android:visibility="gone" />
 
     <TextView
