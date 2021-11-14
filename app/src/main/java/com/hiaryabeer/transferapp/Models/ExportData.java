@@ -202,9 +202,15 @@ headerDll="";
                     else
 
                     {
+                        if(result.contains("unique constraint"))
+                        {
+                            exportAllState.setText("uniqueconstraint");
+                        }else {
+                            Log.e("aaaaaaa1===","aaaaaaa");
+                            exportAllState.setText("err");
+                        }
 
-                        Log.e("aaaaaaa1===","aaaaaaa");
-                        exportAllState.setText("err");
+
 
                     }
                 }

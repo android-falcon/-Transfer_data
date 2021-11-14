@@ -1017,17 +1017,33 @@ fromSpinner.setEnabled(false);
 
                     }
                     else{
-                        Log.e("editable.t",editable.toString()+"");
-                        saved=0;
-                        replacementlist.clear();
-                        fillAdapter();
-                        adapter.notifyDataSetChanged();
-                        zone.setEnabled(true);
-                        zone.requestFocus();
-                        fromSpinner.setEnabled(true);
-                        toSpinner.setEnabled(true);
-                        // showSweetDialog(MainActivity.this, 0, "check connection", "");
-                        save.setEnabled(false);
+                            if(editable.toString().trim().equals("uniqueconstraint")){
+                                saved =5;
+                                //saveData(0);
+                                replacementlist.clear();
+                                fillAdapter();
+                                adapter.notifyDataSetChanged();
+                                zone.setEnabled(true);
+                                zone.requestFocus();
+
+                                save.setEnabled(false);
+                                fromSpinner.setEnabled(true);
+                                toSpinner.setEnabled(true);
+                                showSweetDialog(MainActivity.this, 0, "unique constraint", "");
+                            }else {
+                                Log.e("editable.t",editable.toString()+"");
+                                saved=0;
+                                replacementlist.clear();
+                                fillAdapter();
+                                adapter.notifyDataSetChanged();
+                                zone.setEnabled(true);
+                                zone.requestFocus();
+                                fromSpinner.setEnabled(true);
+                                toSpinner.setEnabled(true);
+                                // showSweetDialog(MainActivity.this, 0, "check connection", "");
+                                save.setEnabled(false);
+                            }
+
                     }
                 }
             }
