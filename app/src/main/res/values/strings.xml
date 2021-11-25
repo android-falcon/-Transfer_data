@@ -78,7 +78,7 @@ This box is not available in this PO, do you want to add it? </string>
     <string name="barcodeconfirm">
 This barcode is not available in this PO, do you want to add it? </string>
     <string name="messageExit">Are You Sure To Exit ?</string>
-    <string name="messageExit2">all data saved locally, Are You Sure To Exit ?</string>
+    <string name="messageExit2">All data saved locally, Are You Sure To Exit ?</string>
     <string name="ok">OK</string>
     <string name="warning">Warning</string>
     <string name="fillYourList">Fill Your List !!</string>
@@ -177,5 +177,24 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="getAllData">All data has been saved</string>
     <string name="or">OR</string>
     <string name="activateCheckQty">Activate quantity check feature </string>
+    <string name="serverError">Server Error!</string>
+    <string name="serverErrorMsg">An error has occurred while importing the quantity of this item from the server.</string>
+
+    <string name="inValidCode">InValid Code!</string>
+    <string name="serial_no">Serial No.</string>
+    <string name="add">Add</string>
+    <string name="saving">Saving</string>
+    <string name="enter_serial_number">Enter Serial Number</string>
+    <string name="uniqueSerial">Serial no. must be unique!</string>
+    <string name="uniqueSerialMsg">An entry with same serial number already exists in this transfer</string>
+    <string name="deleteAll">Delete All</string>
+    <string name="deleteAllMsg">Are you sure you want to delete all entered serials ?</string>
+    <string name="noUnsavedData">No new data to be saved</string>
+    <string name="serials">Serials</string>
+    <string name="savingSerials">Exporting Serials</string>
+
+    <string name="export_to_pdf">Export To Pdf</string>
+
+
 
 </resources>

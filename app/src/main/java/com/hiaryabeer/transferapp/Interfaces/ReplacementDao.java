@@ -50,7 +50,7 @@ public interface ReplacementDao {
     @Query("SELECT * FROM REPLACEMENT_TABLE WHERE ITEMCODE = :s AND ISPOSTED='0'")
     ReplacementModel getReplacement(String s);
 
-    @Query("SELECT  Max(CAST(TransNumber AS INTEGER))  as MaxTrans FROM REPLACEMENT_TABLE ")
+    @Query("SELECT  Max(CAST(TransNumber AS INTEGER)) as MaxTrans FROM REPLACEMENT_TABLE ")
     String getMaxReplacementNo();
 
     @Query("Delete from REPLACEMENT_TABLE WHERE TOSTORE= :ToSt AND ZONECODE= :Zone ")

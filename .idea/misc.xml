@@ -5,24 +5,38 @@
       <map>
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable-v24/ic_person.xml" value="0.20092592592592592" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable-v24/ic_search.xml" value="0.21481481481481482" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/border.xml" value="0.2046875" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/cancel_button.xml" value="0.2203125" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/gradient_spinner.xml" value="0.1" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.20092592592592592" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_close2.xml" value="0.2203125" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_convert.xml" value="0.2203125" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_date2.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_edit.xml" value="0.2203125" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_expand_circle_down.xml" value="0.2203125" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_expand_less.xml" value="0.2203125" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_expand_more.xml" value="0.2203125" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_key2.xml" value="0.19722222222222222" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_person2.xml" value="0.19722222222222222" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_scan_black_24dp.xml" value="0.2203125" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_search2.xml" value="0.19722222222222222" />
-        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_login.xml" value="0.22592592592592592" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_transfer_reports.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/delete_entry.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/enter_serial_layout.xml" value="0.22" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/ip_setting_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/item_serials_layout.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/passworddailog.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/replacmentrecycler.xml" value="0.33" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rv_serial_transfer.xml" value="0.25" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rv_serials_report.xml" value="0.33" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/searchdailog.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/searchrec.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/searchrec.xml" value="0.33" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/spinner_item.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/transfer_report_rv_layout.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/zone_search.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/menu/fab_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/menu/main_menu.xml" value="0.22" />
       </map>
     </option>

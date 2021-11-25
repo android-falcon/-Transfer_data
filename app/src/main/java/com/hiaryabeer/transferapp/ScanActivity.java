@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
+import com.hiaryabeer.transferapp.Adapters.Adapterr;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static com.hiaryabeer.transferapp.MainActivity.etSerial;
 import static com.hiaryabeer.transferapp.MainActivity.itemcode;
 import static com.hiaryabeer.transferapp.MainActivity.zone;
 
@@ -61,14 +63,20 @@ public class ScanActivity extends AppCompatActivity
         // Do something with the result here
         // Log.v("tag", rawResult.getText()); // Prints scan results
         // Log.v("tag", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
-        String valueBarcode = rawResult.getText().toString();
+        String valueBarcode = rawResult.getText();
 
         if (type.equals("4")) {
 
             zone.setText(valueBarcode);
 
         } else if (type.equals("5")) {
+
             itemcode.setText(valueBarcode);
+
+        } else if (type.equals("6")) {
+
+            etSerial.setText(valueBarcode.replaceAll("\\s+","").trim());
+
         }
 
         onBackPressed();

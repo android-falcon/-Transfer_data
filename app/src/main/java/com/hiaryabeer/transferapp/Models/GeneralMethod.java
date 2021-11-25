@@ -30,7 +30,7 @@ public class GeneralMethod {
     }
 
     public  static  void showSweetDialog(Context context, int type, String title, String content){
-        switch ( type){
+        switch (type){
             case 0://Error Type
                 new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText(title)
@@ -38,7 +38,7 @@ public class GeneralMethod {
                         .setConfirmText(context.getString(R.string.ok))
                         .show();
                 break;
-            case 1://Succes Type
+            case 1://Success Type
                 new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText(title)
                         .setContentText(content)

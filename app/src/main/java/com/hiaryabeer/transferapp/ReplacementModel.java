@@ -100,6 +100,12 @@ public class ReplacementModel {
         Itemcode = itemcode;
         this.availableQty = availableQty;
     }
+    public ReplacementModel(String from, String to, String itemcode, String recQty) {
+        From = from;
+        To = to;
+        Itemcode = itemcode;
+        this.recQty = recQty;
+    }
 
     String ToName;
 
@@ -190,6 +196,7 @@ public class ReplacementModel {
             obj.put("ITEMCODE", Itemcode);
             obj.put("QTY", recQty);
             obj.put("DEVICEID", deviceId);
+            obj.put("VHFNO", transNumber);
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");

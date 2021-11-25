@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -11,8 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.hiaryabeer.transferapp.Login;
+import com.hiaryabeer.transferapp.MainActivity;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.ReplacementModel;
+import com.hiaryabeer.transferapp.RoomAllData;
 
 import java.util.List;
 
@@ -21,9 +25,15 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
     private Context context;
     private List<ReplacementModel> reportsList;
 
+    private SerialsReportAdapter serialsReportAdapter;
+    public static List<String> serialsList;
+
+    private RoomAllData database;
+
     public TransReportsAdapter(Context context, List<ReplacementModel> reportsList) {
         this.context = context;
         this.reportsList = reportsList;
+        this.database = RoomAllData.getInstanceDataBase(context);
     }
 
     @NonNull
@@ -53,6 +63,26 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
             holder.bodyRowParent.setBackgroundResource(R.color.notPostedBackground);
         }
 
+        if (Login.serialsActive == 1) {
+
+            this.serialsList = database.serialsDao().getSerialCodes(reportsList.get(position).getTransNumber(),
+                    reportsList.get(position).getItemcode());
+
+            this.serialsReportAdapter = new SerialsReportAdapter(context, serialsList);
+
+            holder.RVSerialsReport.setAdapter(serialsReportAdapter);
+
+            holder.bodyRowParent.setOnClickListener(v -> {
+                if (holder.serialsLayout.getVisibility() == View.VISIBLE) {
+                    holder.serialsLayout.setVisibility(View.GONE);
+                    holder.downArrow.setBackgroundResource(R.drawable.ic_expand_more);
+                } else {
+                    holder.serialsLayout.setVisibility(View.VISIBLE);
+                    holder.downArrow.setBackgroundResource(R.drawable.ic_expand_less);
+                }
+            });
+        }
+
     }
 
     @Override
@@ -67,6 +97,11 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
 
         private TableRow bodyRowParent;
 
+        private LinearLayout serialsLayout;
+        private RecyclerView RVSerialsReport;
+
+        private TextView downArrow;
+
         public ReportsViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -79,6 +114,11 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
             tvQty = itemView.findViewById(R.id.tvQty);
 
             bodyRowParent = itemView.findViewById(R.id.bodyRowParent);
+
+            serialsLayout = itemView.findViewById(R.id.serialsLayout);
+            RVSerialsReport = itemView.findViewById(R.id.RVSerialsReport);
+
+            downArrow = itemView.findViewById(R.id.downArrow);
 
         }
     }

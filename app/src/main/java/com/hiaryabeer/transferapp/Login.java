@@ -46,6 +46,13 @@ public class Login extends AppCompatActivity {
 
     public static EditText itemKintText1;
 
+    ///B
+    public static int serialsActive;
+
+    static {
+        serialsActive = 1;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +70,16 @@ public class Login extends AppCompatActivity {
         public void onClick(View v) {
             int id = v.getId();
             switch (id) {
-                case R.id.login:
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    startActivity(intent);
+                case R.id.login: {
+                    getDataZone();
+                    if(appSettings.size() != 0) {
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        openSettingDialog();
+                    }
                     break;
+                }
                 case R.id.setting:
                     openSettingDialog();
                     break;
@@ -242,6 +255,7 @@ public class Login extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.ip_setting_dialog);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();
 
 
@@ -257,6 +271,12 @@ public class Login extends AppCompatActivity {
 
         ///////B
         final CheckBox checkboxQtyCheck = dialog.findViewById(R.id.checkboxQtyCheck);
+        if (serialsActive == 1) {
+            checkboxQtyCheck.setChecked(false);
+            checkboxQtyCheck.setVisibility(View.GONE);
+        } else {
+            checkboxQtyCheck.setVisibility(View.VISIBLE);
+        }
 
         // conNO.setEnabled(false);
         //  years.setEnabled(false);
@@ -334,103 +354,103 @@ public class Login extends AppCompatActivity {
                 }
             }
 
-            } else {
-                //  if(ip.getText().toString().equals(""))
-                ip.setEnabled(true);
-                // usernum.setText(SET_userNO);
+        } else {
+            //  if(ip.getText().toString().equals(""))
+            ip.setEnabled(true);
+            // usernum.setText(SET_userNO);
 
-                //   else ip.setEnabled(false);
-            }
+            //   else ip.setEnabled(false);
+        }
 
-            //****************************
-            dialog.findViewById(R.id.saveSetting).setOnClickListener(new View.OnClickListener() {
+        //****************************
+        dialog.findViewById(R.id.saveSetting).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View view) {
-                    deletesettings();
-                    final String SET_IP = ip.getText().toString();
-                    final String SET_conNO = conNO.getText().toString();
-                    COMPANYNO = conNO.getText().toString();
-                    //  final String SET_years = years.getText().toString();
-                    String device_Id = deviceId.getText().toString().trim();
-                    String port = portSetting.getText().toString().trim();
+            @Override
+            public void onClick(View view) {
+                deletesettings();
+                final String SET_IP = ip.getText().toString();
+                final String SET_conNO = conNO.getText().toString();
+                COMPANYNO = conNO.getText().toString();
+                //  final String SET_years = years.getText().toString();
+                String device_Id = deviceId.getText().toString().trim();
+                String port = portSetting.getText().toString().trim();
 
-                    ///////B
-                    String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
+                ///////B
+                String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
 
 
 //                Log.e("port",""+port);
-                    //usernum.setText(SET_userNO);
+                //usernum.setText(SET_userNO);
 
-                    if (qtyUP.isChecked())
-                        SET_qtyup = "1";
-                    else
-                        SET_qtyup = "0";
+                if (qtyUP.isChecked())
+                    SET_qtyup = "1";
+                else
+                    SET_qtyup = "0";
 
-                    setting = new appSettings();
-                    setting.setIP(SET_IP);
-                    setting.setCompanyNum(SET_conNO);
-                    setting.setUpdateQTY(SET_qtyup);
-                    setting.setPort(port);
-                    //  setting.setYears(SET_years);
-                    //  setting.setUserNumber(usernum.getText().toString().trim());
-                    setting.setDeviceId(deviceId.getText().toString().trim());
+                setting = new appSettings();
+                setting.setIP(SET_IP);
+                setting.setCompanyNum(SET_conNO);
+                setting.setUpdateQTY(SET_qtyup);
+                setting.setPort(port);
+                //  setting.setYears(SET_years);
+                //  setting.setUserNumber(usernum.getText().toString().trim());
+                setting.setDeviceId(deviceId.getText().toString().trim());
 //                Log.e("setting", "==" + setting.getDeviceId());
 
-                    ////B
-                    setting.setCheckQty(checkQty);
+                ////B
+                setting.setCheckQty(checkQty);
 
-                    if (deviceId.getText().toString().trim().length() != 0) {
-                        if (ip.getText().toString().trim().length() != 0) {
-                            if (conNO.getText().toString().trim().length() != 0) {
-
-
-                                saveData(setting);
-                                dialog.dismiss();
-                                my_dataBase.itemDao().dELETEAll();
+                if (deviceId.getText().toString().trim().length() != 0) {
+                    if (ip.getText().toString().trim().length() != 0) {
+                        if (conNO.getText().toString().trim().length() != 0) {
 
 
-                            } else {
-                                conNO.setError("Empty");
-                            }
+                            saveData(setting);
+                            dialog.dismiss();
+                            my_dataBase.itemDao().dELETEAll();
+
 
                         } else {
-                            ip.setError("Empty");
+                            conNO.setError(getString(R.string.reqired_filled));
                         }
 
-                    } else
-                        deviceId.setError("Empty");
-                }
-            });
-            dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
+                    } else {
+                        ip.setError(getString(R.string.reqired_filled));
+                    }
 
-        }
-
-        private void getDataZone () {
-            appSettings = new ArrayList();
-            try {
-                appSettings = my_dataBase.settingDao().getallsetting();
-            } catch (Exception e) {
-                Log.e("Getting app settings",e.getMessage());
+                } else
+                    deviceId.setError(getString(R.string.reqired_filled));
             }
-        }
+        });
+        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
-        private void deletesettings () {
-            if (appSettings.size() != 0)
-                my_dataBase.settingDao().deleteALL();
-        }
+    }
 
-        private void saveData (appSettings settings){
-            my_dataBase.settingDao().deleteALL();
-            my_dataBase.storeDao().deleteall();
-            my_dataBase.settingDao().insert(settings);
-
-            generalMethod.showSweetDialog(this, 1, this.getResources().getString(R.string.savedSuccsesfule), "");
-
+    private void getDataZone() {
+        appSettings = new ArrayList();
+        try {
+            appSettings = my_dataBase.settingDao().getallsetting();
+        } catch (Exception e) {
+            Log.e("Getting app settings", e.getMessage());
         }
     }
+
+    private void deletesettings() {
+        if (appSettings.size() != 0)
+            my_dataBase.settingDao().deleteALL();
+    }
+
+    private void saveData(appSettings settings) {
+        my_dataBase.settingDao().deleteALL();
+        my_dataBase.storeDao().deleteall();
+        my_dataBase.settingDao().insert(settings);
+
+        generalMethod.showSweetDialog(this, 1, this.getResources().getString(R.string.savedSuccsesfule), "");
+
+    }
+}

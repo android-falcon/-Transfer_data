@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Transfer App</string>
-    <string name="reqired_filled">مطلوب</string>
+    <string name="reqired_filled">*مطلوب</string>
     <string name="about">المطور</string>
     <string name="barcode">الباركود</string>
     <string name="boxnum">رقم الصندوق</string>
@@ -112,7 +112,7 @@
     <string name="saleprice">Sale Price</string>
     <string name="aviqty">AVI Qty</string>
     <string name="search1">search by ItemCode or ItemName</string>
-    <string name="total_qty">Total_Qty</string>
+    <string name="total_qty">مجموع الكميات</string>
     <string name="IsNew">IsNew</string>
     <string name="date">التاريخ</string>
     <string name="preview">اظهار</string>
@@ -124,7 +124,7 @@
     <string name="notvaildqty2">  لا توجد كمية كافية في </string>
     <string name="trsnferNo">رقم السند </string>
 
-    <string name="transactionDate">اختار التاريخ</string>
+    <string name="transactionDate">تاريخ التحويل</string>
     <string name="previewBtn">عرض النتائج</string>
     <string name="SearchByItemName">اكتب اسم المادة</string>
     <string name="SearchByItemNo">اكتب رقم المادة</string>
@@ -170,5 +170,21 @@
     <string name="getAllData">تم حفظ جميع البيانات</string>
     <string name="or">أو</string>
     <string name="activateCheckQty">تفعيل خاصية التحقق من الكميات</string>
+    <string name="serverError">خطأ في السيرڤر!</string>
+    <string name="serverErrorMsg">حدث خطأ أثناء عملية استيراد الكمية لهذه المادة من السيرڤر.</string>
+
+    <string name="inValidCode">الكود غير صحيح!</string>
+    <string name="serial_no">الرقم التسلسلي</string>
+    <string name="add">إضافة</string>
+    <string name="saving">جاري الحفظ</string>
+    <string name="enter_serial_number">أدخل الرقم التسلسلي</string>
+    <string name="uniqueSerial">رقم تسلسلي مُكرر!</string>
+    <string name="uniqueSerialMsg">هذا الرقم التسلسلي موجود بالفعل في هذه الفاتورة</string>
+    <string name="deleteAll">حذف الكل</string>
+    <string name="deleteAllMsg">هل أنت متأكد من حذف جميع الأرقام المتسلسلة المُدخلة ؟</string>
+    <string name="noUnsavedData">لا يوجد بيانات جديدة لحفظها</string>
+    <string name="serials">الأرقام التسلسلية</string>
+    <string name="savingSerials">تصدير الأرقام التسلسلية</string>
+
 
 </resources>

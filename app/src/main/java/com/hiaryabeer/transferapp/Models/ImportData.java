@@ -107,10 +107,10 @@ public class ImportData {
         try {
             getIpAddress();
         } catch (Exception e) {
-            Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_LONG).show();
         }
 
- headerDll="/Falcons/VAN.Dll/";
+//        headerDll = "/Falcons/VAN.Dll/";
     }
 
     public void getAllItems() {
@@ -541,7 +541,7 @@ public class ImportData {
                 h.post(new Runnable() {
                     public void run() {
                         try {
-                            showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
+                            Toast.makeText(context, "The target server failed to respond", Toast.LENGTH_SHORT).show();
                         } catch (WindowManager.BadTokenException e) {
                             //use a log message
                         }
@@ -810,6 +810,14 @@ public class ImportData {
                 return null;
             } catch (Exception e) {
                 e.printStackTrace();
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(context,  "The target server failed to respond", Toast.LENGTH_LONG).show();
+                    }
+                });
                 Log.e("Exception", "" + e.getMessage());
 //                progressDialog.dismiss();
                 return null;
