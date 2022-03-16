@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLinearAdapter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -131,6 +130,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <CheckBox
         android:id="@+id/checkboxQtyCheck"
         android:layout_width="wrap_content"
@@ -138,9 +138,52 @@
         android:layout_below="@id/deviceTextField"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="15dp"
         android:checked="true"
         android:text="@string/activateCheckQty" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkboxQtyCheck"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="10dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveSetting"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/loginbtn"
+            android:elevation="3dp"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="5dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancelBtn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/cancel_button"
+            android:elevation="3dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/saveSetting"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="5dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <!--    <LinearLayout-->
