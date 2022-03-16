@@ -95,9 +95,21 @@
                             android:layout_height="match_parent"
                             android:layout_weight="3"
                             android:padding="3dp"
-                            android:text="@string/from"
-                            android:textColor="@color/dark_blue_3"
+                            android:text="@string/from_"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
                             android:textSize="14sp" />
+
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
 
                         <Spinner
                             android:id="@+id/fromspinner"
@@ -106,7 +118,6 @@
                             android:layout_weight="1" />
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -122,8 +133,21 @@
                             android:layout_weight="3"
                             android:padding="3dp"
                             android:text="@string/to"
-                            android:textColor="@color/dark_blue_3"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
                             android:textSize="14sp" />
+
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+
 
                         <Spinner
                             android:id="@+id/tospinner"
@@ -138,7 +162,6 @@
                             android:layout_weight="1"
                             android:visibility="gone" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -205,16 +228,28 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1.5"
                             android:padding="3dp"
-                            android:text="@string/itemCode"
-                            android:textColor="@color/dark_blue_3"
+                            android:text="@string/itemCode_"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
                             android:textSize="14sp" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+
 
                         <EditText
                             android:id="@+id/itemcodeedt"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="5dp"
-                            android:layout_weight="1.2"
+                            android:layout_weight="1"
                             android:background="@drawable/back_border_edit"
                             android:elevation="2dp"
                             android:gravity="center"
@@ -226,10 +261,11 @@
 
 
                         <TextView
+
                             android:id="@+id/scanItemCode"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:elevation="2dp"
                             android:gravity="center"
                             android:inputType="text"
@@ -242,18 +278,18 @@
 
                         <TextView
                             android:id="@+id/searchitemCode"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
                             android:background="@drawable/ic_baseline_search_24"
                             android:elevation="2dp"
+                            android:layout_weight="3"
                             android:gravity="center"
                             android:inputType="text"
                             android:padding="1dp"
                             android:textColor="@color/darkblue_"
                             android:textSize="14sp" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -434,7 +470,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/back_border_dark"
+                        android:background="@color/lightOrange"
                         android:gravity="top"
                         android:padding="3dp">
 
