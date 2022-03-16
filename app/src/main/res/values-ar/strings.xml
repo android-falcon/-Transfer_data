@@ -8,8 +8,11 @@
     <string name="cancel">إلغاء</string>
     <string name="export">تصدير</string>
     <string name="from">من</string>
+    <string name="from_">من:</string>
     <string name="itemCode">رقم المادة</string>
+    <string name="itemCode_">رقم المادة:</string>
     <string name="to">إلى</string>
+    <string name="to_">إلى:</string>
     <string name="pono">رقم الطلبية</string>
     <string name="savedSuccsesfule">تم الحفظ بنجاح</string>
     <string name="msg3"> لا يوجد سندات غير مرحلة</string>

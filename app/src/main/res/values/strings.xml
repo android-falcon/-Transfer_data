@@ -34,6 +34,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="ZoneCode">Zone Code</string>
     <string name="itemCode">Item Code</string>
+    <string name="itemCode_">Item Code:</string>
     <string name="Poqty">PoQty</string>
     <string name="notvaildqty">There is no enough quantity </string>
     <string name="notvaildqty2">There is no enough quantity in </string>
@@ -48,8 +49,10 @@
     <string name="boxnum">BoxNo</string>
     <string name="barcode">BareCode</string>
     <string name="from">From</string>
+    <string name="from_">From:</string>
     <string name="enter_password">Enter Password</string>
     <string name="to">TO</string>
+    <string name="to_">TO:</string>
     <string name="nextBox">Next Box</string>
     <string name="login">login</string>
     <string name="Import">Import</string>
