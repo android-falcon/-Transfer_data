@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TransferReports">
+    tools:context=".Activities.TransferReports">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -81,7 +81,6 @@
 
     <!--    </androidx.appcompat.widget.Toolbar>-->
 
-
     <LinearLayout
         android:id="@+id/part1"
         android:layout_width="match_parent"
@@ -89,48 +88,93 @@
         android:layout_below="@+id/my_toolbar"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:weightSum="8">
+        android:orientation="horizontal">
 
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.3"
-            android:text="@string/transactionDate"
-            android:textColor="#3E3F47"
-            android:textSize="16sp" />
+            android:layout_weight="0.8"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etPickDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_weight="6"
-            android:focusable="false"
-            android:gravity="center"
-            android:hint="@string/chooseDate"
-            android:inputType="date"
-            android:textColor="#F2627178"
-            android:textSize="17sp"
-            app:drawableStartCompat="@drawable/ic_date2" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="8">
 
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.3"
+                    android:fontFamily="@font/noto_sans"
+                    android:text="@string/transactionDate"
+                    android:textColor="#3E3F47"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/etPickDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="6"
+                    android:focusable="false"
+                    android:gravity="center"
+                    android:hint="@string/chooseDate"
+                    android:inputType="date"
+                    android:textColor="#039BE5"
+                    android:textSize="17sp"
+                    android:text="23/01/2023"
+                    app:drawableStartCompat="@drawable/ic_date2" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/noto_sans"
+                    android:text="@string/TransferNo"
+                    android:textColor="#3E3F47"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerTrans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="2dp"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textDirection="locale" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnPreview"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="7dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.20"
             android:background="@drawable/loginbtn"
             android:text="@string/previewBtn"
-            android:textAllCaps="false" />
-
-
+            android:textAllCaps="false"
+            android:visibility="gone"/>
     </LinearLayout>
 
 
@@ -149,6 +193,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/noto_sans"
             android:text="@string/searchByToStore"
             android:textColor="#3E3F47"
             android:textSize="16sp" />
@@ -185,7 +230,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_search2"
             android:gravity="start"
-            android:hint="@string/SearchByItemName" />
+            android:hint="@string/Itemname" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -204,7 +249,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_search2"
             android:gravity="start"
-            android:hint="@string/SearchByItemNo" />
+            android:hint="@string/itemCode" />
 
 
     </LinearLayout>
@@ -403,8 +448,8 @@
         android:layout_marginBottom="10dp"
         android:contentDescription="Excel"
         android:src="@drawable/ic_excel"
-        android:visibility="invisible"
-        app:backgroundTint="#FFFFFF"
+        android:visibility="gone"
+        app:backgroundTint="#1F2912"
         app:fabSize="normal"
         app:iconSize="30dp" />
 
@@ -412,15 +457,48 @@
         android:id="@+id/fabPDF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/fabShare"
+        android:layout_alignStart="@+id/fabShare"
+        android:layout_alignEnd="@+id/fabShare"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="7dp"
+        android:contentDescription="PDF"
+        android:src="@drawable/pdf3"
+        android:visibility="gone"
+        app:backgroundTint="#A10000"
+        app:fabSize="normal"
+        app:iconSize="30dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPrint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabShare"
+        android:layout_alignStart="@+id/fabShare"
+        android:layout_alignEnd="@+id/fabShare"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="Print"
+        android:src="@drawable/ic_print"
+        android:visibility="gone"
+        app:backgroundTint="#98A7BF"
+        app:fabSize="normal"
+        app:iconSize="30dp" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/fabConvert"
         android:layout_alignStart="@+id/fabConvert"
         android:layout_alignEnd="@+id/fabConvert"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="7dp"
-        android:contentDescription="PDF"
-        android:src="@drawable/pdf2"
-        android:visibility="invisible"
-        app:backgroundTint="#FFFFFF"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="Share"
+        android:src="@drawable/ic_share"
+        android:visibility="gone"
+        app:backgroundTint="#C6C6C6"
         app:fabSize="normal"
         app:iconSize="30dp" />
 
@@ -431,12 +509,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="22dp"
         android:contentDescription="Convert into"
         android:src="@drawable/ic_convert"
+        android:visibility="gone"
         app:fabSize="normal"
         app:iconSize="30dp" />
 

@@ -5,13 +5,11 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,42 +17,36 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hiaryabeer.transferapp.Login;
-import com.hiaryabeer.transferapp.MainActivity;
+import com.hiaryabeer.transferapp.Activities.Login;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 
 import java.util.List;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-import static com.hiaryabeer.transferapp.MainActivity.colorData;
-import static com.hiaryabeer.transferapp.MainActivity.highligtedItemPosition;
-import static com.hiaryabeer.transferapp.MainActivity.highligtedItemPosition2;
-import static com.hiaryabeer.transferapp.MainActivity.replacmentRecycler;
-import static com.hiaryabeer.transferapp.MainActivity.save;
-import static com.hiaryabeer.transferapp.MainActivity.saveflage;
-import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
-import static com.hiaryabeer.transferapp.MainActivity.replacementlist;
-import static com.hiaryabeer.transferapp.Models.ImportData.listQtyZone;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition2;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.save;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.replacementlist;
 
 
 public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.replacementViewHolder> {
-    private List<ReplacementModel> list;
+    public static List<ReplacementModel> list;
     Context context;
     String newqty;
     public RoomAllData my_dataBase;
 
     private int recyclerViewCurrentScrolledPosition;
 
+//    List<ItemSerialTransfer> serialsList;
+//    EditSerialAdapter editSerialAdapter;
+
     public ReplacementAdapter(List<ReplacementModel> list, Context context) {
-        this.list = list;
+        ReplacementAdapter.list = list;
         this.context = context;
 
-        if (list.size() == 0)
-            save.setEnabled(false);
-        else
-            save.setEnabled(true);
+        save.setEnabled(list.size() != 0);
 
     }
 
@@ -81,12 +73,232 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         //   holder.itemqty.setText(list.get(position).getQty());
         holder.itemqty.setEnabled(false);
 
-        holder.qty.setEnabled(Login.serialsActive == 0);
+//        holder.qty.setEnabled(Login.serialsActive == 0);
+
+        if (Login.serialsActive == 1) {
+
+            List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
+
+            if (hasSerial.get(0).equals("1")) {
+                holder.qty.setEnabled(false);
+                holder.qty.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        if (s.toString().equals("0")) {
+                            my_dataBase.replacementDao().deleteReplacement(list.get(holder.getAdapterPosition()).getItemcode(),
+                                    list.get(holder.getAdapterPosition()).getFrom(), list.get(holder.getAdapterPosition()).getTo(), list.get(holder.getAdapterPosition()).getTransNumber());
+                            list.remove(holder.getAdapterPosition());
+                            notifyDataSetChanged();
+                        }
+
+                    }
+                });
+            } else {
+
+                holder.qty.setEnabled(true);
+                holder.qty.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        if (s.toString().length() != 0) {
+                            try {
+//                            int pos = Integer.parseInt(itemcode.getTag().toString());
+
+                                newqty = s.toString().trim();
+
+
+                                if (!newqty.trim().equals("0")) {
+
+                                    list.get(holder.getAdapterPosition()).setRecQty(newqty);
+                                    my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber());
+
+//                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
+
+                                } else {
+//                                    replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
+//                                    MainActivity.updateAdpapter();
+                                    holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
+                                    Log.e("case1===", "");
+                                }
+
+
+                            } catch (Exception e) {
+                            }
+
+                            //newqty = qty.getText().toString();
+
+                        } else {
+//                        int pos = Integer.parseInt(itemcode.getTag().toString());
+//                        replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
+//                        MainActivity.updateAdpapter();
+                            holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
+
+                        }
+
+                    }
+                });
+
+            }
+
+        } else {
+//            holder.qty.setEnabled(true);
+//            holder.qty.requestFocus();
+//            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+//            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
+            holder.qty.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                    if (my_dataBase.settingDao().getallsetting().get(0).getCheckQty().equals("1")) { ///Qty Checker Active
+
+                        if (editable.toString().length() != 0) {
+                            try {
+//                            int pos = Integer.parseInt(itemcode.getTag().toString());
+
+                                int totAvailableQty = Integer.parseInt(replacementlist.get(holder.getAdapterPosition()).getAvailableQty()) + Integer.parseInt(replacementlist.get(holder.getAdapterPosition()).getRecQty());
+
+                                Log.e("Total Available Qty:", String.valueOf(totAvailableQty));
+
+                                newqty = editable.toString().trim();
+
+                                if ((Integer.parseInt(newqty)) <= (totAvailableQty)) {
+                                    if (!newqty.trim().equals("0")) {
+
+                                        list.get(holder.getAdapterPosition()).setRecQty(newqty);
+                                        my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+                                                list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber());
+                                        list.get(holder.getAdapterPosition()).setAvailableQty(String.valueOf(totAvailableQty - Integer.parseInt(newqty)));
+                                        my_dataBase.replacementDao().updateAvailableQTY(list.get(holder.getAdapterPosition()).getTransNumber(),
+                                                list.get(holder.getAdapterPosition()).getItemcode(), list.get(holder.getAdapterPosition()).getAvailableQty());
+
+                                        Log.e("AvailableAfter", String.valueOf(totAvailableQty - Integer.parseInt(newqty)));
+//                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
+
+                                    } else {
+//                                    replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
+//                                    MainActivity.updateAdpapter();
+                                        holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
+                                        Log.e("case1===", "");
+                                    }
+                                } else {
+                                    int availableQty = Integer.parseInt(replacementlist.get(holder.getAdapterPosition()).getAvailableQty());
+                                    int enteredQty = Integer.parseInt(replacementlist.get(holder.getAdapterPosition()).getRecQty());
+                                    int totAvailable = availableQty + enteredQty;
+                                    holder.qty.setError(context.getString(R.string.notEnoughQuantity) +
+                                            totAvailable);
+                                    //Maximum quantity available for this item is ...
+                                }
+
+                            } catch (Exception e) {
+                            }
+
+                            //newqty = qty.getText().toString();
+
+                        } else {
+//                        int pos = Integer.parseInt(itemcode.getTag().toString());
+//                        replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
+//                        MainActivity.updateAdpapter();
+                            holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
+
+                        }
+                    } else { ///Qty Checker Inactive
+
+                        if (editable.toString().length() != 0) {
+                            try {
+//                            int pos = Integer.parseInt(itemcode.getTag().toString());
+
+                                newqty = editable.toString().trim();
+
+
+                                if (!newqty.trim().equals("0")) {
+
+                                    list.get(holder.getAdapterPosition()).setRecQty(newqty);
+                                    my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber());
+
+//                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
+
+                                } else {
+//                                    replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
+//                                    MainActivity.updateAdpapter();
+                                    holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
+                                    Log.e("case1===", "");
+                                }
+
+
+                            } catch (Exception e) {
+                            }
+
+                            //newqty = qty.getText().toString();
+
+                        } else {
+//                        int pos = Integer.parseInt(itemcode.getTag().toString());
+//                        replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
+//                        MainActivity.updateAdpapter();
+                            holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
+
+                        }
+
+                    }
+                }
+            });
+        }
+
+        if (Login.serialsActive == 0) {
+            holder.tvEdit.setVisibility(View.INVISIBLE);
+        } else {
+            List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
+
+            if (hasSerial.get(0).equals("1")) {
+                holder.tvEdit.setVisibility(View.VISIBLE);
+                holder.tvEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        itemcode.setText(list.get(holder.getAdapterPosition()).getItemcode());
+                    }
+                });
+            } else
+                holder.tvEdit.setVisibility(View.INVISIBLE);
+
+        }
 
         Log.e("pos===", position + "highligtedItemPosition=== " + highligtedItemPosition + "highligtedItemPosition2==" + highligtedItemPosition2);
         if (position == highligtedItemPosition2) {
 
             if (Login.serialsActive == 0) {
+                holder.qty.setEnabled(true);
                 holder.qty.requestFocus();
                 InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
@@ -118,9 +330,8 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
                         list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());
                 Log.e("f===", f + "");
 
-                my_dataBase.serialsDao().deleteAllAdded(list.get(position).getItemcode(), list.get(position).getTransNumber());
+                my_dataBase.serialTransfersDao().deleteAllAdded(list.get(position).getItemcode(), list.get(position).getTransNumber());
                 list.remove(position);
-
 
                 notifyDataSetChanged();
             }
@@ -134,11 +345,15 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
     }
 
     class replacementViewHolder extends RecyclerView.ViewHolder {
-        TextView itemname, from, to, zone, itemcode, tvRemove, itemqty, TransferNo;
+        TextView itemname, from, to, zone, itemcode, tvRemove, itemqty, TransferNo, tvEdit;
 
         EditText qty;
 
-        LinearLayout linearLayoutColoring;
+        LinearLayout linearLayoutColoring, linearEdit;
+
+        Button btnAddSerial;
+
+        RecyclerView rvEditSerials;
 
         public replacementViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -154,117 +369,10 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             // qty.setOnEditorActionListener(onEditAction);
             tvRemove = itemView.findViewById(R.id.tvRemove);
             itemqty = itemView.findViewById(R.id.itemqty);
-
-            if (Login.serialsActive == 0) {
-
-                qty.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                        if (my_dataBase.settingDao().getallsetting().get(0).getCheckQty().equals("1")) { ///Qty Checker Active
-
-                            if (editable.toString().length() != 0) {
-                                try {
-//                            int pos = Integer.parseInt(itemcode.getTag().toString());
-
-                                    int totAvailableQty = Integer.parseInt(replacementlist.get(getAdapterPosition()).getAvailableQty()) + Integer.parseInt(replacementlist.get(getAdapterPosition()).getRecQty());
-
-                                    Log.e("Total Available Qty:", String.valueOf(totAvailableQty));
-
-                                    newqty = editable.toString().trim();
-
-                                    if ((Integer.parseInt(newqty)) <= (totAvailableQty)) {
-                                        if (!newqty.trim().equals("0")) {
-
-                                            list.get(getAdapterPosition()).setRecQty(newqty);
-                                            my_dataBase.replacementDao().updateQTY(list.get(getAdapterPosition()).getItemcode(),
-                                                    list.get(getAdapterPosition()).getRecQty(), list.get(getAdapterPosition()).getTransNumber());
-                                            list.get(getAdapterPosition()).setAvailableQty(String.valueOf(totAvailableQty - Integer.parseInt(newqty)));
-                                            my_dataBase.replacementDao().updateAvailableQTY(list.get(getAdapterPosition()).getTransNumber(),
-                                                    list.get(getAdapterPosition()).getItemcode(), list.get(getAdapterPosition()).getAvailableQty());
-
-                                            Log.e("AvailableAfter", String.valueOf(totAvailableQty - Integer.parseInt(newqty)));
-//                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
-
-                                        } else {
-//                                    replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
-//                                    MainActivity.updateAdpapter();
-                                            qty.setError(context.getResources().getString(R.string.qtyerror3));
-                                            Log.e("case1===", "");
-                                        }
-                                    } else {
-                                        int availableQty = Integer.parseInt(replacementlist.get(getAdapterPosition()).getAvailableQty());
-                                        int enteredQty = Integer.parseInt(replacementlist.get(getAdapterPosition()).getRecQty());
-                                        int totAvailable = availableQty + enteredQty;
-                                        qty.setError(context.getString(R.string.notEnoughQuantity) +
-                                                totAvailable);
-                                        //Maximum quantity available for this item is ...
-                                    }
-
-                                } catch (Exception e) {
-                                }
-
-                                //newqty = qty.getText().toString();
-
-                            } else {
-//                        int pos = Integer.parseInt(itemcode.getTag().toString());
-//                        replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
-//                        MainActivity.updateAdpapter();
-                                qty.setError(context.getResources().getString(R.string.qtyerror3));
-
-                            }
-                        } else { ///Qty Checker Inactive
-
-                            if (editable.toString().length() != 0) {
-                                try {
-//                            int pos = Integer.parseInt(itemcode.getTag().toString());
-
-                                    newqty = editable.toString().trim();
-
-
-                                    if (!newqty.trim().equals("0")) {
-
-                                        list.get(getAdapterPosition()).setRecQty(newqty);
-                                        my_dataBase.replacementDao().updateQTY(list.get(getAdapterPosition()).getItemcode(),
-                                                list.get(getAdapterPosition()).getRecQty(), list.get(getAdapterPosition()).getTransNumber());
-
-//                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
-
-                                    } else {
-//                                    replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
-//                                    MainActivity.updateAdpapter();
-                                        qty.setError(context.getResources().getString(R.string.qtyerror3));
-                                        Log.e("case1===", "");
-                                    }
-
-
-                                } catch (Exception e) {
-                                }
-
-                                //newqty = qty.getText().toString();
-
-                            } else {
-//                        int pos = Integer.parseInt(itemcode.getTag().toString());
-//                        replacementlist.get(pos).setRecQty(replacementlist.get(pos).getRecQty());
-//                        MainActivity.updateAdpapter();
-                                qty.setError(context.getResources().getString(R.string.qtyerror3));
-
-                            }
-
-                        }
-                    }
-                });
-            }
+            linearEdit = itemView.findViewById(R.id.linearEdit);
+            btnAddSerial = itemView.findViewById(R.id.btnAddSerial);
+            rvEditSerials = itemView.findViewById(R.id.rvEditSerials);
+            tvEdit = itemView.findViewById(R.id.tvEdit);
 
 
             tvRemove.setOnClickListener(new View.OnClickListener() {

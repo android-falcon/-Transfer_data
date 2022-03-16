@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.hiaryabeer.transferapp.MainActivity;
+import com.hiaryabeer.transferapp.Activities.Login;
+import com.hiaryabeer.transferapp.Activities.MainActivity;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.RoomAllData;
 import com.hiaryabeer.transferapp.Store;
@@ -35,13 +38,13 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import static com.hiaryabeer.transferapp.Login.getListCom;
-import static com.hiaryabeer.transferapp.MainActivity.itemcode;
-import static com.hiaryabeer.transferapp.MainActivity.itemrespons;
-import static com.hiaryabeer.transferapp.MainActivity.zone;
+import static com.hiaryabeer.transferapp.Activities.Login.getListCom;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.itemrespons;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.zone;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
-
+//zamel: 92.253.93.250:80 / 295
 public class ImportData {
     public static ArrayList<ZoneModel> listAllZone = new ArrayList<>();
     public static int posize;
@@ -78,7 +81,7 @@ public class ImportData {
 
         String myQty = "";
 
-        String url = "http://" + ipAddress.trim() + "/GetItemQtyInStore?CONO=" + CONO.trim() + "&strno=" + storeNo + "&ITEMCODE=" + itemCode;
+        String url = "http://" + ipAddress.trim() + headerDll.trim() + "/GetItemQtyInStore?CONO=" + CONO.trim() + "&strno=" + storeNo + "&ITEMCODE=" + itemCode;
         Log.e(" url", url);
         JsonArrayRequest arrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
@@ -96,6 +99,24 @@ public class ImportData {
                 getItemQtyCallBack.onError(error.getMessage());
             }
         });
+
+        arrayRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+
         RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(arrayRequest);
     }
 
@@ -815,7 +836,7 @@ public class ImportData {
                 h.post(new Runnable() {
                     public void run() {
 
-                        Toast.makeText(context,  "The target server failed to respond", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "The target server failed to respond", Toast.LENGTH_LONG).show();
                     }
                 });
                 Log.e("Exception", "" + e.getMessage());
@@ -849,6 +870,11 @@ public class ImportData {
                                 jsonObject1 = requestArray.getJSONObject(i);
                                 allItems.setItemOcode(jsonObject1.getString("ItemOCode"));
                                 allItems.setItemName(jsonObject1.getString("ItemNameA"));
+                                allItems.setBarCode(jsonObject1.getString("ItemNCode"));
+                                if (Login.serialsActive == 1)
+                                    allItems.setHasSerial(jsonObject1.getString("ITEMHASSERIAL"));
+                                else
+                                    allItems.setHasSerial("");
 
                                 AllImportItemlist.add(allItems);
                             }
@@ -865,10 +891,10 @@ public class ImportData {
                     Log.e("itemrespons", itemrespons.getText().toString() + d);
 
                     Log.e("itemrespons", itemrespons.getText().toString() + d);
+
                 } else {
 
                     itemrespons.setText("nodata");
-
 
                 }
 
@@ -879,6 +905,94 @@ public class ImportData {
 
 
     }
+
+    /******** Bara' *********/
+
+    public interface GetSerialsCallBack {
+
+        void onResponse(JSONArray response);
+
+        void onError(String error);
+
+    }
+
+    public void getAllSerials(GetSerialsCallBack getSerialsCallBack) {
+
+//        List<SerialsModel> allSerialsList = my_dataBase.serialsDao().getAllSerials();
+//        if (allSerialsList.size() == 0) {
+
+        SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        dialog.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+        dialog.setTitleText(context.getString(R.string.storeSerials));
+        dialog.setCancelable(false);
+        dialog.show();
+
+        String url = "http://" + ipAddress.trim() + headerDll.trim() + "/GetAllITEMSERIAL?CONO=" + CONO.trim();
+        Log.e("Serials url", url);
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+
+                        dialog.dismissWithAnimation();
+                    }
+                });
+                Log.e("GetSerialsResp", response.toString().substring(0, 100));
+                getSerialsCallBack.onResponse(response);
+
+                showSweetDialog(context, 1, context.getString(R.string.app_done), "");
+
+//                for (int i = 0; i < response.length(); i++) {
+//                    try {
+//                        my_dataBase.serialsDao().insert(new SerialsModel(
+//                                response.getJSONObject(i).getString("STORENO"),
+//                                response.getJSONObject(i).getString("ITEMOCODE"),
+//                                response.getJSONObject(i).getString("SERIALCODE")));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+
+                        dialog.dismissWithAnimation();
+                    }
+                });
+                getSerialsCallBack.onError(error.getMessage() + "");
+                Toast.makeText(context, context.getString(R.string.errorSavingSerials), Toast.LENGTH_SHORT).show();
+                Log.e("GetSerialsErr", error.getMessage() + "");
+            }
+        });
+        arrayRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(arrayRequest);
+//        }
+    }
+
+    /*************/
 
 
 }

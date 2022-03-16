@@ -8,12 +8,12 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.hiaryabeer.transferapp.Login;
-import com.hiaryabeer.transferapp.MainActivity;
+import com.hiaryabeer.transferapp.Activities.Login;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
@@ -41,9 +41,7 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import static com.hiaryabeer.transferapp.MainActivity.exportAllState;
-import static com.hiaryabeer.transferapp.MainActivity.poststateRE;
-import static com.hiaryabeer.transferapp.MainActivity.saveflage;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.exportAllState;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
 public class ExportData {
@@ -57,11 +55,14 @@ public class ExportData {
     private JSONArray jsonArrayShipment;
     private JSONArray jsonArrayReplacement, jsonArraySerials, jsonArrayStock, jsonArrayZoneRep;
     private JSONArray jsonArrayVouchers;
+    ImportData importData;
+    List<SerialsModel> allItemSerials = new ArrayList<>();
 
     public ArrayList<ReplacementModel> listAllReplacment = new ArrayList<>();
     int typeExportZone = 0;
     int typeExportShipment = 0;
     int typeExportReplacement = 0;
+    boolean reExport = false;
 
     public ExportData(Context context) {
         this.context = context;
@@ -85,7 +86,6 @@ public class ExportData {
         Log.e("getIpAddress", "1" + ipAddress + "port=" + portIp);
 //        Log.e("getIpAddress",""+ipAddress);
 
-
     }
 
     public void exportReplacementList(List<ReplacementModel> replacementlist) {
@@ -95,6 +95,8 @@ public class ExportData {
         pdRepla.setTitleText(context.getString(R.string.exportRep));
         pdRepla.setCancelable(false);
         pdRepla.show();
+
+//        this.reExport = reExport;
 
         new JSONTask_AddReplacment(replacementlist).execute();
     }
@@ -134,7 +136,7 @@ public class ExportData {
     public class JSONTask_AddReplacment extends AsyncTask<String, String, String> {
         private String JsonResponse = null;
 
-        List<ReplacementModel> replacementList = new ArrayList<>();
+        List<ReplacementModel> replacementList;
 
         public JSONTask_AddReplacment(List<ReplacementModel> replacementList) {
             this.replacementList = replacementList;
@@ -234,7 +236,15 @@ public class ExportData {
                         //  poststateRE.setText("exported");
 
 //                        exportAllState.setText("exported");
-                        my_dataBase.replacementDao().updateReplashmentPosted();
+                        for (int i = 0; i < replacementList.size(); i++) {
+                            my_dataBase.replacementDao().postFor(
+                                    replacementList.get(i).getTransNumber(),
+                                    replacementList.get(i).getItemcode());
+                        }
+
+//                        my_dataBase.replacementDao().updateReplashmentPosted();
+                        exportAllState.setText("exported");
+
                         if (Login.serialsActive == 1) {
 
                             SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
@@ -242,15 +252,17 @@ public class ExportData {
                             savingDialog.setTitleText(context.getString(R.string.savingSerials));
                             savingDialog.setCancelable(false);
                             savingDialog.show();
-                            JSONTask_ExportSerials(savingDialog);
+                            JSONTask_ExportSerials(savingDialog, replacementList);
 
                         } else {
+
                             SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
                             savingDialog.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
                             savingDialog.setTitleText(context.getString(R.string.saving));
                             savingDialog.setCancelable(false);
                             savingDialog.show();
                             JSONTask_ExportTrans(savingDialog);
+
                         }
 
 
@@ -269,7 +281,6 @@ public class ExportData {
 //                Log.e("aaaaaaa2===","aaaaaaa");
                 exportAllState.setText("not");
 
-
             }
 
 
@@ -278,27 +289,32 @@ public class ExportData {
     }
 
     ////////B
-    public void JSONTask_ExportSerials(SweetAlertDialog savingDialog) {
+    public void JSONTask_ExportSerials(SweetAlertDialog savingDialog, List<ReplacementModel> replacements) {
         String url = "http://" + ipAddress.trim() + headerDll.trim() + "/SaveSerialTransfer";
         Log.e("Export Serials URL ", url);
 
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, url,new Response.Listener<String>() {
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("ExportSerials Response", response);
-                if (response.toString().contains("Saved Successfully")) {
+                if (response.contains("Saved Successfully")) {
                     savingDialog.dismissWithAnimation();
-                    my_dataBase.serialsDao().postSerials();
+                    for (int r = 0; r < replacements.size(); r++) {
+
+                        my_dataBase.serialTransfersDao().postSerialsFor(
+                                replacements.get(r).getItemcode(), replacements.get(r).getTransNumber());
+
+                    }
                     SweetAlertDialog savingDialog2 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
                     savingDialog2.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
                     savingDialog2.setTitleText(context.getString(R.string.saving));
                     savingDialog2.setCancelable(false);
                     savingDialog2.show();
                     JSONTask_ExportTrans(savingDialog2);
-                } else if (response.toString().contains("server error")) {
+                } else if (response.contains("server error")) {
                     savingDialog.dismissWithAnimation();
                     showSweetDialog(context, 0, "Internal server error", "");
-                } else if (response.toString().contains("unique constraint")) {
+                } else if (response.contains("unique constraint")) {
                     savingDialog.dismissWithAnimation();
                     Log.e("unique response", response.toString() + "");
                     try {
@@ -326,19 +342,43 @@ public class ExportData {
 
                 // on below line we are passing our key
                 // and value pair to our parameters.
-                List<ItemSerialTransfer> serialTransfers = my_dataBase.serialsDao().getUnPosted();
+                List<ItemSerialTransfer> serialTransfers = new ArrayList<>();
+                for (int r = 0; r < replacements.size(); r++) {
+
+                    serialTransfers.addAll(my_dataBase.serialTransfersDao().getAllAdded(
+                            replacements.get(r).getItemcode(), replacements.get(r).getTransNumber()
+                    ));
+
+
+                }
+//                serialTransfers = my_dataBase.serialTransfersDao().getUnPosted();
                 getSerialsObject(serialTransfers);
 //                my_dataBase.serialsDao().postSerials();
                 params.put("CONO", CONO.trim());
                 params.put("JSONSTR", serialsObject.toString());
 
-                Log.e("JSONSTRSer",serialsObject.toString());
+                Log.e("JSONSTRSer", serialsObject.toString());
                 // at last we are
                 // returning our params.
                 return params;
             }
         };
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
 
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
         RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 
     }
@@ -348,25 +388,60 @@ public class ExportData {
         String url = "http://" + ipAddress.trim() + headerDll.trim() + "/EXPORTTRANS" + "?CONO=" + CONO;
         Log.e("Export Trans URL ", url);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.e("ExportTrans Response", response.toString());
                 if (response.toString().contains("Saved Successfully")) {
+
                     savingDialog.dismissWithAnimation();
                     exportAllState.setText("exported");
+
+//                    reportsList = my_dataBase.replacementDao().getReplacementsByDate(etPickDate.getText().toString());
+//                    transReportsAdapter = new TransReportsAdapter(context, reportsList);
+//                    rvTransferReports.setAdapter(transReportsAdapter);
+//                    rvTransferReports.setLayoutManager(new LinearLayoutManager(context));
+
+                    showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
+
+
+//                    ((Activity)context).recreate();
+
+//                    if (Login.serialsActive == 1) {
+//                        int d = my_dataBase.serialsDao().deleteAllSerials();
+//                        Log.e("DeleteSERIALS", d + "");
+//                        importData.getAllSerials(new ImportData.GetSerialsCallBack() {
+//                            @Override
+//                            public void onResponse(JSONArray response) {
+//                                Log.e("responseLength", response.length() + "");
+//                                allItemSerials.clear();
+//                                for (int i = 0; i < response.length(); i++) {
+//                                    try {
+//                                        allItemSerials.add(new SerialsModel(
+//                                                response.getJSONObject(i).getString("STORENO"),
+//                                                response.getJSONObject(i).getString("ITEMOCODE"),
+//                                                response.getJSONObject(i).getString("SERIALCODE")));
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                                Log.e("allItemSerialsLength", allItemSerials.size() + "");
+//                                my_dataBase.serialsDao().insertAll(allItemSerials);
+//                            }
+//
+//                            @Override
+//                            public void onError(String error) {
+//
+//                            }
+//                        });
+//                    }
                 } else if (response.toString().contains("server error")) {
                     savingDialog.dismissWithAnimation();
                     showSweetDialog(context, 0, "Internal server error", "");
                 } else if (response.toString().contains("unique constraint")) {
                     savingDialog.dismissWithAnimation();
                     Log.e("unique response", response.toString() + "");
-                    try {
-                        String res = response.getString("ErrorDesc");
-                        showSweetDialog(context, 0, "Unique Constraint", res);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    showSweetDialog(context, 0, "Unique Constraint", "");
 
                 }
             }
@@ -374,29 +449,106 @@ public class ExportData {
             @Override
             public void onErrorResponse(VolleyError error) {
                 savingDialog.dismissWithAnimation();
-                showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
+
+                if ((error.getMessage() + "").contains("value too large for column \"A2021_295\""))
+                    showSweetDialog(context, 0, "Server Error!", "Value too large for column \"A2021_295\"");
+                else
+                    showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
 
                 Log.e("ExportTrans Error ", error.getMessage() + "");
             }
-        }) {
+        });
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
             @Override
-            protected Map<String, String> getParams() {
-                // below line we are creating a map for
-                // storing our values in key and value pair.
-                Map<String, String> params = new HashMap<String, String>();
-
-                // on below line we are passing our key
-                // and value pair to our parameters.
-                params.put("CONO", CONO);
-
-                // at last we are
-                // returning our params.
-                return params;
+            public int getCurrentTimeout() {
+                return 30000;
             }
-        };
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 3;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
 
         RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 
     }
+
+//    public void JSONTask_ExportTransTest(SweetAlertDialog savingDialog) {
+//        String url = "http://" + ipAddress.trim() + headerDll.trim() + "/EXPORTTRANS" + "?";
+//        Log.e("Export Trans URL ", url);
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.e("ExportTrans Response", response + "");
+//                if (response.toString().contains("Saved Successfully")) {
+//                    savingDialog.dismissWithAnimation();
+//                    exportAllState.setText("exported");
+//
+//                } else if ((response + "").contains("server error")) {
+//                    savingDialog.dismissWithAnimation();
+//                    showSweetDialog(context, 0, "Internal server error", "");
+//                } else if ((response + "").contains("unique constraint")) {
+//                    savingDialog.dismissWithAnimation();
+//                    Log.e("unique response", response + "");
+//                    showSweetDialog(context, 0, "Unique Constraint", "");
+//
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                savingDialog.dismissWithAnimation();
+//
+//                if ((error.getMessage() + "").contains("value too large for column \"A2021_295\""))
+//                    showSweetDialog(context, 0, "Server Error!", "Value too large for column \"A2021_295\"");
+//                else
+//                    showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
+//
+//                Log.e("ExportTrans Error ", error.getMessage() + "");
+//            }
+//        }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//
+//                Map<String, String> params = new HashMap<>();
+//                params.put("CONO", CONO);
+//
+//                return params;
+//
+//            }
+//
+//        };
+//
+//
+//        stringRequest.setRetryPolicy(new RetryPolicy() {
+//            @Override
+//            public int getCurrentTimeout() {
+//                return 30000;
+//            }
+//
+//            @Override
+//            public int getCurrentRetryCount() {
+//                return 3;
+//            }
+//
+//            @Override
+//            public void retry(VolleyError error) throws VolleyError {
+//
+//            }
+//        });
+//
+//        RequestQueueSingleton.getInstance(context.getApplicationContext()).
+//                addToRequestQueue(stringRequest);
+//
+//    }
 
 }

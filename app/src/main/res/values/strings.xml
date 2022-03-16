@@ -13,7 +13,7 @@
     <string name="close_drawer">close drawer</string>
     <string name="settings_ip">Settings</string>
     <string name="server_ip">Server IP</string>
-    <string name="IP_PORT">IP PORT</string>
+    <string name="IP_PORT">IP Port</string>
     <string name="CONO">CoNo</string>
     <string name="year">Year</string>
     <string name="save">Save</string>
@@ -57,7 +57,7 @@
     <string name="recQty">recQty</string>
     <string name="invalidPONO">in valid PO number</string>
     <string name="existsBARCODE">BareCode not exists</string>
-    <string name="Itemname">Item name</string>
+    <string name="Itemname">Item Name</string>
     <string name="app_done">Done</string>
     <string name="Differ">Differ</string>
     <string name="confirm">Are you sure you want to select this entry?</string>
@@ -139,7 +139,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="msg">To Transfer to other zones</string>
 
     <string name="trsnferNo">Transfer No</string>
-    <string name="transactionDate">Transaction Date:</string>
+    <string name="transactionDate">Transaction Date</string>
     <string name="previewBtn">Preview</string>
     <string name="SearchByItemName">Search By Name</string>
     <string name="SearchByItemNo">Search By Item No.</string>
@@ -193,8 +193,21 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="serials">Serials</string>
     <string name="savingSerials">Exporting Serials</string>
 
+    <string name="allTransfers">All Transfers</string>
     <string name="export_to_pdf">Export To Pdf</string>
 
+    <string name="shareTo">Share to …</string>
+    <string name="serialNotFound">Serial not found!</string>
+    <string name="notFoundMsg">This serial no. doesn\'t exist for the selected item in the selected store</string>
+    <string name="storeSerials">Importing Item Serials</string>
+    <string name="errorSavingSerials">Error saving serials</string>
+    <string name="note_enter_password">Note: Enter required password to re-Export replacement.</string>
+    <string name="wrong_password">Wrong Password!</string>
+    <string name="wrong_password_msg">You\'re not authorized for this action.</string>
+    <string name="welcome_to_">Welcome to your\nInventory Management\npartner</string>
+    <string name="start_now">Start Now</string>
+    <string name="login_with">Sign in now with your username\nand password !</string>
+    <string name="ip_address_">IP address settings</string>
 
 
 </resources>

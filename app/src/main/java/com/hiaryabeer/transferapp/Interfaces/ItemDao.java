@@ -15,8 +15,11 @@ public interface ItemDao {
     public long[] insertAll(List<AllItems> allItems);
 
     @Query("SELECT * FROM ITEM_TABLE")
-    List<AllItems>   getAll();
+    List<AllItems> getAll();
 
     @Query("DELETE FROM ITEM_TABLE")
-   void  dELETEAll();
+    void dELETEAll();
+
+    @Query("SELECT Has_Serial FROM ITEM_TABLE WHERE ITEMOCODE = :itemCode")
+    List<String> itemHasSerial(String itemCode);
 }

@@ -1,9 +1,15 @@
 package com.hiaryabeer.transferapp.Adapters;
 
+import static com.hiaryabeer.transferapp.Activities.Login.serialsActive;
+import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
+
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -12,12 +18,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.hiaryabeer.transferapp.Login;
-import com.hiaryabeer.transferapp.MainActivity;
+import com.hiaryabeer.transferapp.Models.ExportData;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapter.ReportsViewHolder> {
@@ -63,10 +69,12 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
             holder.bodyRowParent.setBackgroundResource(R.color.notPostedBackground);
         }
 
-        if (Login.serialsActive == 1) {
+        if (serialsActive == 1) {
+            holder.downArrow.setVisibility(View.VISIBLE);
 
-            this.serialsList = database.serialsDao().getSerialCodes(reportsList.get(position).getTransNumber(),
+            serialsList = database.serialTransfersDao().getSerialCodes(reportsList.get(position).getTransNumber(),
                     reportsList.get(position).getItemcode());
+
 
             this.serialsReportAdapter = new SerialsReportAdapter(context, serialsList);
 
@@ -79,6 +87,76 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
                 } else {
                     holder.serialsLayout.setVisibility(View.VISIBLE);
                     holder.downArrow.setBackgroundResource(R.drawable.ic_expand_less);
+                }
+            });
+        } else {
+            holder.downArrow.setVisibility(View.GONE);
+        }
+
+        if (serialsActive == 1)
+            holder.reExport.setVisibility(View.GONE);
+        else {
+            holder.reExport.setVisibility(View.VISIBLE);
+            holder.reExport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Dialog passwordDialog = new Dialog(context);
+
+                    View view = LayoutInflater.from(context).inflate(R.layout.prompt_password_dialog, null);
+
+                    passwordDialog.setContentView(view);
+                    passwordDialog.setCancelable(false);
+
+                    TextView closeBtn = passwordDialog.findViewById(R.id.closeBtn);
+                    EditText passwordEt = passwordDialog.findViewById(R.id.passwordEt);
+                    Button okBtn = passwordDialog.findViewById(R.id.okBtn);
+
+                    closeBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            passwordDialog.dismiss();
+                        }
+                    });
+
+                    okBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (passwordEt.getText().toString().trim().equals("")) {
+
+                                passwordEt.requestFocus();
+                                passwordEt.setError(context.getString(R.string.required));
+
+                            } else {
+
+                                if (passwordEt.getText().toString().trim().equals("2022000")) {
+
+                                    List<ReplacementModel> replacements = new ArrayList<>();
+                                    ReplacementModel replacement = reportsList.get(holder.getAdapterPosition());
+
+                                    replacements.add(replacement);
+                                    ExportData exportData = new ExportData(context);
+                                    exportData.exportReplacementList(replacements);
+
+//                                    transReportsAdapter = new TransReportsAdapter(context, reportsList);
+//                                    rvTransferReports.setAdapter(transReportsAdapter);
+//                                    transReportsAdapter.notifyDataSetChanged();
+
+                                } else {
+
+                                    showSweetDialog(context, 3, context.getString(R.string.wrong_password), context.getString(R.string.wrong_password_msg));
+
+                                }
+                                passwordDialog.dismiss();
+
+                            }
+
+                        }
+                    });
+
+                    passwordDialog.show();
+
                 }
             });
         }
@@ -100,7 +178,7 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
         private LinearLayout serialsLayout;
         private RecyclerView RVSerialsReport;
 
-        private TextView downArrow;
+        private TextView downArrow, reExport, serials;
 
         public ReportsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,6 +197,8 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
             RVSerialsReport = itemView.findViewById(R.id.RVSerialsReport);
 
             downArrow = itemView.findViewById(R.id.downArrow);
+            reExport = itemView.findViewById(R.id.reExport);
+            serials = itemView.findViewById(R.id.serials);
 
         }
     }

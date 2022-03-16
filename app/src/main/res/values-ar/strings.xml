@@ -30,7 +30,7 @@
     <string name="action_sign_in">تسجيل الدخول</string>
     <string name="invalid_username">اسم مستخدم غير صالح</string>
     <string name="invalid_password">رقم سري غير صالح</string>
-    <string name="enter_password">ادخل كلمة المرور</string>
+    <string name="enter_password">أدخل كلمة المرور</string>
     <string name="app_done">تم</string>
     <string name="edit">تعديل</string>
     <string name="welcome">مرحبا</string>
@@ -129,8 +129,8 @@
     <string name="SearchByItemName">اكتب اسم المادة</string>
     <string name="SearchByItemNo">اكتب رقم المادة</string>
     <string name="TransferNo">رقم السند</string>
-    <string name="fromStore">المستودع المُصدِّر</string>
-    <string name="toStore">المستودع المنقول اليه</string>
+    <string name="fromStore">من المستودع</string>
+    <string name="toStore">إلى المستودع</string>
     <string name="chooseDate">اختار التاريخ</string>
 
     <string name="TransfersReportTitle">تقرير التحويلات</string>
@@ -154,15 +154,15 @@
     <string name="notEnoughQuantity">كمية غير متوفرة\n أقصى كمية يمكن ادخالها هي: </string>
     <string name="search">بحث</string>
     <string name="error">يوجد خطأ!</string>
-    <string name="searchByToStore">اسم المستودع المنقول له:</string>
+    <string name="searchByToStore">المستودع المنقول له:</string>
     <string name="allStores">جميع المستودعات</string>
     <string name="Empty">لا يوجد بيانات</string>
 
     <string name="exportRep">جاري تصدير التحويلات</string>
     <string name="importData">استيراد البيانات</string>
-    <string name="getStore">يتم تحميل معلومات المستودعات</string>
+    <string name="getStore">يتم تحميل بيانات المستودعات</string>
 
-    <string name="fillIpAndComNo">املأ معلومات الIP ورقم الشركة</string>
+    <string name="fillIpAndComNo">املأ الIP ورقم الشركة</string>
     <string name="fillIp"> املأ الIP</string>
     <string name="ipConnectionFailed">خطأ في اتصال السيرفر</string>
     <string name="netWorkError">خطأ في الشبكة</string>
@@ -185,6 +185,19 @@
     <string name="noUnsavedData">لا يوجد بيانات جديدة لحفظها</string>
     <string name="serials">الأرقام التسلسلية</string>
     <string name="savingSerials">تصدير الأرقام التسلسلية</string>
+    <string name="allTransfers">جميع السندات</string>
+    <string name="export_to_pdf" />
 
+    <string name="shareTo">المشاركة إلى …</string>
+    <string name="serialNotFound">الرقم غير موجود!</string>
+    <string name="notFoundMsg">هذا الرقم التسلسلي غير موجود للمادة المُختارة في المستودع المحدد</string>
+    <string name="storeSerials">استيراد الأرقام التسلسلية</string>
+    <string name="errorSavingSerials">خطأ في حفظ الأرقام التسلسلية</string>
+    <string name="note_enter_password">ملاحظة: أدخل كلمة المرور المطلوبة لإعادة تصدير التحويل.</string>
+    <string name="wrong_password">كلمة مرور خاطئة!</string>
+    <string name="wrong_password_msg">غير مصرح لك استخدام هذه الميزة.</string>
+    <string name="start_now">ابدأ الآن</string>
+    <string name="login_with">سجل الدخول باستخدام اسم المستخدم\nوكلمة المرور الخاصة بك !</string>
+    <string name="ip_address_">إعدادات عنوان IP</string>
 
 </resources>

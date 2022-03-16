@@ -17,6 +17,7 @@ public interface StoreDao {
 
     @Insert
     public long[] insertAll(List<Store> stores);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insert(Store store);
 
@@ -25,10 +26,11 @@ public interface StoreDao {
 
 
     @Update
-    public  void update(Store store);
+    public void update(Store store);
+
     @Query("SELECT * FROM STORE_TABLE")
     List<Store> getall();
 
     @Query("Delete FROM STORE_TABLE")
-  void deleteall();
+    void deleteall();
 }

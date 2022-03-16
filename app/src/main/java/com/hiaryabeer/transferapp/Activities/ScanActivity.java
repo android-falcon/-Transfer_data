@@ -1,4 +1,4 @@
-package com.hiaryabeer.transferapp;
+package com.hiaryabeer.transferapp.Activities;
 
 //import android.support.v7.app.AppCompatActivity;
 
@@ -9,16 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-import com.hiaryabeer.transferapp.Adapters.Adapterr;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-import static com.hiaryabeer.transferapp.MainActivity.etSerial;
-import static com.hiaryabeer.transferapp.MainActivity.itemcode;
-import static com.hiaryabeer.transferapp.MainActivity.zone;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.etSerial;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.zone;
 
 
 public class ScanActivity extends AppCompatActivity
@@ -65,18 +64,22 @@ public class ScanActivity extends AppCompatActivity
         // Log.v("tag", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
         String valueBarcode = rawResult.getText();
 
-        if (type.equals("4")) {
+        switch (type) {
+            case "4":
 
-            zone.setText(valueBarcode);
+                zone.setText(valueBarcode.replaceAll("\\s+", "").trim());
 
-        } else if (type.equals("5")) {
+                break;
+            case "5":
 
-            itemcode.setText(valueBarcode);
+                itemcode.setText(valueBarcode.replaceAll("\\s+", "").trim());
 
-        } else if (type.equals("6")) {
+                break;
+            case "6":
 
-            etSerial.setText(valueBarcode.replaceAll("\\s+","").trim());
+                etSerial.setText(valueBarcode.replaceAll("\\s+", "").trim());
 
+                break;
         }
 
         onBackPressed();

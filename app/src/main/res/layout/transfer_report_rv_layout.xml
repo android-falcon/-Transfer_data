@@ -2,12 +2,10 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -22,16 +20,26 @@
             android:background="@color/notPostedBackground"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="4dp"
-            >
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/downArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_expand_more"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="1dp"/>
+                android:layout_marginEnd="1dp"
+                android:background="@drawable/ic_expand_more" />
+
+            <TextView
+                android:id="@+id/reExport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:background="@drawable/ic_export"
+                android:clickable="true"
+                android:focusable="true"
+                android:elevation="2dp"/>
 
             <TextView
                 android:id="@+id/tvTransNo"
@@ -110,6 +118,7 @@
         </TableRow>
 
 
+
         <LinearLayout
             android:id="@+id/serialsLayout"
             android:layout_width="match_parent"
@@ -118,36 +127,41 @@
             android:visibility="gone">
 
             <LinearLayout
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical">
 
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:text="@string/serials"
-                android:textSize="17sp"
-                android:gravity="start|center_vertical"
-                android:textStyle="bold"
-                android:textColor="@color/dark_blue_3"
-                android:paddingStart="5dp"/>
+                <TextView
+                    android:id="@+id/serials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/serials"
+                    android:textColor="@color/dark_blue_3"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:layout_weight="0.8"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@color/dark_blue_3"/>
+                    android:background="@color/dark_blue_3"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="0.2"
+                    />
             </LinearLayout>
 
             <TextView
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dark_blue_3"/>
+                android:background="@color/dark_blue_3" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RVSerialsReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
@@ -158,7 +172,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#BF043B6E"
-        />
+        android:background="#BF043B6E" />
+
 
 </LinearLayout>

@@ -33,9 +33,12 @@ public interface ReplacementDao {
     @Query("SELECT * FROM REPLACEMENT_TABLE where ISPOSTED = :s")
     List<ReplacementModel> getUnpostedReplacement(String s);
 
-
     @Query("UPDATE REPLACEMENT_TABLE SET  ISPOSTED='1' WHERE ISPOSTED='0' ")
     void updateReplashmentPosted();
+
+    @Query("UPDATE REPLACEMENT_TABLE SET  ISPOSTED='1' WHERE ISPOSTED='0' AND TransNumber = :voucherNo AND ITEMCODE = :itemCode")
+    void postFor(String voucherNo, String itemCode);
+
     @Query("UPDATE REPLACEMENT_TABLE SET RECQTY = :qty WHERE ITEMCODE= :barcode AND ISPOSTED='0' AND TransNumber= :tran" )
     int updateQTY(String barcode, String qty,String tran);
 
@@ -82,4 +85,12 @@ public interface ReplacementDao {
     @Query("SELECT * FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date")
     List<ReplacementModel> getReplacementsByDate(String date);
 
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date AND TransNumber = :trans")
+    List<ReplacementModel> getByDateAndTrans(String date, String trans);
+
+    @Query("SELECT DISTINCT TransNumber FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date")
+    List<String> getTranByDate(String date);
+
+    @Query("SELECT RECQTY FROM REPLACEMENT_TABLE WHERE ISPOSTED = '0' AND ITEMCODE = :itemCode AND TransNumber = :transNo")
+    String getQtyForItem(String itemCode, String transNo);
 }

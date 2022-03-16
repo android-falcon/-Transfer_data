@@ -1,4 +1,4 @@
-package com.hiaryabeer.transferapp;
+package com.hiaryabeer.transferapp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -40,20 +39,23 @@ import com.google.zxing.integration.android.IntentResult;
 import com.hiaryabeer.transferapp.Adapters.Adapterr;
 import com.hiaryabeer.transferapp.Adapters.ReplacementAdapter;
 import com.hiaryabeer.transferapp.Adapters.SerialsAdapter;
-import com.hiaryabeer.transferapp.Interfaces.ReplacementDao;
 import com.hiaryabeer.transferapp.Models.AllItems;
 import com.hiaryabeer.transferapp.Models.ExportData;
 import com.hiaryabeer.transferapp.Models.GeneralMethod;
 import com.hiaryabeer.transferapp.Models.ImportData;
 import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
 import com.hiaryabeer.transferapp.Models.KeyboardUtil;
+import com.hiaryabeer.transferapp.Models.SerialsModel;
+import com.hiaryabeer.transferapp.R;
+import com.hiaryabeer.transferapp.ReplacementModel;
+import com.hiaryabeer.transferapp.RoomAllData;
+import com.hiaryabeer.transferapp.Store;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import static com.hiaryabeer.transferapp.Models.ExportData.pdRepla;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.convertToEnglish;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 import static com.hiaryabeer.transferapp.Models.ImportData.AllImportItemlist;
@@ -61,6 +63,9 @@ import static com.hiaryabeer.transferapp.Models.ImportData.Storelist;
 import static com.hiaryabeer.transferapp.Models.ImportData.listAllZone;
 import static com.hiaryabeer.transferapp.Models.ImportData.listQtyZone;
 import static com.hiaryabeer.transferapp.Models.ImportData.pdRepla2;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class MainActivity extends AppCompatActivity {
     int saved = 4;
@@ -92,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
     String FromNo, ToNo;
     ReplacementModel replacement;
     ReplacementModel replacementModel;
-    static ReplacementAdapter adapter;
+    public static ReplacementAdapter adapter;
     public static boolean validItem = false, validateKind = false;
     public static RecyclerView replacmentRecycler;
     public static final int REQUEST_Camera_Barcode = 1;
-    List<appSettings> appSettings;
+    List<com.hiaryabeer.transferapp.appSettings> appSettings;
     public static Dialog dialog1;
     List<ReplacementModel> deleted_DBzone;
     private Dialog authenticationdialog;
@@ -144,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
     public static TextView tvTotal;
     private List<ItemSerialTransfer> allTransSerials;
     private int transNo;
+    String codeScanned;
+    List<SerialsModel> allItemSerials = new ArrayList<>();
 
 
     @Override
@@ -155,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        my_dataBase = RoomAllData.getInstanceDataBase(MainActivity.this);
         init();
         itemcode.setText("");
         minVo = my_dataBase.replacementDao().getMinVocherNo();
@@ -176,6 +184,37 @@ public class MainActivity extends AppCompatActivity {
 //      my_dataBase.storeDao().deleteall();
         Storelist.clear();
         Storelist = my_dataBase.storeDao().getall();
+
+        importData = new ImportData(MainActivity.this);
+        if (Login.serialsActive == 1) {
+            List<SerialsModel> allSerialsList = my_dataBase.serialsDao().getAllSerials();
+            if (allSerialsList.size() == 0) {
+                importData.getAllSerials(new ImportData.GetSerialsCallBack() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.e("responseLength", response.length() + "");
+                        allItemSerials.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                allItemSerials.add(new SerialsModel(
+                                        response.getJSONObject(i).getString("STORENO"),
+                                        response.getJSONObject(i).getString("ITEMOCODE"),
+                                        response.getJSONObject(i).getString("SERIALCODE")));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Log.e("allItemSerialsLength", allItemSerials.size() + "");
+                        my_dataBase.serialsDao().insertAll(allItemSerials);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            }
+        }
 
 //      my_dataBase.replacementDao().deleteALL();
 
@@ -255,8 +294,6 @@ public class MainActivity extends AppCompatActivity {
         recqty.setEnabled(false);
         save.setEnabled(false);
 
-        my_dataBase = RoomAllData.getInstanceDataBase(MainActivity.this);
-        my_dataBase.serialsDao().deleteNotAddedPrev(max + "");
         UserNo = my_dataBase.settingDao().getUserNo();
 //my_dataBase.replacementDao().deleteALL();
       /*  if(Storelistt.size()==0) {
@@ -342,15 +379,15 @@ public class MainActivity extends AppCompatActivity {
 
                 // UnPostedreplacementlist=my_dataBase.replacementDao().getallReplacement();
                 exportAllData();
-              maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
+                maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
                 if (maxVochNum != null) {
 
                     Log.e(" maxVochNum", maxVochNum);
                     max = Integer.parseInt(maxVochNum) + 1;
 
-                } else {
 
                 }
+
                 zone.setEnabled(true);
                 zone.requestFocus();
 
@@ -556,9 +593,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean ExistsInLocallist(ReplacementModel replacement) {
         boolean flag = false;
 
-        if (replacementlist.size() != 0)
+        if (replacementlist.size() != 0) {
             for (int i = 0; i < replacementlist.size(); i++) {
-                if (convertToEnglish(replacementlist.get(i).getItemcode()).equals(replacement.getItemcode())) {
+                if (convertToEnglish(replacementlist.get(i).getItemcode()).equals(convertToEnglish(replacement.getItemcode()))) {
 
                     position = i;
                     flag = true;
@@ -566,6 +603,9 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
+        }
+
+        if (!flag) position = 0;
 
         return flag;
 
@@ -624,29 +664,57 @@ public class MainActivity extends AppCompatActivity {
         importData.getStore();
     }
 
-    public void exportData() {
-        try {
-            saveflage = 1;
-            exportData.exportReplacementList(replacementlist);
-        } catch (Exception e) {
-
-            // test
-        }
-
-    }
+//    public void exportData() {
+//        try {
+//            saveflage = 1;
+//            exportData.exportReplacementList(replacementlist);
+//        } catch (Exception e) {
+//
+//            // test
+//        }
+//
+//    }
 
     public void exportAllData() {
         Allreplacementlist1 = my_dataBase.replacementDao().getallReplacement();
         boolean posted = true;
         for (int i = 0; i < Allreplacementlist1.size(); i++) {
-            if (Allreplacementlist1.get(i).IsPosted.equals("0")) {
+            if (Allreplacementlist1.get(i).getIsPosted().equals("0")) {
                 posted = false;
                 break;
             }
         }
-        if (!posted)
+        if (!posted) {
             exportData.exportReplacementList(Allreplacementlist1);
-        else
+//            if (Login.serialsActive == 1) {
+//                int d = my_dataBase.serialsDao().deleteAllSerials();
+//                Log.e("DeleteSERIALS", d + "");
+//                importData.getAllSerials(new ImportData.GetSerialsCallBack() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.e("responseLength", response.length() + "");
+//                        allItemSerials.clear();
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                allItemSerials.add(new SerialsModel(
+//                                        response.getJSONObject(i).getString("STORENO"),
+//                                        response.getJSONObject(i).getString("ITEMOCODE"),
+//                                        response.getJSONObject(i).getString("SERIALCODE")));
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                        Log.e("allItemSerialsLength", allItemSerials.size() + "");
+//                        my_dataBase.serialsDao().insertAll(allItemSerials);
+//                    }
+//
+//                    @Override
+//                    public void onError(String error) {
+//
+//                    }
+//                });
+//            }
+        } else
             showSweetDialog(MainActivity.this, 3, getString(R.string.noUnsavedData), "");
 
   /*      if (saved == 1) {
@@ -810,26 +878,26 @@ public class MainActivity extends AppCompatActivity {
                     if (appSettings.get(0).getCheckQty().equals("1")) { ///Qty Checker Active //////B
                         if (editable.toString().length() != 0) {
 
-                            {
-                                Log.e("itemcode===", "aaaaaa");
-                                Log.e("itemcode===", editable.toString());
-                                From = fromSpinner.getSelectedItem().toString();
-                                To = toSpinner.getSelectedItem().toString();
-                                FromNo = From.substring(0, From.indexOf(" "));
-                                ToNo = To.substring(0, To.indexOf(" "));
 
-                                ReplacementModel replacementModel = new ReplacementModel();
+                            Log.e("itemcode===", "aaaaaa");
+                            Log.e("itemcode===", editable.toString());
+                            From = fromSpinner.getSelectedItem().toString();
+                            To = toSpinner.getSelectedItem().toString();
+                            FromNo = From.substring(0, From.indexOf(" "));
+                            ToNo = To.substring(0, To.indexOf(" "));
 
-                                replacementModel.setTransNumber(max + "");
-                                replacementModel.setFromName(From);
-                                replacementModel.setIsPosted("0");
-                                replacementModel.setToName(To);
-                                replacementModel.setFrom(FromNo);
-                                replacementModel.setDeviceId(deviceId);
-                                replacementModel.setTo(ToNo);
-                                replacementModel.setZone("");
-                                replacementModel.setReplacementDate(generalMethod.getCurentTimeDate(1));
-                                replacementModel.setItemcode(itemcode.getText().toString());
+                            ReplacementModel replacementModel = new ReplacementModel();
+
+                            replacementModel.setTransNumber(max + "");
+                            replacementModel.setFromName(From);
+                            replacementModel.setIsPosted("0");
+                            replacementModel.setToName(To);
+                            replacementModel.setFrom(FromNo);
+                            replacementModel.setDeviceId(deviceId);
+                            replacementModel.setTo(ToNo);
+                            replacementModel.setZone("");
+                            replacementModel.setReplacementDate(generalMethod.getCurentTimeDate(1));
+                            replacementModel.setItemcode(itemcode.getText().toString());
 
 //                        ReplacementModel replacementModel1 = null;
 //                        List<ReplacementModel> replacementModels1 = my_dataBase.replacementDao().isItemExist(itemcode.getText().toString());
@@ -837,33 +905,33 @@ public class MainActivity extends AppCompatActivity {
 //                            replacementModel1 = replacementModels1.get(replacementModels1.size() - 1);
 //                        }
 
-                                if (ExistsInLocallist(replacementModel)) {
+                            if (ExistsInLocallist(replacementModel)) {
 
-                                    itemcode.setError(null);
+                                itemcode.setError(null);
 
-                                    Log.e(" Case1 ", "Exists in Local List:");
-                                    if ((Integer.parseInt(replacementlist.get(position).getAvailableQty())) > 0) {
+                                Log.e(" Case1 ", "Exists in Local List:");
+                                if ((Integer.parseInt(replacementlist.get(position).getAvailableQty())) > 0) {
 
-                                        int sum = Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
+                                    int sum = Integer.parseInt(replacementlist.get(position).getRecQty()) + Integer.parseInt("1");
 
-                                        replacementlist.get(position).setAvailableQty(String.valueOf((Integer.parseInt(replacementlist.get(position).getAvailableQty())) - 1));
-                                        replacementModel.setAvailableQty(String.valueOf((Integer.parseInt(replacementlist.get(position).getAvailableQty())) - 1));
+                                    replacementlist.get(position).setAvailableQty(String.valueOf((Integer.parseInt(replacementlist.get(position).getAvailableQty())) - 1));
+                                    replacementModel.setAvailableQty(String.valueOf((Integer.parseInt(replacementlist.get(position).getAvailableQty())) - 1));
 
-                                        replacementlist.get(position).setRecQty(sum + "");
-                                        replacementModel.setRecQty(sum + "");
+                                    replacementlist.get(position).setRecQty(sum + "");
+                                    replacementModel.setRecQty(sum + "");
 
-                                        my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(), replacementlist.get(position).getRecQty(), max + "");
-                                        my_dataBase.replacementDao().updateAvailableQTY(max + "", replacementlist.get(position).getItemcode(), replacementlist.get(position).getAvailableQty());
-                                        colorlastrow.setText(position + "");
-                                        fillAdapter();
-                                        Log.e("case1", "case1");
-                                        save.setEnabled(true);
+                                    my_dataBase.replacementDao().updateQTY(replacementlist.get(position).getItemcode(), replacementlist.get(position).getRecQty(), max + "");
+                                    my_dataBase.replacementDao().updateAvailableQTY(max + "", replacementlist.get(position).getItemcode(), replacementlist.get(position).getAvailableQty());
+                                    colorlastrow.setText(position + "");
+                                    fillAdapter();
+                                    Log.e("case1", "case1");
+                                    save.setEnabled(true);
 
 
-                                    } else {
-                                        showSweetDialog(MainActivity.this, 3, getResources().getString(R.string.no_enough_amount), "");
-                                        itemcode.setText("");
-                                    }
+                                } else {
+                                    showSweetDialog(MainActivity.this, 3, getResources().getString(R.string.no_enough_amount), "");
+                                    itemcode.setText("");
+                                }
 
 
 //                            if (ExistsInLocallist(replacementModel)) {
@@ -881,57 +949,57 @@ public class MainActivity extends AppCompatActivity {
 //                                save.setEnabled(true);
 //                            }
 
-                                } else {
-                                    if (ExsitsInItemlist(itemcode.getText().toString())) {
+                            } else {
+                                if (ExsitsInItemlist(itemcode.getText().toString())) {
 
-                                        itemcode.setError(null);
-                                        Log.e(" Case3 ", "Not in local but in ItemList");
+                                    itemcode.setError(null);
+                                    Log.e(" Case3 ", "Not in local but in ItemList");
 
-                                        importData.getItemQty(editable.toString(), FromNo, new ImportData.GetItemQtyCallBack() {
-                                            @Override
-                                            public void onResponse(String qty) {
-                                                Log.e("QTY Response ", qty);
+                                    importData.getItemQty(editable.toString(), FromNo, new ImportData.GetItemQtyCallBack() {
+                                        @Override
+                                        public void onResponse(String qty) {
+                                            Log.e("QTY Response ", qty);
 //                                        qty = "20";
-                                                replacementModel.setAvailableQty(qty);
-                                                if ((Integer.parseInt(qty)) > 0) {
-                                                    replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(qty) - 1));
-                                                    replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
-                                                    replacementModel.setRecQty("1");
-                                                    replacementlist.add(0, replacementModel);
-                                                    SaveRow(replacementModel);
-                                                    colorlastrow.setText("0");
-                                                    fillAdapter();
-                                                    Log.e("case3", "case3");
-                                                    save.setEnabled(true);
+                                            replacementModel.setAvailableQty(qty);
+                                            if ((Integer.parseInt(qty)) > 0) {
+                                                replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(qty) - 1));
+                                                replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+                                                replacementModel.setRecQty("1");
+                                                replacementlist.add(0, replacementModel);
+                                                SaveRow(replacementModel);
+                                                colorlastrow.setText("0");
+                                                fillAdapter();
+                                                Log.e("case3", "case3");
+                                                save.setEnabled(true);
 
-                                                    fromSpinner.setEnabled(false);
-                                                    toSpinner.setEnabled(false);
-
-
-                                                } else {
-                                                    showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
-                                                    itemcode.setText("");
-                                                }
+                                                fromSpinner.setEnabled(false);
+                                                toSpinner.setEnabled(false);
 
 
-                                            }
-
-                                            @Override
-                                            public void onError(String error) {
-                                                showSweetDialog(MainActivity.this, 3, "Error!", getString(R.string.checkConnection));
+                                            } else {
+                                                showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
                                                 itemcode.setText("");
                                             }
-                                        });
 
 
-                                    } else {
-                                        Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
-                                        itemcode.setError("InValid Code");
-                                        itemcode.setText("");
-                                    }
+                                        }
+
+                                        @Override
+                                        public void onError(String error) {
+                                            showSweetDialog(MainActivity.this, 3, "Error!", getString(R.string.checkConnection));
+                                            itemcode.setText("");
+                                        }
+                                    });
+
+
+                                } else {
+                                    Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
+                                    itemcode.setError("InValid Code");
+                                    itemcode.setText("");
+                                }
 
 //                            Log.e("case4", "case4");
-                                }
+
 
                             }
 
@@ -1041,97 +1109,175 @@ public class MainActivity extends AppCompatActivity {
                         {
                             Log.e("itemcode===", "aaaaaa");
                             Log.e("itemcode===", s.toString());
-                            if (ExsitsInItemlist(itemcode.getText().toString())) {
+
+                            if (ExsitsInItemlist(itemcode.getText().toString().trim())) {
 
                                 itemcode.setError(null);
-                                Log.e(" Case3 ", "Exists in ItemList");
-
-                                my_dataBase.serialsDao().deleteNotAddedPrev(max + "");
-                                Dialog dialog = new Dialog(MainActivity.this);
-                                dialog.setContentView(R.layout.item_serials_layout);
-                                dialog.setCancelable(true);
-
-                                TextView icClose = dialog.findViewById(R.id.icClose);
-                                TextView tvItemName = dialog.findViewById(R.id.tvItemName);
-                                TextView tvItemCode = dialog.findViewById(R.id.tvItemCode);
-                                etSerial = dialog.findViewById(R.id.etSerial);
-                                TextView icScan = dialog.findViewById(R.id.icScan);
-                                TextView icEdit = dialog.findViewById(R.id.icEdit);
-                                rvSerialTransfers = dialog.findViewById(R.id.rvSerialTransfers);
-                                Button btnAdd = dialog.findViewById(R.id.btnAdd);
-                                tvTotal = dialog.findViewById(R.id.tvTotal);
-                                TextView icDeleteAll = dialog.findViewById(R.id.icDeleteAll);
-
-                                dialog.show();
+                                Log.e(" Case1 ", "Exists in ItemList");
 
                                 transNo = max;
                                 deviceId = my_dataBase.settingDao().getallsetting().get(0).getDeviceId();
 
-                                serialTransfers = (ArrayList<ItemSerialTransfer>) my_dataBase.serialsDao().getAllNotAdded(String.valueOf(transNo), deviceId, s.toString().trim());
-                                updateAdapter();
+                                if (item_has_serial(itemcode.getText().toString().trim())) {
 
-                                etSerial.requestFocus();
-                                etSerial.setEnabled(false);
-                                etSerial.setClickable(true);
-                                etSerial.setOnEditorActionListener((v17, actionId, event) -> {
-                                    if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_SEARCH
-                                            || actionId == EditorInfo.IME_NULL) {
+                                    Dialog dialog = new Dialog(MainActivity.this);
+                                    dialog.setContentView(R.layout.item_serials_layout);
+                                    dialog.setCancelable(true);
 
-                                        if (etSerial.getText().toString().trim().equals(""))
+                                    DisplayMetrics dm = new DisplayMetrics();
+                                    MainActivity.this.getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
+                                    int width = dm.widthPixels;
 
-                                            etSerial.requestFocus();
+                                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                                    layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                                    layoutParams.width = (int) (width / 1.3);
+                                    dialog.getWindow().setAttributes(layoutParams);
 
-                                    }
+                                    TextView icClose = dialog.findViewById(R.id.icClose);
+                                    TextView tvItemName = dialog.findViewById(R.id.tvItemName);
+                                    TextView tvItemCode = dialog.findViewById(R.id.tvItemCode);
+                                    etSerial = dialog.findViewById(R.id.etSerial);
+                                    TextView icScan = dialog.findViewById(R.id.icScan);
+                                    TextView icEdit = dialog.findViewById(R.id.icEdit);
+                                    rvSerialTransfers = dialog.findViewById(R.id.rvSerialTransfers);
+                                    Button btnAdd = dialog.findViewById(R.id.btnAdd);
+                                    tvTotal = dialog.findViewById(R.id.tvTotal);
+                                    TextView icDeleteAll = dialog.findViewById(R.id.icDeleteAll);
 
-                                    return true;
-                                });
-
-                                icClose.setOnClickListener(v1 -> dialog.dismiss()
-                                );
-                                tvItemName.setText(AllItemDBlist.get(pos).getItemName());
-                                tvItemCode.setText(itemcode.getText().toString().trim());
-
-                                icScan.setOnClickListener(v14 -> openSmallCapture(6));
-
-                                icEdit.setOnClickListener(v13 -> openEditDialog());
+                                    dialog.show();
 
 
-                                etSerial.addTextChangedListener(new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    serialTransfers = (ArrayList<ItemSerialTransfer>) my_dataBase.serialTransfersDao().getAllAdded(s.toString().trim(), String.valueOf(transNo));
+                                    updateAdapter();
 
-                                    }
+                                    etSerial.requestFocus();
+                                    etSerial.setEnabled(false);
+                                    etSerial.setClickable(true);
+                                    etSerial.setOnEditorActionListener((v17, actionId, event) -> {
+                                        if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_SEARCH
+                                                || actionId == EditorInfo.IME_NULL) {
 
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                            if (etSerial.getText().toString().trim().equals(""))
 
-                                    }
+                                                etSerial.requestFocus();
 
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-                                        if (!s.toString().trim().equals("")) {
-
-                                            String code = s.toString().replaceAll("\\s+","");
-                                            if (!isExist(code)) {
-                                                ItemSerialTransfer serialTransfer =
-                                                        new ItemSerialTransfer(String.valueOf(transNo),
-                                                                deviceId, itemcode.getText().toString().trim(), code,
-                                                                (new GeneralMethod(MainActivity.this)).getCurentTimeDate(1),
-                                                                fromSpinner.getSelectedItem().toString().substring(0, (MainActivity.fromSpinner.getSelectedItem().toString().indexOf(" ")))
-                                                        );
-                                                etSerial.setError(null);
-                                                serialTransfers.add(serialTransfer);
-                                                my_dataBase.serialsDao().insert(serialTransfer);
-                                                updateAdapter();
-                                                openSmallCapture(6);
-                                            } else {
-                                                showSweetDialog(MainActivity.this, 3, getString(R.string.uniqueSerial), getString(R.string.uniqueSerialMsg));
-                                            }
-                                            etSerial.setText("");
                                         }
 
-                                    }
-                                });
+                                        return true;
+                                    });
+
+                                    icClose.setOnClickListener(v1 -> dialog.dismiss()
+                                    );
+                                    tvItemName.setText(AllItemDBlist.get(pos).getItemName());
+                                    tvItemCode.setText(itemcode.getText().toString().trim());
+
+                                    icScan.setOnClickListener(v14 -> openSmallCapture(6));
+
+                                    icEdit.setOnClickListener(v13 -> openEditDialog());
+
+
+                                    etSerial.addTextChangedListener(new TextWatcher() {
+                                        @Override
+                                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                        }
+
+                                        @Override
+                                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                        }
+
+                                        @Override
+                                        public void afterTextChanged(Editable s) {
+                                            if (!s.toString().trim().equals("")) {
+
+                                                String code = s.toString().replaceAll("\\s+", "");
+                                                Log.e("SerialScanned", code);
+                                                if (!isRepeated(code)) {
+
+                                                    if (existInItemSerialList(itemcode.getText().toString().trim(), code)) {
+
+                                                        ItemSerialTransfer serialTransfer =
+                                                                new ItemSerialTransfer(String.valueOf(transNo),
+                                                                        deviceId, itemcode.getText().toString().trim(), code,
+                                                                        (new GeneralMethod(MainActivity.this)).getCurentTimeDate(1),
+                                                                        fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))),
+                                                                        toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" ")))
+                                                                );
+                                                        etSerial.setError(null);
+                                                        serialTransfers.add(serialTransfer);
+                                                        my_dataBase.serialTransfersDao().insert(serialTransfer);
+                                                        updateAdapter();
+
+                                                        if (ExistsInRepList(itemcode.getText().toString())) {
+
+                                                            int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + 1;
+                                                            replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
+                                                            my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo));
+
+                                                            replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                                                            ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+                                                            replacmentRecycler.setAdapter(adapter);
+
+                                                            replacmentRecycler.smoothScrollToPosition(repPosition);
+                                                            colorlastrow.setText(repPosition + "");
+
+//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                        serialTransfers.get(i).setAdded("1");
+//                                                    }
+
+
+                                                        } else {
+                                                            ReplacementModel replacementModel = new ReplacementModel();
+
+                                                            replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
+                                                            replacementModel.setTo(toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" "))));
+                                                            replacementModel.setItemcode(itemcode.getText().toString());
+                                                            replacementModel.setIsPosted("0");
+                                                            replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
+                                                            replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+                                                            replacementModel.setTransNumber(transNo + "");
+                                                            replacementModel.setDeviceId(deviceId);
+                                                            replacementModel.setRecQty(1 + "");
+                                                            replacementModel.setFromName(fromSpinner.getSelectedItem().toString());
+                                                            replacementModel.setToName(toSpinner.getSelectedItem().toString());
+                                                            replacementModel.setZone("");
+
+                                                            replacementlist.add(0, replacementModel);
+                                                            my_dataBase.replacementDao().insert(replacementModel);
+
+                                                            replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                                                            ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+                                                            replacmentRecycler.setAdapter(adapter);
+
+                                                            replacmentRecycler.smoothScrollToPosition(0);
+                                                            colorlastrow.setText("0");
+
+                                                            save.setEnabled(true);
+
+                                                            fromSpinner.setEnabled(false);
+                                                            toSpinner.setEnabled(false);
+
+//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                        serialTransfers.get(i).setAdded("1");
+//                                                    }
+
+                                                        }
+//                                                my_dataBase.serialsDao().addToRep(transNo + "", deviceId, s.toString().trim());
+
+
+                                                        openSmallCapture(6);
+                                                    } else {
+                                                        showSweetDialog(MainActivity.this, 3, getString(R.string.serialNotFound), getString(R.string.notFoundMsg));
+                                                    }
+                                                } else {
+                                                    showSweetDialog(MainActivity.this, 3, getString(R.string.uniqueSerial), getString(R.string.uniqueSerialMsg));
+                                                }
+                                                etSerial.setText("");
+                                            }
+
+                                        }
+                                    });
 
 //                                etSerial.setOnKeyListener((v15, keyCode, event) -> {
 ////                        if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -1150,94 +1296,162 @@ public class MainActivity extends AppCompatActivity {
 //                                    return false;
 //                                });
 
-                                icDeleteAll.setOnClickListener(v16 -> {
+                                    icDeleteAll.setOnClickListener(v16 -> {
 
-                                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                                            .setTitleText(getString(R.string.deleteAll))
-                                            .setContentText(getString(R.string.deleteAllMsg))
-                                            .setConfirmButton(getString(R.string.yes), sweetAlertDialog -> {
-                                                if (serialTransfers.size() > 0) {
-                                                    serialTransfers.clear();
-                                                    my_dataBase.serialsDao().deleteNotAddedForItem(
-                                                            transNo + "",
-                                                            deviceId,
-                                                            itemcode.getText().toString().trim()
-                                                    );
-                                                    updateAdapter();
-                                                }
-                                                sweetAlertDialog.dismissWithAnimation();
-                                            })
-                                            .setCancelButton(getString(R.string.no), SweetAlertDialog::dismissWithAnimation)
-                                            .show();
-                                });
+                                        new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                                .setTitleText(getString(R.string.deleteAll))
+                                                .setContentText(getString(R.string.deleteAllMsg))
+                                                .setConfirmButton(getString(R.string.yes), sweetAlertDialog -> {
+                                                    if (serialTransfers.size() > 0) {
+                                                        serialTransfers.clear();
+                                                        my_dataBase.serialTransfersDao().deleteAllAdded(
+                                                                itemcode.getText().toString().trim(),
+                                                                transNo + ""
+                                                        );
+                                                        updateAdapter();
+                                                        my_dataBase.replacementDao().deleteReplacement(itemcode.getText().toString(),
+                                                                fromSpinner.getSelectedItem().toString().substring(0, fromSpinner.getSelectedItem().toString().indexOf(" ")), toSpinner.getSelectedItem().toString().substring(0, toSpinner.getSelectedItem().toString().indexOf(" ")), max + "");
+                                                        if (ExistsInRepList(itemcode.getText().toString())) {
+                                                            replacementlist.remove(repPosition);
+                                                        }
+                                                        fillAdapter();
+                                                        updateAdpapter();
 
-
-                                btnAdd.setOnClickListener(v12 -> {
-                                    if (serialTransfers.size() > 0) {
-                                        if (ExistsInRepList(s.toString().trim())) {
-
-                                            int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + serialTransfers.size();
-                                            replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
-                                            my_dataBase.replacementDao().updateQTY(s.toString().trim(), String.valueOf(sumQty), String.valueOf(transNo));
-
-                                            replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                                            ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
-                                            replacmentRecycler.setAdapter(adapter);
-
-                                            replacmentRecycler.smoothScrollToPosition(repPosition);
-                                            colorlastrow.setText(repPosition + "");
-
-                                            for (int i = 0; i < serialTransfers.size(); i++) {
-                                                serialTransfers.get(i).setAdded("1");
-                                            }
+                                                    }
+                                                    sweetAlertDialog.dismissWithAnimation();
+                                                })
+                                                .setCancelButton(getString(R.string.no), SweetAlertDialog::dismissWithAnimation)
+                                                .show();
+                                    });
 
 
-                                        } else {
-                                            ReplacementModel replacementModel = new ReplacementModel();
+                                    btnAdd.setOnClickListener(v12 -> {
+//                                    if (serialTransfers.size() > 0) {
+//                                        if (ExistsInRepList(s.toString().trim())) {
 
-                                            replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
-                                            replacementModel.setTo(toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" "))));
-                                            replacementModel.setItemcode(s.toString().trim());
-                                            replacementModel.setIsPosted("0");
-                                            replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
-                                            replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
-                                            replacementModel.setTransNumber(transNo + "");
-                                            replacementModel.setDeviceId(deviceId);
-                                            replacementModel.setRecQty(serialTransfers.size() + "");
-                                            replacementModel.setFromName(fromSpinner.getSelectedItem().toString());
-                                            replacementModel.setToName(toSpinner.getSelectedItem().toString());
-                                            replacementModel.setZone("");
-
-                                            replacementlist.add(0, replacementModel);
-                                            my_dataBase.replacementDao().insert(replacementModel);
-
-                                            replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                                            ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
-                                            replacmentRecycler.setAdapter(adapter);
-
-                                            replacmentRecycler.smoothScrollToPosition(0);
-                                            colorlastrow.setText("0");
-
-                                            for (int i = 0; i < serialTransfers.size(); i++) {
-                                                serialTransfers.get(i).setAdded("1");
-                                            }
-
-                                        }
-                                        my_dataBase.serialsDao().addToRep(transNo + "", deviceId, s.toString().trim());
+//                                            int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + serialTransfers.size();
+//                                            replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
+//                                            my_dataBase.replacementDao().updateQTY(s.toString().trim(), String.valueOf(sumQty), String.valueOf(transNo));
+//
+//                                            replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+//                                            ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+//                                            replacmentRecycler.setAdapter(adapter);
+//
+//                                            replacmentRecycler.smoothScrollToPosition(repPosition);
+//                                            colorlastrow.setText(repPosition + "");
+//
+//                                            for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                serialTransfers.get(i).setAdded("1");
+//                                            }
+//
+//
+//                                        } else {
+//                                            ReplacementModel replacementModel = new ReplacementModel();
+//
+//                                            replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
+//                                            replacementModel.setTo(toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" "))));
+//                                            replacementModel.setItemcode(s.toString().trim());
+//                                            replacementModel.setIsPosted("0");
+//                                            replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
+//                                            replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+//                                            replacementModel.setTransNumber(transNo + "");
+//                                            replacementModel.setDeviceId(deviceId);
+//                                            replacementModel.setRecQty(serialTransfers.size() + "");
+//                                            replacementModel.setFromName(fromSpinner.getSelectedItem().toString());
+//                                            replacementModel.setToName(toSpinner.getSelectedItem().toString());
+//                                            replacementModel.setZone("");
+//
+//                                            replacementlist.add(0, replacementModel);
+//                                            my_dataBase.replacementDao().insert(replacementModel);
+//
+//                                            replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+//                                            ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+//                                            replacmentRecycler.setAdapter(adapter);
+//
+//                                            replacmentRecycler.smoothScrollToPosition(0);
+//                                            colorlastrow.setText("0");
+//
+//                                            for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                serialTransfers.get(i).setAdded("1");
+//                                            }
+//
+//                                        }
+//                                        my_dataBase.serialsDao().addToRep(transNo + "", deviceId, s.toString().trim());
 
                                         dialog.dismiss();
-                                        dialog1.dismiss();
+//                                    dialog1.dismiss();
                                         save.setEnabled(true);
 
                                         fromSpinner.setEnabled(false);
                                         toSpinner.setEnabled(false);
+//                                    }
+
+                                    });
+
+                                } else {
+                                    if (ExistsInRepList(itemcode.getText().toString())) {
+
+                                        int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + 1;
+                                        replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
+                                        my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo));
+
+                                        replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                                        ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+                                        replacmentRecycler.setAdapter(adapter);
+
+                                        replacmentRecycler.smoothScrollToPosition(repPosition);
+                                        colorlastrow.setText(repPosition + "");
+
+//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                        serialTransfers.get(i).setAdded("1");
+//                                                    }
+
+
+                                    } else {
+
+                                        ReplacementModel replacementModel = new ReplacementModel();
+
+                                        replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
+                                        replacementModel.setTo(toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" "))));
+                                        replacementModel.setItemcode(itemcode.getText().toString());
+                                        replacementModel.setIsPosted("0");
+                                        replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
+                                        replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+                                        replacementModel.setTransNumber(transNo + "");
+                                        replacementModel.setDeviceId(deviceId);
+                                        replacementModel.setRecQty(1 + "");
+                                        replacementModel.setFromName(fromSpinner.getSelectedItem().toString());
+                                        replacementModel.setToName(toSpinner.getSelectedItem().toString());
+                                        replacementModel.setZone("");
+
+                                        replacementlist.add(0, replacementModel);
+                                        my_dataBase.replacementDao().insert(replacementModel);
+
+                                        replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                                        ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+                                        replacmentRecycler.setAdapter(adapter);
+
+                                        replacmentRecycler.smoothScrollToPosition(0);
+                                        colorlastrow.setText("0");
+
+
+                                        save.setEnabled(true);
+
+                                        fromSpinner.setEnabled(false);
+                                        toSpinner.setEnabled(false);
+
                                     }
+                                    dialog1.dismiss();
+                                }
 
-                                });
+                            } else if (existsInSerialsList(itemcode.getText().toString().trim())) {
+                                Log.e(" Case2 ", "Exist in serial list");
 
+                            } else if (existBarcode(itemcode.getText().toString().trim())) {
+                                Log.e(" Case3 ", "Exist in barcode list");
 
                             } else {
-                                Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
+                                Log.e(" Case4 ", "Not Exist in any list, Invalid code!");
                                 itemcode.setError("InValid Code");
                                 itemcode.setText("");
                             }
@@ -1499,13 +1713,61 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private boolean item_has_serial(String itemCode) {
+        List<String> hasSerials = my_dataBase.itemDao().itemHasSerial(itemCode);
+        Log.e("ItemHasSerial", itemCode + ": " + hasSerials.get(0));
+        return hasSerials.get(0).equals("1");
+    }
+
+    private boolean existBarcode(String code) {
+
+        List<AllItems> allItemsList = my_dataBase.itemDao().getAll();
+
+        boolean flag = false;
+
+        for (int t = 0; t < allItemsList.size(); t++) {
+
+            if (allItemsList.get(t).getBarCode().equals(code)) {
+                codeScanned = allItemsList.get(t).getItemOcode();
+                itemcode.setText(codeScanned);
+                flag = true;
+                break;
+            }
+
+        }
+
+        return flag;
+
+    }
+
+    private boolean existsInSerialsList(String code) {
+
+        String fromNo = fromSpinner.getSelectedItem().toString().substring(0, fromSpinner.getSelectedItem().toString().indexOf(" "));
+        List<SerialsModel> serialsModelList = my_dataBase.serialsDao().getSerialsInStore(fromNo);
+        boolean flag = false;
+
+        for (int s = 0; s < serialsModelList.size(); s++) {
+
+            if (serialsModelList.get(s).getSerialNo().trim().equals(code.trim())) {
+                codeScanned = serialsModelList.get(s).getItemNo();
+                itemcode.setText(codeScanned);
+                flag = true;
+                break;
+            }
+
+        }
+
+        return flag;
+
+    }
+
 
     private boolean ExsitsInItemlist(String itemcode) {
 
         Log.e("ExsitsInItemlist==", "ExsitsInItemlist");
         boolean flage = false;
         for (int x1 = 0; x1 < AllItemDBlist.size(); x1++) {
-            if (AllItemDBlist.get(x1).getItemOcode().equals(itemcode)) {
+            if (AllItemDBlist.get(x1).getItemOcode().trim().equals(itemcode.trim())) {
                 pos = x1;
 
                 flage = true;
@@ -1808,6 +2070,7 @@ public class MainActivity extends AppCompatActivity {
         //  colorlastrow.setText(position + "");
         //    colorlastrow.setText((0)+"");
         if (replacementlist.size() > 1) {
+            Log.e("position=====", position + "");
             replacmentRecycler.smoothScrollToPosition(position);
 
         }
@@ -1897,7 +2160,7 @@ public class MainActivity extends AppCompatActivity {
 //        long result[] = my_dataBase.replacementDao().insertAll(replacementlist);
 //
 //        if (result.length != 0) {
-        showSweetDialog(this, 1, this.getResources().getString(R.string.savedSuccsesfule), "");
+//        showSweetDialog(this, 1, this.getResources().getString(R.string.savedSuccsesfule), "");
 //        }
 
 
@@ -1917,8 +2180,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private boolean isExist(String serial) {
-        allTransSerials = my_dataBase.serialsDao().getAll(String.valueOf(transNo), deviceId);
+    private boolean isRepeated(String serial) {
+        allTransSerials = my_dataBase.serialTransfersDao().getAllIntrans(String.valueOf(transNo), deviceId);
         for (int i = 0; i < allTransSerials.size(); i++) {
 
             if (allTransSerials.get(i).getSerialNo().equals(serial)) {
@@ -1926,7 +2189,49 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
+        List<String> s = my_dataBase.serialTransfersDao().getSerialsForOther(itemcode.getText().toString());
+        for (int i = 0; i < s.size(); i++) {
+
+            if (s.get(i).equals(serial)) {
+                return true;
+            }
+
+        }
+
         return false;
+    }
+
+    public boolean existInItemSerialList(String itemNo, String serialNo) {
+
+        boolean valid = false;
+
+        String fromNo = fromSpinner.getSelectedItem().toString().substring(0, fromSpinner.getSelectedItem().toString().indexOf(" "));
+        List<String> itemSerialsInStore = my_dataBase.serialsDao().getItemSerialsInStore(fromNo, itemNo);
+        Log.e("itemSerialsInStore", itemSerialsInStore.toString() + "");
+
+        for (int i = 0; i < itemSerialsInStore.size(); i++) {
+
+            if (itemSerialsInStore.get(i).equals(serialNo))
+                valid = true;
+
+        }
+
+        if (valid) {
+            List<ItemSerialTransfer> serialTransfers1 = my_dataBase.serialTransfersDao().getAll();
+            if (serialTransfers1.size() != 0) {
+                for (int i = (serialTransfers1.size() - 1); i >= 0; i--) {
+                    if (serialTransfers1.get(i).getSerialNo().equals(serialNo)) {
+                        valid = serialTransfers1.get(i).getToStore().equals(fromNo);
+                        break;
+                    }
+                }
+            }
+        }
+
+        Log.e("VALID", valid + "");
+        return valid;
+
     }
 
     public boolean ExistsInRepList(String code) {
@@ -1954,6 +2259,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        menu.getItem(1).setVisible(Login.serialsActive != 0);
+
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -1964,6 +2271,55 @@ public class MainActivity extends AppCompatActivity {
             case R.id.goToReports: {
                 Intent i = new Intent(MainActivity.this, TransferReports.class);
                 startActivity(i);
+                break;
+            }
+            case R.id.menuImport: {
+                if (Login.serialsActive == 1) {
+                    int d = my_dataBase.serialsDao().deleteAllSerials();
+                    Log.e("DeleteSERIALS", d + "");
+                    importData.getAllSerials(new ImportData.GetSerialsCallBack() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Log.e("responseLength", response.length() + "");
+                            allItemSerials.clear();
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    allItemSerials.add(new SerialsModel(
+                                            response.getJSONObject(i).getString("STORENO"),
+                                            response.getJSONObject(i).getString("ITEMOCODE"),
+                                            response.getJSONObject(i).getString("SERIALCODE")));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            Log.e("allItemSerialsLength", allItemSerials.size() + "");
+                            my_dataBase.serialsDao().insertAll(allItemSerials);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+                }
+                break;
+            }
+            case R.id.menuExport: {
+                Log.e("export", "clicked");
+
+                // UnPostedreplacementlist=my_dataBase.replacementDao().getallReplacement();
+                exportAllData();
+                maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
+                if (maxVochNum != null) {
+                    Log.e(" maxVochNum", maxVochNum);
+                    max = Integer.parseInt(maxVochNum) + 1;
+                }
+
+                zone.setEnabled(true);
+                zone.requestFocus();
+
+                zone.setText("");
+                itemcode.setText("");
             }
         }
         return super.onOptionsItemSelected(item);
