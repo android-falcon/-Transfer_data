@@ -2,6 +2,7 @@ package com.hiaryabeer.transferapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -38,6 +39,7 @@ import java.util.List;
 
 public class Login extends AppCompatActivity {
     private Button login;
+    private ConstraintLayout loginBox;
     private LinearLayout request_ip_;
     public com.hiaryabeer.transferapp.appSettings setting;
     List<appSettings> appSettings;
@@ -250,6 +252,7 @@ public class Login extends AppCompatActivity {
 //        selectedCompany = findViewById(R.id.selectedCompany);
         //  itemKintText1 = findViewById(R.id.itemKintTextRE);
         login = findViewById(R.id.login);
+        loginBox = findViewById(R.id.loginBox);
         login.setOnClickListener(onClickListener);
         request_ip_ = findViewById(R.id.request_ip_);
         request_ip_.setOnClickListener(onClickListener);
@@ -258,9 +261,12 @@ public class Login extends AppCompatActivity {
 
     private void openSettingDialog() {
 
-        BottomSheetDialog dialog = new BottomSheetDialog(Login.this);
+        BottomSheetDialog dialog = new BottomSheetDialog(Login.this, R.style.SheetDialog);
         dialog.setContentView(R.layout.ip_setting_dialog);
 
+        dialog.setCancelable(false);
+
+        loginBox.setVisibility(View.GONE);
         dialog.show();
 
 
@@ -421,6 +427,7 @@ public class Login extends AppCompatActivity {
 
                             saveData(setting);
                             dialog.dismiss();
+                            loginBox.setVisibility(View.VISIBLE);
 
 
                         } else {
@@ -439,6 +446,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                loginBox.setVisibility(View.VISIBLE);
             }
         });
 
