@@ -378,69 +378,69 @@ public class Login extends AppCompatActivity {
         }
 
         //****************************
-//        dialog.findViewById(R.id.saveSetting).setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                deletesettings();
-//                final String SET_IP = ip.getText().toString();
-//                final String SET_conNO = conNO.getText().toString();
-//                COMPANYNO = conNO.getText().toString();
-//                //  final String SET_years = years.getText().toString();
-//                String device_Id = deviceId.getText().toString().trim();
-//                String port = portSetting.getText().toString().trim();
-//
-//                ///////B
-//                String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
-//
-//
-////                Log.e("port",""+port);
-//                //usernum.setText(SET_userNO);
-//
+        dialog.findViewById(R.id.saveSetting).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                deletesettings();
+                final String SET_IP = ip.getText().toString();
+                final String SET_conNO = conNO.getText().toString();
+                COMPANYNO = conNO.getText().toString();
+                //  final String SET_years = years.getText().toString();
+                String device_Id = deviceId.getText().toString().trim();
+                String port = portSetting.getText().toString().trim();
+
+                ///////B
+                String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
+
+
+//                Log.e("port",""+port);
+                //usernum.setText(SET_userNO);
+
 //                if (qtyUP.isChecked())
 //                    SET_qtyup = "1";
 //                else
 //                    SET_qtyup = "0";
-//
-//                setting = new appSettings();
-//                setting.setIP(SET_IP);
-//                setting.setCompanyNum(SET_conNO);
+
+                setting = new appSettings();
+                setting.setIP(SET_IP);
+                setting.setCompanyNum(SET_conNO);
 //                setting.setUpdateQTY(SET_qtyup);
-//                setting.setPort(port);
-//                //  setting.setYears(SET_years);
-//                //  setting.setUserNumber(usernum.getText().toString().trim());
-//                setting.setDeviceId(deviceId.getText().toString().trim());
-////                Log.e("setting", "==" + setting.getDeviceId());
-//
-//                ////B
-//                setting.setCheckQty(checkQty);
-//
-//                if (deviceId.getText().toString().trim().length() != 0) {
-//                    if (ip.getText().toString().trim().length() != 0) {
-//                        if (conNO.getText().toString().trim().length() != 0) {
-//
-//                            saveData(setting);
-//                            dialog.dismiss();
-//
-//
-//                        } else {
-//                            conNO.setError(getString(R.string.reqired_filled));
-//                        }
-//
-//                    } else {
-//                        ip.setError(getString(R.string.reqired_filled));
-//                    }
-//
-//                } else
-//                    deviceId.setError(getString(R.string.reqired_filled));
-//            }
-//        });
-//        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
+                setting.setPort(port);
+                //  setting.setYears(SET_years);
+                //  setting.setUserNumber(usernum.getText().toString().trim());
+                setting.setDeviceId(deviceId.getText().toString().trim());
+//                Log.e("setting", "==" + setting.getDeviceId());
+
+                ////B
+                setting.setCheckQty(checkQty);
+
+                if (deviceId.getText().toString().trim().length() != 0) {
+                    if (ip.getText().toString().trim().length() != 0) {
+                        if (conNO.getText().toString().trim().length() != 0) {
+
+                            saveData(setting);
+                            dialog.dismiss();
+
+
+                        } else {
+                            conNO.setError(getString(R.string.reqired_filled));
+                        }
+
+                    } else {
+                        ip.setError(getString(R.string.reqired_filled));
+                    }
+
+                } else
+                    deviceId.setError(getString(R.string.reqired_filled));
+            }
+        });
+        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
     }
 
