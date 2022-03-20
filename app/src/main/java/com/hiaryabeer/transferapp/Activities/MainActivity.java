@@ -68,7 +68,7 @@ import static com.hiaryabeer.transferapp.Models.ImportData.pdRepla2;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
+public class MainActivity extends AppCompatActivity {
     int saved = 4;
     int position;
     public static int actvityflage = 1;
@@ -154,70 +154,135 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     List<SerialsModel> allItemSerials = new ArrayList<>();
 
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.goToReports: {
-                Intent i = new Intent(MainActivity.this, TransferReports.class);
-                startActivity(i);
-                return true;
-            }
-            case R.id.menuImport: {
-                if (Login.serialsActive == 1) {
-                    int d = my_dataBase.serialsDao().deleteAllSerials();
-                    Log.e("DeleteSERIALS", d + "");
-                    importData.getAllSerials(new ImportData.GetSerialsCallBack() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Log.e("responseLength", response.length() + "");
-                            allItemSerials.clear();
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    allItemSerials.add(new SerialsModel(
-                                            response.getJSONObject(i).getString("STORENO"),
-                                            response.getJSONObject(i).getString("ITEMOCODE"),
-                                            response.getJSONObject(i).getString("SERIALCODE")));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            Log.e("allItemSerialsLength", allItemSerials.size() + "");
-                            my_dataBase.serialsDao().insertAll(allItemSerials);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-
-                        }
-                    });
-                }
-                return true;
-            }
-            case R.id.menuExport: {
-                Log.e("export", "clicked");
-
-                // UnPostedreplacementlist=my_dataBase.replacementDao().getallReplacement();
-                exportAllData();
-                maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
-                if (maxVochNum != null) {
-                    Log.e(" maxVochNum", maxVochNum);
-                    max = Integer.parseInt(maxVochNum) + 1;
-                }
-
-                zone.setEnabled(true);
-                zone.requestFocus();
-
-                zone.setText("");
-                itemcode.setText("");
-                return true;     }
-            default:
-                return false;
-        }
-    }
+//    @Override
+//    public boolean onMenuItemClick(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.goToReports: {
+//                Intent i = new Intent(MainActivity.this, TransferReports.class);
+//                startActivity(i);
+//                return true;
+//            }
+//            case R.id.menuImport: {
+//                if (Login.serialsActive == 1) {
+//                    int d = my_dataBase.serialsDao().deleteAllSerials();
+//                    Log.e("DeleteSERIALS", d + "");
+//                    importData.getAllSerials(new ImportData.GetSerialsCallBack() {
+//                        @Override
+//                        public void onResponse(JSONArray response) {
+//                            Log.e("responseLength", response.length() + "");
+//                            allItemSerials.clear();
+//                            for (int i = 0; i < response.length(); i++) {
+//                                try {
+//                                    allItemSerials.add(new SerialsModel(
+//                                            response.getJSONObject(i).getString("STORENO"),
+//                                            response.getJSONObject(i).getString("ITEMOCODE"),
+//                                            response.getJSONObject(i).getString("SERIALCODE")));
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                            Log.e("allItemSerialsLength", allItemSerials.size() + "");
+//                            my_dataBase.serialsDao().insertAll(allItemSerials);
+//                        }
+//
+//                        @Override
+//                        public void onError(String error) {
+//
+//                        }
+//                    });
+//                }
+//                return true;
+//            }
+//            case R.id.menuExport: {
+//                Log.e("export", "clicked");
+//
+//                // UnPostedreplacementlist=my_dataBase.replacementDao().getallReplacement();
+//                exportAllData();
+//                maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
+//                if (maxVochNum != null) {
+//                    Log.e(" maxVochNum", maxVochNum);
+//                    max = Integer.parseInt(maxVochNum) + 1;
+//                }
+//
+//                zone.setEnabled(true);
+//                zone.requestFocus();
+//
+//                zone.setText("");
+//                itemcode.setText("");
+//                return true;     }
+//            default:
+//                return false;
+//        }
+//    }
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.main_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                // Toast message on menu item clicked
+
+                switch (menuItem.getItemId()) {
+                    case R.id.goToReports: {
+                        Intent i = new Intent(MainActivity.this, TransferReports.class);
+                        startActivity(i);
+                        return true;
+                    }
+                    case R.id.menuImport: {
+                        if (Login.serialsActive == 1) {
+                            int d = my_dataBase.serialsDao().deleteAllSerials();
+                            Log.e("DeleteSERIALS", d + "");
+                            importData.getAllSerials(new ImportData.GetSerialsCallBack() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    Log.e("responseLength", response.length() + "");
+                                    allItemSerials.clear();
+                                    for (int i = 0; i < response.length(); i++) {
+                                        try {
+                                            allItemSerials.add(new SerialsModel(
+                                                    response.getJSONObject(i).getString("STORENO"),
+                                                    response.getJSONObject(i).getString("ITEMOCODE"),
+                                                    response.getJSONObject(i).getString("SERIALCODE")));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    Log.e("allItemSerialsLength", allItemSerials.size() + "");
+                                    my_dataBase.serialsDao().insertAll(allItemSerials);
+                                }
+
+                                @Override
+                                public void onError(String error) {
+
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                    case R.id.menuExport: {
+                        Log.e("export", "clicked");
+
+                        // UnPostedreplacementlist=my_dataBase.replacementDao().getallReplacement();
+                        exportAllData();
+                        maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
+                        if (maxVochNum != null) {
+                            Log.e(" maxVochNum", maxVochNum);
+                            max = Integer.parseInt(maxVochNum) + 1;
+                        }
+
+                        zone.setEnabled(true);
+                        zone.requestFocus();
+
+                        zone.setText("");
+                        itemcode.setText("");
+                        return true;     }
+                    default:
+                        return false;
+                }
+
+            }
+        });
         popup.show();
     }
 
