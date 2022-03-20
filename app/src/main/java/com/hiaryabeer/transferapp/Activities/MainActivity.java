@@ -227,8 +227,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         setContentView(R.layout.activity_main);
         AllItemDBlist.clear();
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
 
         my_dataBase = RoomAllData.getInstanceDataBase(MainActivity.this);
         init();

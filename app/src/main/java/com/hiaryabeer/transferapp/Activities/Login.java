@@ -66,9 +66,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-
         init();
         my_dataBase = RoomAllData.getInstanceDataBase(Login.this);
     }
