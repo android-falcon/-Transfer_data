@@ -157,7 +157,7 @@
     <string name="notEnoughQuantity">كمية غير متوفرة\n أقصى كمية يمكن ادخالها هي: </string>
     <string name="search">بحث</string>
     <string name="error">يوجد خطأ!</string>
-    <string name="searchByToStore">المستودع المنقول له:</string>
+    <string name="searchByToStore">إلى المستودع :</string>
     <string name="allStores">جميع المستودعات</string>
     <string name="Empty">لا يوجد بيانات</string>
 
@@ -202,5 +202,8 @@
     <string name="start_now">ابدأ الآن</string>
     <string name="login_with">سجل الدخول باستخدام اسم المستخدم\nوكلمة المرور الخاصة بك !</string>
     <string name="ip_address_">إعدادات عنوان IP</string>
+    <string name="transfer_date_">تاريخ السند :</string>
+    <string name="transfer_no_">رقم السند :</string>
+    <string name="search_item_">البحث عن مادة :</string>
 
 </resources>

@@ -4,56 +4,194 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/screen_bg"
     android:orientation="vertical"
     tools:context=".Activities.TransferReports">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/logo"
+        android:layout_alignBottom="@id/logo"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="@string/TransfersReportTitle"
-        app:titleTextColor="@color/white">
+        android:layout_marginStart="17dp"
+        android:gravity="center">
 
-        <LinearLayout
-            android:id="@+id/labels"
+        <ImageButton
+            android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="start"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:layout_marginStart="3dp"
+            android:background="@drawable/back_btn" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/transfer_logo" />
+
+    <LinearLayout
+        android:id="@+id/labels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/logo"
+        android:layout_alignBottom="@id/logo"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:layout_marginBottom="20dp"
+        android:gravity="start|center_vertical"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_grey_square" />
+
+
+        <TextView
+            android:id="@+id/notPostedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:text="@string/not_posted_items"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/part1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="55dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/postedLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@string/posted_items"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_blue_square" />
+                android:layout_weight="0.25"
+                android:fontFamily="@font/poppins_semibold_600"
+                android:text="@string/transfer_date_"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
+            <EditText
+                android:id="@+id/etPickDate"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/black_border"
+                android:focusable="false"
+                android:gravity="center"
+                android:hint="@string/chooseDate"
+                android:inputType="date"
+                android:paddingHorizontal="7dp"
+                android:text="23/01/2023"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:drawableEndCompat="@drawable/calender"
+                app:drawableTint="@color/black" />
 
-            <TextView
-                android:id="@+id/notPostedLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="@string/not_posted_items"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_grey_square" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
 
-    </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:fontFamily="@font/poppins_semibold_600"
+                android:text="Transfer No. :"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/spinnerTrans"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:background="@drawable/spinner_bg"
+                android:fontFamily="@font/poppins_semibold_600"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textDirection="locale" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/my_toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="?attr/actionBarSize"-->
+    <!--        android:layout_alignParentStart="true"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:background="?attr/colorPrimary"-->
+    <!--        android:elevation="4dp"-->
+    <!--        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+    <!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+    <!--        app:title="@string/TransfersReportTitle"-->
+    <!--        app:titleTextColor="@color/white">-->
+
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/labels"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="end"-->
+    <!--            android:gravity="start"-->
+    <!--            android:orientation="vertical"-->
+    <!--            android:padding="4dp">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/postedLabel"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginBottom="2dp"-->
+    <!--                android:text="@string/posted_items"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textSize="12sp"-->
+    <!--                app:drawableStartCompat="@drawable/ic_blue_square" />-->
+
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/notPostedLabel"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginTop="2dp"-->
+    <!--                android:text="@string/not_posted_items"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textSize="12sp"-->
+    <!--                app:drawableStartCompat="@drawable/ic_grey_square" />-->
+    <!--        </LinearLayout>-->
+
+
+    <!--    </androidx.appcompat.widget.Toolbar>-->
 
 
     <!--    </androidx.appcompat.widget.Toolbar>-->
@@ -81,130 +219,130 @@
 
     <!--    </androidx.appcompat.widget.Toolbar>-->
 
-    <LinearLayout
-        android:id="@+id/part1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:orientation="horizontal">
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/part1"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentEnd="true"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_weight="0.8"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/logo">-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:orientation="vertical">
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="0.8"-->
+    <!--            android:orientation="vertical">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                android:weightSum="8">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.3"
-                    android:fontFamily="@font/noto_sans"
-                    android:text="@string/transactionDate"
-                    android:textColor="#3E3F47"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/etPickDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="6"
-                    android:focusable="false"
-                    android:gravity="center"
-                    android:hint="@string/chooseDate"
-                    android:inputType="date"
-                    android:textColor="#039BE5"
-                    android:textSize="17sp"
-                    android:text="23/01/2023"
-                    app:drawableStartCompat="@drawable/ic_date2" />
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_gravity="center"-->
+    <!--                android:orientation="horizontal"-->
+    <!--                android:padding="5dp"-->
+    <!--                android:weightSum="8">-->
 
 
-            </LinearLayout>
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center"-->
+    <!--                    android:layout_weight="0.3"-->
+    <!--                    android:fontFamily="@font/noto_sans"-->
+    <!--                    android:text="@string/transactionDate"-->
+    <!--                    android:textColor="#3E3F47"-->
+    <!--                    android:textSize="16sp" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:gravity="start"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/noto_sans"
-                    android:text="@string/TransferNo"
-                    android:textColor="#3E3F47"
-                    android:textSize="16sp" />
-
-                <Spinner
-                    android:id="@+id/spinnerTrans"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="2dp"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:textDirection="locale" />
+    <!--                <EditText-->
+    <!--                    android:id="@+id/etPickDate"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginEnd="2dp"-->
+    <!--                    android:layout_weight="6"-->
+    <!--                    android:focusable="false"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:hint="@string/chooseDate"-->
+    <!--                    android:inputType="date"-->
+    <!--                    android:text="23/01/2023"-->
+    <!--                    android:textColor="#039BE5"-->
+    <!--                    android:textSize="17sp"-->
+    <!--                    app:drawableStartCompat="@drawable/ic_date2" />-->
 
 
-            </LinearLayout>
+    <!--            </LinearLayout>-->
 
-        </LinearLayout>
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_gravity="start"-->
+    <!--                android:gravity="start"-->
+    <!--                android:padding="5dp">-->
 
-        <Button
-            android:id="@+id/btnPreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="7dp"
-            android:layout_weight="0.20"
-            android:background="@drawable/loginbtn"
-            android:text="@string/previewBtn"
-            android:textAllCaps="false"
-            android:visibility="gone"/>
-    </LinearLayout>
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center"-->
+    <!--                    android:fontFamily="@font/noto_sans"-->
+    <!--                    android:text="@string/TransferNo"-->
+    <!--                    android:textColor="#3E3F47"-->
+    <!--                    android:textSize="16sp" />-->
+
+    <!--                <Spinner-->
+    <!--                    android:id="@+id/spinnerTrans"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center"-->
+    <!--                    android:layout_marginStart="2dp"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:textAlignment="center"-->
+    <!--                    android:textDirection="locale" />-->
+
+
+    <!--            </LinearLayout>-->
+
+    <!--        </LinearLayout>-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnPreview"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:layout_marginStart="7dp"-->
+    <!--            android:layout_weight="0.20"-->
+    <!--            android:background="@drawable/loginbtn"-->
+    <!--            android:text="@string/previewBtn"-->
+    <!--            android:textAllCaps="false"-->
+    <!--            android:visibility="gone" />-->
+    <!--    </LinearLayout>-->
 
 
     <LinearLayout
         android:id="@+id/part2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/part1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="start"
-        android:gravity="start"
-        android:padding="5dp">
+        android:layout_below="@id/part1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:gravity="start|center_vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/noto_sans"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/poppins_semibold_600"
             android:text="@string/searchByToStore"
-            android:textColor="#3E3F47"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
         <Spinner
             android:id="@+id/spinnerToStore"
-            style="@style/spinner_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="2dp"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner_bg"
             android:gravity="center"
             android:textAlignment="center"
             android:textDirection="locale" />
@@ -216,40 +354,32 @@
         android:id="@+id/part3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/part2"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:layout_below="@id/part2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:gravity="start|center_vertical"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/etSearchByName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_search2"
-            android:gravity="start"
-            android:hint="@string/Itemname" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/or"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/poppins_semibold_600"
+            android:gravity="start"
+            android:text="@string/search_item_"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/etSearchByNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableStart="@drawable/ic_search2"
-            android:gravity="start"
-            android:hint="@string/itemCode" />
+            android:id="@+id/etSearchItems"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/black_border"
+            android:drawableEnd="@drawable/ic_search2"
+            android:gravity="center" />
 
 
     </LinearLayout>
@@ -258,9 +388,9 @@
         android:id="@+id/part4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/part3"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true">
+        android:layout_below="@id/part3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
 
         <LinearLayout
             android:id="@+id/tableParentLayout"
@@ -271,37 +401,25 @@
             <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:orientation="horizontal">
 
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@color/colorblue_dark"
+                    android:background="@color/lightOrange"
                     android:gravity="center"
-                    android:padding="5dp">
+                    android:padding="15dp">
 
 
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="18dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/TransferNo"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="8dp"
-                        android:background="@color/colorblue1"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
 
                     <TextView
@@ -310,18 +428,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/fromStore"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:background="@color/colorblue1"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
 
                     <TextView
@@ -330,18 +438,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/toStore"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:background="@color/colorblue1"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="150dp"
@@ -349,18 +447,8 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/Itemname"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:background="@color/colorblue1"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="150dp"
@@ -368,18 +456,9 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/itemCode"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:background="@color/colorblue1"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="60dp"
@@ -387,22 +466,21 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/Qty"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
                 </TableRow>
             </TableLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTransferReports"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="2dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </LinearLayout>
@@ -415,10 +493,10 @@
         android:id="@+id/imgEmpty"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/tvEmpty"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/part4"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:alpha="0.1"
         android:src="@drawable/nodata"
         android:visibility="visible" />
@@ -427,80 +505,81 @@
         android:id="@+id/tvEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="120dp"
+        android:layout_below="@id/imgEmpty"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-45dp"
         android:alpha="0.3"
         android:gravity="center"
         android:text="@string/Empty"
         android:visibility="visible" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabExcel"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fabPDF"
-        android:layout_alignStart="@+id/fabPDF"
-        android:layout_alignEnd="@+id/fabPDF"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="Excel"
-        android:src="@drawable/ic_excel"
-        android:visibility="gone"
-        app:backgroundTint="#1F2912"
-        app:fabSize="normal"
-        app:iconSize="30dp" />
+        android:layout_above="@id/fabConvert"
+        android:layout_alignStart="@id/fabConvert"
+        android:layout_alignEnd="@id/fabConvert"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabPDF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fabShare"
-        android:layout_alignStart="@+id/fabShare"
-        android:layout_alignEnd="@+id/fabShare"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="7dp"
-        android:contentDescription="PDF"
-        android:src="@drawable/pdf3"
-        android:visibility="gone"
-        app:backgroundTint="#A10000"
-        app:fabSize="normal"
-        app:iconSize="30dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabExcel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="Excel"
+            android:visibility="visible"
+            app:backgroundTint="#D5D5D5"
+            app:fabSize="mini"
+            app:iconSize="30dp"
+            app:srcCompat="@drawable/xls"
+            app:tint="#00A307" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabPrint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fabShare"
-        android:layout_alignStart="@+id/fabShare"
-        android:layout_alignEnd="@+id/fabShare"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="Print"
-        android:src="@drawable/ic_print"
-        android:visibility="gone"
-        app:backgroundTint="#98A7BF"
-        app:fabSize="normal"
-        app:iconSize="30dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabPDF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="7dp"
+            android:contentDescription="PDF"
+            android:src="@drawable/pdf5"
+            android:visibility="visible"
+            app:backgroundTint="#D5D5D5"
+            app:fabSize="mini"
+            app:iconSize="30dp"
+            app:tint="#DF0F0F" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabPrint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="Print"
+            android:src="@drawable/printer6"
+            android:visibility="gone"
+            app:backgroundTint="#D5D5D5"
+            app:fabSize="mini"
+            app:iconSize="30dp"
+            app:tint="@color/colorblue1" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fabConvert"
-        android:layout_alignStart="@+id/fabConvert"
-        android:layout_alignEnd="@+id/fabConvert"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="Share"
-        android:src="@drawable/ic_share"
-        android:visibility="gone"
-        app:backgroundTint="#C6C6C6"
-        app:fabSize="normal"
-        app:iconSize="30dp" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="Share"
+            android:src="@drawable/sharing1"
+            android:visibility="visible"
+            app:backgroundTint="#D5D5D5"
+            app:fabSize="mini"
+            app:iconSize="30dp"
+            app:tint="@color/black" />
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabConvert"
@@ -509,12 +588,13 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="22dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/colorPrimary"
         android:contentDescription="Convert into"
         android:src="@drawable/ic_convert"
-        android:visibility="gone"
+        android:visibility="visible"
         app:fabSize="normal"
-        app:iconSize="30dp" />
-
+        app:iconSize="30dp"
+        app:tint="@android:color/white" />
 </RelativeLayout>

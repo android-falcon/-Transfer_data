@@ -2489,4 +2489,13 @@ public class MainActivity extends AppCompatActivity {
         if (pdRepla2 != null && pdRepla2.isShowing())
             pdRepla2.cancel();
     }
+
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
 }

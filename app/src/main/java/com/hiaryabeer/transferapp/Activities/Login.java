@@ -266,8 +266,9 @@ public class Login extends AppCompatActivity {
 
         dialog.setCancelable(false);
 
-        loginBox.setVisibility(View.GONE);
         dialog.show();
+        loginBox.setVisibility(View.GONE);
+
 
 
 //        final Dialog dialog = new Dialog(Login.this);

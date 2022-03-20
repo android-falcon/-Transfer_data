@@ -20,7 +20,7 @@
             android:background="@color/notPostedBackground"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="4dp">
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/downArrow"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="1dp"
-                android:background="@drawable/ic_export"
+                android:drawableEnd="@drawable/ic_export"
                 android:clickable="true"
                 android:focusable="true"
                 android:elevation="2dp"/>
@@ -48,9 +48,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/TransferNo"
-                android:textColor="@color/dark_blue_3"
+                android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                 />
 
 
             <TextView
@@ -61,9 +61,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/fromStore"
-                android:textColor="@color/dark_blue_3"
+                android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                 />
 
 
             <TextView
@@ -74,9 +74,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/toStore"
-                android:textColor="@color/dark_blue_3"
+                android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                 />
 
             <TextView
                 android:id="@+id/tvItemName"
@@ -86,9 +86,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/Itemname"
-                android:textColor="@color/dark_blue_3"
+                android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                 />
 
             <TextView
                 android:id="@+id/tvItemCode"
@@ -98,9 +98,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/itemCode"
-                android:textColor="@color/dark_blue_3"
+                android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                 />
 
 
             <TextView
@@ -111,9 +111,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/Qty"
-                android:textColor="@color/dark_blue_3"
+                android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                 />
 
         </TableRow>
 
@@ -124,7 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -139,9 +139,8 @@
                     android:gravity="start|center_vertical"
                     android:paddingHorizontal="5dp"
                     android:text="@string/serials"
-                    android:textColor="@color/dark_blue_3"
+                    android:textColor="@color/black"
                     android:textSize="17sp"
-                    android:textStyle="bold"
                     android:layout_weight="0.8"/>
 
                 <TextView
