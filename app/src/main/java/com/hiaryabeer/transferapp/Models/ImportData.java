@@ -137,7 +137,7 @@ public class ImportData {
     public void getAllItems() {
         AllImportItemlist.clear();
         pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
         pdRepla.setTitleText(context.getString(R.string.importData));
         pdRepla.setCancelable(false);
         pdRepla.show();
@@ -188,7 +188,7 @@ public class ImportData {
 
     public void getStore() {
         pdRepla2 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        pdRepla2.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+        pdRepla2.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
         pdRepla2.setTitleText(context.getString(R.string.getStore));
         pdRepla2.setCancelable(false);
         pdRepla2.show();
@@ -922,7 +922,7 @@ public class ImportData {
 //        if (allSerialsList.size() == 0) {
 
         SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        dialog.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+        dialog.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
         dialog.setTitleText(context.getString(R.string.storeSerials));
         dialog.setCancelable(false);
         dialog.show();

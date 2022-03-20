@@ -12,7 +12,7 @@
         android:textAlignment="viewStart"
         android:text="@string/serial_no"
         android:padding="4dp"
-        android:textColor="@color/dark_blue_3"
+        android:textColor="@color/gray"
         android:textSize="13sp"
         android:layout_margin="4dp"/>
 

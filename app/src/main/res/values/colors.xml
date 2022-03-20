@@ -25,6 +25,7 @@
     <color name="black">#000</color>
     <color name="white_alphe">#9E9C9A9A</color>
     <color name="yellow2"> #FFFF00</color>
+    <color name="gray">#7A7A7A</color>
 
     <color name="white_dark">#E9FFFFFF</color>
     <color name="darkblue_">#DF075F8B</color>
@@ -32,6 +33,6 @@
     <color name="white_two">#85E4DCDC</color>
     <color name="darkOrange2">#D8FFEB3B</color>
 
-    <color name="postedBackground">#D5EBFF</color>
-    <color name="notPostedBackground">#D6D6D6</color>
+    <color name="postedBackground">#FFFFFF</color>
+    <color name="notPostedBackground">#DADADA</color>
 </resources>

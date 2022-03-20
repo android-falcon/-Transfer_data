@@ -8,7 +8,6 @@ import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_CENTER;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,9 +32,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -85,11 +84,11 @@ import java.util.Locale;
 
 public class TransferReports extends AppCompatActivity {
     public static TextView etPickDate;
-    private EditText etSearchByName, etSearchByNo;
-    private Button btnPreview;
+    private ImageButton backBtn;
+    private EditText etSearchItems;
     public static RecyclerView rvTransferReports;
 
-    public static List<ReplacementModel> reportsList = new ArrayList<>();
+    public static List<ReplacementModel> allReports = new ArrayList<>();
     private ArrayList<ReplacementModel> searchList = new ArrayList<>();
     public static TransReportsAdapter transReportsAdapter;
 
@@ -98,7 +97,6 @@ public class TransferReports extends AppCompatActivity {
 
     private RoomAllData myDB;
 
-    private TextView postedLabel, notPostedLabel;
     private Spinner spinnerToStore;
     private ArrayList<String> storeArray = new ArrayList<>();
     private ArrayList<String> transArray = new ArrayList<>();
@@ -122,9 +120,9 @@ public class TransferReports extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_reports);
 
-        Toolbar myToolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+//        setSupportActionBar(myToolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -139,13 +137,10 @@ public class TransferReports extends AppCompatActivity {
 //        toolbar.setTitle(getString(R.string.TransfersReportTitle));
 //        getSupportActionBar().
 
-        initViews();  //Initialize Views
+        initViews();
+        setVisibility(clicked);
+        //Initialize Views
         myDB = RoomAllData.getInstanceDataBase(this);
-
-        String p = "  " + getString(R.string.posted_items);
-        String f = "  " + getString(R.string.not_posted_items);
-        postedLabel.setText(p);
-        notPostedLabel.setText(f);
 
         GeneralMethod generalMethod = new GeneralMethod(TransferReports.this);
 
@@ -167,6 +162,8 @@ public class TransferReports extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabel();
                 initTransSpinner();
+                spinnerToStore.setSelection(0);
+                etSearchItems.setText("");
             }
         };
 
@@ -181,6 +178,10 @@ public class TransferReports extends AppCompatActivity {
         });
 /////////
 
+
+/****** View Data on Recycler View ******/
+        initRecView();
+
 /********* TransNo Filter *******/
 
         initTransSpinner();
@@ -188,7 +189,9 @@ public class TransferReports extends AppCompatActivity {
         spinnerTrans.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                initRecView();
+
+                filter();
+
             }
 
             @Override
@@ -198,29 +201,7 @@ public class TransferReports extends AppCompatActivity {
         });
 
 
-/****** View Data on Recycler View ******/
-        initRecView();
 
-
-/***** Update Recycler View Based On Transaction Date Change ******/
-        btnPreview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reportsList = myDB.replacementDao().getReplacementsByDate(etPickDate.getText().toString());
-                transReportsAdapter = new TransReportsAdapter(TransferReports.this, reportsList);
-                rvTransferReports.setAdapter(transReportsAdapter);
-                rvTransferReports.setLayoutManager(new LinearLayoutManager(TransferReports.this));
-
-                if (transReportsAdapter.getItemCount() == 0) {
-                    imgEmpty.setVisibility(View.VISIBLE);
-                    tvEmpty.setVisibility(View.VISIBLE);
-                } else {
-                    imgEmpty.setVisibility(View.GONE);
-                    tvEmpty.setVisibility(View.GONE);
-                }
-
-            }
-        });
 /////////
 
 /********* Initialize ToStore Spinner ********/
@@ -245,43 +226,9 @@ public class TransferReports extends AppCompatActivity {
         spinnerToStore.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String c = etSearchByNo.getText().toString().trim();
-                String n = etSearchByName.getText().toString().trim();
 
-                if (position != 0) {
+                filter();
 
-                    if ((n.length() == 0) && (c.length() == 0)) {
-                        searchByToStore();
-                    }
-                    //
-                    if ((n.length() != 0) && (c.length() == 0)) {
-                        searchByNameAndStore();
-                    }
-                    //
-                    if ((n.length() == 0 && (c.length() != 0))) {
-                        searchByCodeAndStore();
-                    }
-                    //
-                    if ((n.length() != 0 && (c.length() != 0))) {
-                        searchByAll();
-                    }
-                } else {
-                    if ((n.length() == 0) && (c.length() == 0)) {
-                        initRecView();
-                    }
-                    //
-                    if ((n.length() != 0) && (c.length() == 0)) {
-                        searchByName();
-                    }
-                    //
-                    if ((n.length() == 0 && (c.length() != 0))) {
-                        searchByCode();
-                    }
-                    //
-                    if ((n.length() != 0 && (c.length() != 0))) {
-                        searchByNameAndCode();
-                    }
-                }
             }
 
             @Override
@@ -293,8 +240,8 @@ public class TransferReports extends AppCompatActivity {
 /////////
 
 
-/********** Search Items By Name ***********/
-        etSearchByName.addTextChangedListener(new TextWatcher() {
+/********** Search Items ***********/
+        etSearchItems.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -307,100 +254,9 @@ public class TransferReports extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String n = s.toString().trim();
-                String c = etSearchByNo.getText().toString().trim();
-                int position = spinnerToStore.getSelectedItemPosition();
 
-                if (n.length() != 0) {
+                filter();
 
-                    if ((c.length() == 0) && (position == 0)) {
-                        searchByName();
-                    }
-                    //
-                    if ((c.length() != 0) && (position == 0)) {
-                        searchByNameAndCode();
-                    }
-                    //
-                    if ((c.length() == 0 && (position != 0))) {
-                        searchByNameAndStore();
-                    }
-                    //
-                    if ((c.length() != 0 && (position != 0))) {
-                        searchByAll();
-                    }
-                } else {
-                    if ((c.length() == 0) && (position == 0)) {
-                        initRecView();
-                    }
-                    //
-                    if ((c.length() != 0) && (position == 0)) {
-                        searchByCode();
-                    }
-                    //
-                    if ((c.length() == 0 && (position != 0))) {
-                        searchByToStore();
-                    }
-                    //
-                    if ((c.length() != 0 && (position != 0))) {
-                        searchByCodeAndStore();
-                    }
-                }
-            }
-        });
-/////////
-
-/********** Search Items By Item No. ***********/
-        etSearchByNo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String c = s.toString().trim();
-                String n = etSearchByName.getText().toString().trim();
-                int position = spinnerToStore.getSelectedItemPosition();
-
-                if (c.length() != 0) {
-
-                    if ((n.length() == 0) && (position == 0)) {
-                        searchByCode();
-                    }
-                    //
-                    if ((n.length() != 0) && (position == 0)) {
-                        searchByNameAndCode();
-                    }
-                    //
-                    if ((n.length() == 0 && (position != 0))) {
-                        searchByCodeAndStore();
-                    }
-                    //
-                    if ((n.length() != 0 && (position != 0))) {
-                        searchByAll();
-                    }
-                } else {
-                    if ((n.length() == 0) && (position == 0)) {
-                        initRecView();
-                    }
-                    //
-                    if ((n.length() != 0) && (position == 0)) {
-                        searchByName();
-                    }
-                    //
-                    if ((n.length() == 0 && (position != 0))) {
-                        searchByToStore();
-                    }
-                    //
-                    if ((n.length() != 0 && (position != 0))) {
-                        searchByNameAndStore();
-                    }
-                }
             }
         });
 /////////
@@ -534,13 +390,21 @@ public class TransferReports extends AppCompatActivity {
             fabConvert.setVisibility(View.GONE);
         }
 
+        backBtn.setOnClickListener(v -> finish());
+
     }
 
 
 /////////
 
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     /***************** METHODS *****************/
+
 
     public void createPdf() throws DocumentException, IOException {
         File filePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + "/Transfers_" + etPickDate.getText().toString().substring(0, 2) + "_" + etPickDate.getText().toString().substring(3, 5) + ".pdf");
@@ -563,13 +427,13 @@ public class TransferReports extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Font font0 = new Font(base, 14f, Font.NORMAL, new BaseColor(4, 87, 138));
+        Font font0 = new Font(base, 14f, Font.NORMAL, new BaseColor(0, 0, 0));
         Font font1 = new Font(base, 15f, Font.NORMAL, new BaseColor(255, 255, 255));
-        Font font2 = new Font(base, 17f, Font.NORMAL, new BaseColor(102, 178, 255));
-        Font font3 = new Font(base, 20f, Font.BOLD, new BaseColor(0, 61, 101));
+        Font font2 = new Font(base, 17f, Font.NORMAL, new BaseColor(128, 128, 128));
+        Font font3 = new Font(base, 18f, Font.BOLD, new BaseColor(0, 0, 0));
         Font font4 = new Font(base, 14f, Font.NORMAL, BaseColor.LIGHT_GRAY);
 
-        Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.translogo);
+        Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.transfer_logo);
         assert drawable != null;
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -607,6 +471,7 @@ public class TransferReports extends AppCompatActivity {
         pdfPTableHeader.addCell(pdfCell(getString(R.string.TransfersReportTitle),
                 ALIGN_CENTER, 1, font3, BaseColor.GRAY, false, false, null, true));
 
+        document.add(phrase);
         document.add(pdfPTableHeader);
         document.add(phrase);
 
@@ -629,31 +494,31 @@ public class TransferReports extends AppCompatActivity {
         if (!Locale.getDefault().getLanguage().equals("ar")) {
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.trsnferNo),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.fromStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.toStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Itemname),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.itemCode),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Qty),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.serials),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             document.add(pdfPTableHeader3);
 
@@ -663,29 +528,29 @@ public class TransferReports extends AppCompatActivity {
             pdfPTableBody.setSpacingAfter(0f);
 
             List<String> serialCodes = new ArrayList<>();
-            for (int i = 0; i < reportsList.size(); i++) {
+            for (int i = 0; i < allReports.size(); i++) {
                 serialCodes.clear();
-                serialCodes = myDB.serialTransfersDao().getSerialCodes(reportsList.get(i).getTransNumber(), reportsList.get(i).getItemcode());
+                serialCodes = myDB.serialTransfersDao().getSerialCodes(allReports.get(i).getTransNumber(), allReports.get(i).getItemcode());
                 Log.e("Serials Size", serialCodes.size() + "");
-                if (reportsList.get(i).getIsPosted().equals("0")) {
+                if (allReports.get(i).getIsPosted().equals("0")) {
 
 //                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getTransNumber()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getTransNumber()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getFromName()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getFromName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getToName()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getToName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemname()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemname()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemcode()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemcode()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getRecQty()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getRecQty()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
@@ -707,37 +572,37 @@ public class TransferReports extends AppCompatActivity {
 
                 } else {
 //                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getTransNumber()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getTransNumber()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getFromName()),
+                            new BaseColor(255, 255, 255), false));
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getFromName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getToName()),
+                            new BaseColor(255, 255, 255), false));
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getToName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemname()),
+                            new BaseColor(255, 255, 255), false));
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemname()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemcode()),
+                            new BaseColor(255, 255, 255), false));
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemcode()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getRecQty()),
+                            new BaseColor(255, 255, 255), false));
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getRecQty()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
                     if (serialCodes.size() > 0) {
                         for (int j = 0; j < serialCodes.size(); j++) {
                             Log.e("size > 0", "size > 0");
                             pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(j)),
                                     ALIGN_CENTER, 1, font0, BaseColor.BLACK, true, true,
-                                    new BaseColor(213, 235, 255), false));
+                                    new BaseColor(255, 255, 255), false));
                         }
                     } else {
                         Log.e("size = 0", "size = 0");
                         pdfPTableBody.addCell(pdfCell("   ",
                                 ALIGN_CENTER, 1, font4, BaseColor.BLACK, true, true,
-                                new BaseColor(213, 235, 255), false));
+                                new BaseColor(255, 255, 255), false));
                     }
 
                 }
@@ -749,31 +614,31 @@ public class TransferReports extends AppCompatActivity {
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.serials),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Qty),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.itemCode),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Itemname),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.toStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.fromStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.trsnferNo),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(4, 87, 138), false));
+                    new BaseColor(240, 123, 82), false));
 
             document.add(pdfPTableHeader3);
 
@@ -783,12 +648,12 @@ public class TransferReports extends AppCompatActivity {
             pdfPTableBody.setSpacingAfter(0f);
 
             List<String> serialCodes = new ArrayList<>();
-            for (int i = 0; i < reportsList.size(); i++) {
+            for (int i = 0; i < allReports.size(); i++) {
                 serialCodes.clear();
-                serialCodes = myDB.serialTransfersDao().getSerialCodes(reportsList.get(i).getTransNumber(), reportsList.get(i).getItemcode());
+                serialCodes = myDB.serialTransfersDao().getSerialCodes(allReports.get(i).getTransNumber(), allReports.get(i).getItemcode());
                 Log.e("Serials Size", serialCodes.size() + "");
 
-                if (reportsList.get(i).getIsPosted().equals("0")) {
+                if (allReports.get(i).getIsPosted().equals("0")) {
                     if (serialCodes.size() > 0) {
                         Log.e("size > 0", "size > 0");
                         pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(0)),
@@ -801,28 +666,28 @@ public class TransferReports extends AppCompatActivity {
                                 new BaseColor(214, 214, 214), false));
                     }
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getRecQty()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getRecQty()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemcode()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemcode()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemname()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemname()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getToName()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getToName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getFromName()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getFromName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
 //                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getTransNumber()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getTransNumber()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
                             new BaseColor(214, 214, 214), false));
 
@@ -841,45 +706,45 @@ public class TransferReports extends AppCompatActivity {
                         Log.e("size > 0", "size > 0");
                         pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(0)),
                                 ALIGN_CENTER, 1, font0, BaseColor.BLACK, true, true,
-                                new BaseColor(213, 235, 255), false));
+                                new BaseColor(255, 255, 255), false));
 
                     } else {
                         Log.e("size = 0", "size = 0");
                         pdfPTableBody.addCell(pdfCell("   ",
                                 ALIGN_CENTER, 1, font4, BaseColor.BLACK, true, true,
-                                new BaseColor(213, 235, 255), false));
+                                new BaseColor(255, 255, 255), false));
                     }
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getRecQty()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getRecQty()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemcode()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemcode()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getItemname()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemname()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getToName()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getToName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getFromName()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getFromName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
 //                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
-                    pdfPTableBody.addCell(pdfCell(String.valueOf(reportsList.get(i).getTransNumber()),
+                    pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getTransNumber()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(213, 235, 255), false));
+                            new BaseColor(255, 255, 255), false));
 
                     if (serialCodes.size() > 0) {
                         for (int j = 1; j < serialCodes.size(); j++) {
                             pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(j)),
                                     ALIGN_CENTER, 1, font0, BaseColor.BLACK, true, true,
-                                    new BaseColor(213, 235, 255), false));
+                                    new BaseColor(255, 255, 255), false));
                         }
                     }
 
@@ -983,7 +848,7 @@ public class TransferReports extends AppCompatActivity {
 
         Row row = sheet.createRow(0);
         org.apache.poi.ss.usermodel.Cell cell = row.createCell(0);
-        cell.setCellValue(getString(R.string.transactionDate) + ":  " + etPickDate.getText().toString());
+        cell.setCellValue(getString(R.string.transfer_date_) + " " + etPickDate.getText().toString());
         CellStyle ccs = workbook.createCellStyle();
         ccs.setAlignment(CellStyle.ALIGN_CENTER);
         ccs.setVerticalAlignment(VERTICAL_CENTER);
@@ -1004,7 +869,7 @@ public class TransferReports extends AppCompatActivity {
 
         row = sheet.createRow(1);
         cell = row.createCell(0);
-        cell.setCellValue(getString(R.string.trsnferNo) + ":  " + spinnerTrans.getSelectedItem().toString());
+        cell.setCellValue(getString(R.string.trsnferNo) + " : " + spinnerTrans.getSelectedItem().toString());
 
         CellStyle ccs1 = workbook.createCellStyle();
         ccs1.setAlignment(CellStyle.ALIGN_CENTER);
@@ -1026,18 +891,18 @@ public class TransferReports extends AppCompatActivity {
 
 
         CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
+        cellStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
         cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
         cellStyle.setVerticalAlignment(VERTICAL_CENTER);
         cellStyle.setBorderRight(CellStyle.BORDER_THIN);
-        cellStyle.setRightBorderColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle.setBorderLeft(CellStyle.BORDER_THIN);
-        cellStyle.setLeftBorderColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle.setBorderTop(CellStyle.BORDER_THIN);
-        cellStyle.setTopBorderColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        cellStyle.setBottomBorderColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
         cellStyle.setFont(defaultFont);
 
         org.apache.poi.ss.usermodel.Cell cell1 = null;
@@ -1086,36 +951,36 @@ public class TransferReports extends AppCompatActivity {
             cellStyle1.setBorderBottom(CellStyle.BORDER_THIN);
             cellStyle1.setBottomBorderColor(IndexedColors.BLUE.getIndex());
 
-            for (int r = 3; r <= reportsList.size() + 2; r++) {
+            for (int r = 3; r <= allReports.size() + 2; r++) {
 
                 row = sheet.createRow(r);
                 serialCodes.clear();
-                serialCodes = myDB.serialTransfersDao().getSerialCodes(reportsList.get(r - 3).getTransNumber(), reportsList.get(r - 3).getItemcode());
+                serialCodes = myDB.serialTransfersDao().getSerialCodes(allReports.get(r - 3).getTransNumber(), allReports.get(r - 3).getItemcode());
 
                 row.setHeightInPoints(((serialCodes.size() + 2) * sheet.getDefaultRowHeightInPoints()));
 
                 cell1 = row.createCell(0);
-                cell1.setCellValue(reportsList.get(r - 3).getTransNumber());
+                cell1.setCellValue(allReports.get(r - 3).getTransNumber());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(1);
-                cell1.setCellValue(reportsList.get(r - 3).getFromName());
+                cell1.setCellValue(allReports.get(r - 3).getFromName());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(2);
-                cell1.setCellValue(reportsList.get(r - 3).getToName());
+                cell1.setCellValue(allReports.get(r - 3).getToName());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(3);
-                cell1.setCellValue(reportsList.get(r - 3).getItemname());
+                cell1.setCellValue(allReports.get(r - 3).getItemname());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(4);
-                cell1.setCellValue(reportsList.get(r - 3).getItemcode());
+                cell1.setCellValue(allReports.get(r - 3).getItemcode());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(5);
-                cell1.setCellValue(reportsList.get(r - 3).getRecQty());
+                cell1.setCellValue(allReports.get(r - 3).getRecQty());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(6);
@@ -1210,11 +1075,11 @@ public class TransferReports extends AppCompatActivity {
             cellStyle1.setBorderBottom(CellStyle.BORDER_THIN);
             cellStyle1.setBottomBorderColor(IndexedColors.BLUE.getIndex());
 
-            for (int r = 3; r <= reportsList.size() + 2; r++) {
+            for (int r = 3; r <= allReports.size() + 2; r++) {
 
                 row = sheet.createRow(r);
                 serialCodes.clear();
-                serialCodes = myDB.serialTransfersDao().getSerialCodes(reportsList.get(r - 3).getTransNumber(), reportsList.get(r - 3).getItemcode());
+                serialCodes = myDB.serialTransfersDao().getSerialCodes(allReports.get(r - 3).getTransNumber(), allReports.get(r - 3).getItemcode());
 
                 row.setHeightInPoints(((serialCodes.size() + 2) * sheet.getDefaultRowHeightInPoints()));
 
@@ -1250,27 +1115,27 @@ public class TransferReports extends AppCompatActivity {
                 cell1.setCellStyle(cs);
 
                 cell1 = row.createCell(1);
-                cell1.setCellValue(reportsList.get(r - 3).getRecQty());
+                cell1.setCellValue(allReports.get(r - 3).getRecQty());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(2);
-                cell1.setCellValue(reportsList.get(r - 3).getItemcode());
+                cell1.setCellValue(allReports.get(r - 3).getItemcode());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(3);
-                cell1.setCellValue(reportsList.get(r - 3).getItemname());
+                cell1.setCellValue(allReports.get(r - 3).getItemname());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(4);
-                cell1.setCellValue(reportsList.get(r - 3).getToName());
+                cell1.setCellValue(allReports.get(r - 3).getToName());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(5);
-                cell1.setCellValue(reportsList.get(r - 3).getFromName());
+                cell1.setCellValue(allReports.get(r - 3).getFromName());
                 cell1.setCellStyle(cellStyle1);
 
                 cell1 = row.createCell(6);
-                cell1.setCellValue(reportsList.get(r - 3).getTransNumber());
+                cell1.setCellValue(allReports.get(r - 3).getTransNumber());
                 cell1.setCellStyle(cellStyle1);
 
             }
@@ -1336,240 +1201,6 @@ public class TransferReports extends AppCompatActivity {
         }
     }
 
-//    private void createPdf2() throws IOException {
-//        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString();
-//        File file = new File(pdfPath, "Transfers_" + etPickDate.getText().toString().substring(0, 2) + "_" + etPickDate.getText().toString().substring(3, 5) + ".pdf");
-////        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + "/Transfers_" + etPickDate.getText().toString().substring(0, 2) + "_" + etPickDate.getText().toString().substring(3, 5) + ".pdf");
-////        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-////                Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
-//
-////        try {
-////            if (!file.exists()) {
-////                file.createNewFile();
-////            }
-////
-////            FileOutputStream fileOutputStream = new FileOutputStream(file);
-////
-////            if (fileOutputStream != null) {
-////                fileOutputStream.flush();
-////                fileOutputStream.close();
-////            }
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
-//
-////        OutputStream outputStream = new FileOutputStream(file);
-////        PdfReader reader = new PdfReader(pdfPath +"/Transfers_Report.pdf");
-//        PdfWriter pdfWriter = new PdfWriter(file);
-//
-//        PdfDocument pdfDocument = new PdfDocument(pdfWriter);
-//
-//        pdfDocument.setDefaultPageSize(PageSize.A3);
-//
-//        Document document = new Document(pdfDocument);
-//
-//
-//        PdfFont f = PdfFontFactory.createFont("/assets/arial.ttf", PdfEncodings.IDENTITY_H, true);
-//        document.setFont(f);
-//        if (Locale.getDefault().getLanguage().equals("ar"))
-//            document.setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
-//        else
-//            document.setBaseDirection(BaseDirection.LEFT_TO_RIGHT);
-//
-////        FontProvider provider = new FontProvider();
-////        //Load in fonts in the directory into the provider
-////        provider.addDirectory("./fonts");
-////
-////        //Build a priority list of fontfamilies to use
-////        List<String> fontfamilies = new ArrayList<>();
-////        fontfamilies.add("Noto Sans Blk"); //Found in font file using font forge
-////        fontfamilies.add("Noto Naskh Arabic");
-////        fontfamilies.add("Open Sans");
-////        fontfamilies.add("ZCOOL QingKe HuangYou");
-////        FontSelectorStrategy strategy;
-//
-//
-//        Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.translogo);
-//        assert drawable != null;
-//        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//        byte[] bitmapData = stream.toByteArray();
-//
-//        ImageData imageData = ImageDataFactory.create(bitmapData);
-//        Image image = new Image(imageData);
-//        image.setHeight(100);
-//        image.setWidth(100);
-//        image.setHorizontalAlignment(HorizontalAlignment.CENTER);
-//
-//
-//        Paragraph paragraph1 = new Paragraph("Transfers Report").setBold()
-//                .setFontSize(19f).setTextAlignment(TextAlignment.CENTER)
-//                .setFontColor(new DeviceRgb(0, 61, 101));
-//        Paragraph paragraph2 = new Paragraph("\n\nDate: " + etPickDate.getText().toString()).setFontSize(15f);
-//        Paragraph paragraph3 = new Paragraph("Transfer No.: " + spinnerTrans.getSelectedItem() + "\n\n").setFontSize(15f);
-////        Paragraph paragraph3 = new Paragraph("Transfers made To Store: " +
-////                spinnerToStore.getSelectedItem().toString() + "\n\n").setFontSize(13f);
-//
-//
-////        Text text1 = new Text("Transfers Report").setBold();
-////
-////        Text text2 = new Text("Date: " + etPickDate.getText().toString());
-////
-////        Text text3 = new Text("Transfers made To Store: " +
-////                "" + spinnerToStore.getSelectedItem().toString());
-////
-////        paragraph.add(text1)
-////                .add(text2)
-////                .add(text3);
-//
-//        float[] columnWidth = {100f, 100f, 100f, 150f, 150f, 100f, 150f};
-//        Table table = new Table(columnWidth);
-//
-////        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-////                .setBackgroundColor(new DeviceRgb(4,87,138))
-////                .add(new Paragraph(getString(R.string.transactionDate))));
-////
-////        final FontSet set = new FontSet();
-////        set.addFont("/assets/arial.ttf");
-////        document.setFontProvider(new FontProvider(set));
-//
-//
-//        //table.setFont(f);
-//        table.setBaseDirection(BaseDirection.RIGHT_TO_LEFT);
-//
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.trsnferNo))));
-//
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.fromStore))));
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.toStore))));
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.Itemname))));
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.itemCode))));
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.Qty))));
-//
-//        table.addCell(new Cell().setFontColor(ColorConstants.WHITE)
-//                .setBackgroundColor(new DeviceRgb(4, 87, 138))
-//                .setTextAlignment(TextAlignment.CENTER)
-//                .add(new Paragraph(getString(R.string.serials))));
-//
-//        List<String> serialCodes = new ArrayList<>();
-//        for (int i = 0; i < reportsList.size(); i++) {
-//            serialCodes.clear();
-//            serialCodes = myDB.serialsDao().getSerialCodes(reportsList.get(i).getTransNumber(), reportsList.get(i).getItemcode());
-//            Log.e("Serials Size", serialCodes.size() + "");
-//            if (reportsList.get(i).IsPosted.equals("0")) {
-//
-////                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(String.valueOf(reportsList.get(i).getTransNumber()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(String.valueOf(reportsList.get(i).getFromName()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(String.valueOf(reportsList.get(i).getToName()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(String.valueOf(reportsList.get(i).getItemname()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(String.valueOf(reportsList.get(i).getItemcode()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(String.valueOf(reportsList.get(i).getRecQty()))));
-//                for (int j = 0; j < serialCodes.size(); j++) {
-//                    if (j == (serialCodes.size() - 1))
-//                        table.addCell(new Cell().setBackgroundColor(new DeviceRgb(214, 214, 214)).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).setTextAlignment(TextAlignment.CENTER).add(new Paragraph(serialCodes.get(j))));
-//                    else
-//                        table.addCell(new Cell().setBackgroundColor(new DeviceRgb(214, 214, 214)).setTextAlignment(TextAlignment.CENTER).add(new Paragraph(serialCodes.get(j))));
-//                }
-//            } else {
-////                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(reportsList.get(i).getTransNumber())));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(reportsList.get(i).getFromName())));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(reportsList.get(i).getToName())));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(reportsList.get(i).getItemname())));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(reportsList.get(i).getItemcode())));
-//                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(reportsList.get(i).getRecQty())));
-//
-//                if (serialCodes.size() > 0) {
-//                    for (int j = 0; j < serialCodes.size(); j++) {
-//                        Log.e("size > 0", "size > 0");
-//                        if (j == (serialCodes.size() - 1))
-//                            table.addCell(new Cell().setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph(serialCodes.get(j))));
-//                        else
-//                            table.addCell(new Cell().setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).add(new Paragraph(serialCodes.get(j))));
-//                    }
-//                } else {
-//                    Log.e("size = 0", "size = 0");
-//                    table.addCell(new Cell().setBackgroundColor(new DeviceRgb(213, 235, 255)).setTextAlignment(TextAlignment.CENTER).setFontColor(ColorConstants.LIGHT_GRAY).setBorderBottom(new SolidBorder(new DeviceRgb(4, 87, 138), 1)).add(new Paragraph("   ")));
-//                }
-//
-//            }
-//
-//        }
-//        table.setBorder(new SolidBorder(new DeviceRgb(4, 87, 138), 1));
-//
-//
-//        document.add(image)
-//                .add(paragraph1)
-//                .add(paragraph2)
-//                .add(paragraph3)
-//                .add(table);
-//
-//        document.close();
-//        pdfDocument.close();
-//        pdfWriter.close();
-//
-////        try {
-////            if (!file.exists()) {
-////                file.createNewFile();
-////            }
-////
-////            FileOutputStream fileOutputStream = new FileOutputStream(file);
-////
-////            if (fileOutputStream != null) {
-////                fileOutputStream.flush();
-////                fileOutputStream.close();
-////            }
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
-//
-//
-//        Log.e("PDF Created", file + "");
-//        Toast.makeText(this, "PDF Created", Toast.LENGTH_LONG).show();
-//
-//        try {
-//            Log.e("startViewPdf", "PDF");
-//            Uri path = FileProvider.getUriForFile(TransferReports.this, getApplicationContext().getPackageName() + ".provider", file);
-//            Intent objIntent = new Intent(Intent.ACTION_VIEW);
-//            objIntent.setDataAndType(path, "application/pdf");
-//            objIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            objIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            try {
-//                TransferReports.this.startActivity(objIntent);
-//            } catch (Exception e) {
-//                Toast.makeText(TransferReports.this, "Pdf program needed!", Toast.LENGTH_SHORT).show();
-//            }
-//        } catch (Exception e) {
-//            Log.e("ExceptionPdf", "" + e.getMessage());
-//        }
-//
-//
-//    }
 
     void setVisibility(boolean clicked) {
 
@@ -1600,208 +1231,190 @@ public class TransferReports extends AppCompatActivity {
 
     }
 
+    private void filter() {
+
+        String item = etSearchItems.getText().toString().trim();
+        int storePosition = spinnerToStore.getSelectedItemPosition();
+        int transPosition = spinnerTrans.getSelectedItemPosition();
+
+
+        if (storePosition != 0) {
+
+            if (transPosition == 0 && item.length() == 0)
+                searchByToStore();
+            else if (transPosition != 0 && item.length() == 0)
+                searchByTransAndStore();
+            else if (transPosition == 0)
+                searchByItemAndStore();
+            else {
+                searchByAll();
+            }
+
+        } else {
+
+            if (transPosition == 0 && item.length() == 0)
+                initRecView();
+            else if (transPosition != 0 && item.length() == 0)
+                searchByTransNo();
+            else if (transPosition == 0)
+                searchByItem();
+            else {
+                searchByItemAnTrans();
+            }
+
+        }
+
+    }
 
     private void searchByAll() {
 
+        String item = etSearchItems.getText().toString().toLowerCase().trim();
+
         searchList.clear();
-        String name = etSearchByName.getText().toString().toLowerCase().trim();
-        String code = etSearchByNo.getText().toString().toLowerCase().trim();
-        String toStore = spinnerToStore.getSelectedItem().toString();
 
-        for (int i = 0; i < reportsList.size(); i++) {
-            if (reportsList.get(i).getToName().contains(toStore) &&
-                    reportsList.get(i).getItemcode().toLowerCase().contains(code) &&
-                    reportsList.get(i).getItemname().toLowerCase().contains(name)) {
-                searchList.add(reportsList.get(i));
+        for (int s = 0; s < allReports.size(); s++) {
+
+            if (allReports.get(s).getTransNumber().equals(spinnerTrans.getSelectedItem().toString()) &&
+                    (allReports.get(s).getItemname().toLowerCase().contains(item) ||
+                            allReports.get(s).getItemcode().toLowerCase().contains(item)) &&
+                    allReports.get(s).getToName().contains(spinnerToStore.getSelectedItem().toString())) {
+
+                searchList.add(allReports.get(s));
             }
-        }
-
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
-
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
 
         }
+
+        updateRecView(searchList);
 
     }
 
-    private void searchByCodeAndStore() {
+    private void searchByItemAnTrans() {
+
+        String item = etSearchItems.getText().toString().toLowerCase().trim();
 
         searchList.clear();
-        String code = etSearchByNo.getText().toString().toLowerCase().trim();
-        String toStore = spinnerToStore.getSelectedItem().toString();
 
-        for (int i = 0; i < reportsList.size(); i++) {
-            if (reportsList.get(i).getToName().contains(toStore) &&
-                    reportsList.get(i).getItemcode().toLowerCase().contains(code)) {
-                searchList.add(reportsList.get(i));
+        for (int s = 0; s < allReports.size(); s++) {
+
+            if (allReports.get(s).getTransNumber().equals(spinnerTrans.getSelectedItem().toString()) &&
+                    (allReports.get(s).getItemname().toLowerCase().contains(item) ||
+                            allReports.get(s).getItemcode().toLowerCase().contains(item))) {
+                searchList.add(allReports.get(s));
             }
-        }
-
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
-
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
 
         }
+
+        updateRecView(searchList);
 
     }
 
-    private void searchByNameAndStore() {
+    private void searchByTransAndStore() {
 
         searchList.clear();
-        String name = etSearchByName.getText().toString().toLowerCase().trim();
-        String toStore = spinnerToStore.getSelectedItem().toString();
 
-        for (int i = 0; i < reportsList.size(); i++) {
-            if (reportsList.get(i).getToName().contains(toStore) &&
-                    reportsList.get(i).getItemname().toLowerCase().contains(name)) {
-                searchList.add(reportsList.get(i));
+        for (int s = 0; s < allReports.size(); s++) {
+
+            if (allReports.get(s).getTransNumber().equals(spinnerTrans.getSelectedItem().toString()) &&
+                    allReports.get(s).getToName().contains(spinnerToStore.getSelectedItem().toString())) {
+                searchList.add(allReports.get(s));
             }
-        }
-
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
-
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
 
         }
+
+        updateRecView(searchList);
 
     }
 
-    private void searchByNameAndCode() {
+    private void searchByTransNo() {
 
         searchList.clear();
-        String code = etSearchByNo.getText().toString().toLowerCase().trim();
-        String name = etSearchByName.getText().toString().toLowerCase().trim();
 
-        for (int i = 0; i < reportsList.size(); i++) {
+        for (int s = 0; s < allReports.size(); s++) {
 
-            if (reportsList.get(i).getItemcode().toLowerCase().contains(code) &&
-                    reportsList.get(i).getItemname().toLowerCase().contains(name)) {
-                searchList.add(reportsList.get(i));
+            if (allReports.get(s).getTransNumber().equals(spinnerTrans.getSelectedItem().toString())) {
+                searchList.add(allReports.get(s));
             }
 
         }
 
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
+        updateRecView(searchList);
 
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
+    }
 
+    private void searchByItemAndStore() {
+
+        searchList.clear();
+        String item = etSearchItems.getText().toString().toLowerCase().trim();
+        String toStore = spinnerToStore.getSelectedItem().toString();
+
+        for (int i = 0; i < allReports.size(); i++) {
+            if (allReports.get(i).getToName().contains(toStore) &&
+                    (allReports.get(i).getItemname().toLowerCase().contains(item) ||
+                            allReports.get(i).getItemcode().toLowerCase().contains(item))) {
+                searchList.add(allReports.get(i));
+            }
         }
+
+        updateRecView(searchList);
+
     }
 
     private void searchByToStore() {
 
         searchList.clear();
 
-        for (int s = 0; s < reportsList.size(); s++) {
+        for (int s = 0; s < allReports.size(); s++) {
 
-            if (reportsList.get(s).getToName().contains(spinnerToStore.getSelectedItem().toString())) {
-                searchList.add(reportsList.get(s));
+            if (allReports.get(s).getToName().contains(spinnerToStore.getSelectedItem().toString())) {
+                searchList.add(allReports.get(s));
             }
 
         }
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
 
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
-
-        }
+        updateRecView(searchList);
 
     }
 
-    private void searchByCode() {
+    private void searchByItem() {
         searchList.clear();
-        String code = etSearchByNo.getText().toString().toLowerCase().trim();
+        String item = etSearchItems.getText().toString().toLowerCase().trim();
 
-        for (int i = 0; i < reportsList.size(); i++) {
+        for (int i = 0; i < allReports.size(); i++) {
 
-            if (reportsList.get(i).getItemcode().toLowerCase().contains(code)) {
-                searchList.add(reportsList.get(i));
+            if (allReports.get(i).getItemname().toLowerCase().contains(item) ||
+                    allReports.get(i).getItemcode().toLowerCase().contains(item)) {
+                searchList.add(allReports.get(i));
             }
 
         }
 
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
-
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
-
-        }
-    }
-
-    private void searchByName() {
-        searchList.clear();
-        String name = etSearchByName.getText().toString().toLowerCase().trim();
-
-        for (int i = 0; i < reportsList.size(); i++) {
-
-            if (reportsList.get(i).getItemname().toLowerCase().contains(name)) {
-                searchList.add(reportsList.get(i));
-            }
-
-        }
-
-        transReportsAdapter = new TransReportsAdapter(this, searchList);
-        rvTransferReports.setAdapter(transReportsAdapter);
-        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
-
-        if (transReportsAdapter.getItemCount() == 0) {
-            imgEmpty.setVisibility(View.VISIBLE);
-            tvEmpty.setVisibility(View.VISIBLE);
-        } else {
-            imgEmpty.setVisibility(View.GONE);
-            tvEmpty.setVisibility(View.GONE);
-
-        }
+        updateRecView(searchList);
 
     }
 
     private void initRecView() {
         String date = etPickDate.getText().toString().trim();
-        if (spinnerTrans.getSelectedItemPosition() == 0)
-            reportsList = myDB.replacementDao().getReplacementsByDate(date);
-        else
-            reportsList = myDB.replacementDao().getByDateAndTrans(date, spinnerTrans.getSelectedItem().toString());
-        transReportsAdapter = new TransReportsAdapter(this, reportsList);
+
+        allReports = myDB.replacementDao().getReplacementsByDate(date);
+
+        transReportsAdapter = new TransReportsAdapter(this, allReports);
+        rvTransferReports.setAdapter(transReportsAdapter);
+        rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
+
+        if (transReportsAdapter.getItemCount() == 0) {
+            imgEmpty.setVisibility(View.VISIBLE);
+            tvEmpty.setVisibility(View.VISIBLE);
+        } else {
+            imgEmpty.setVisibility(View.GONE);
+            tvEmpty.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    private void updateRecView(List<ReplacementModel> newList) {
+
+        transReportsAdapter = new TransReportsAdapter(this, newList);
         rvTransferReports.setAdapter(transReportsAdapter);
         rvTransferReports.setLayoutManager(new LinearLayoutManager(this));
 
@@ -1828,11 +1441,9 @@ public class TransferReports extends AppCompatActivity {
 
         /////Edit Texts
         etPickDate = findViewById(R.id.etPickDate);
-        etSearchByName = findViewById(R.id.etSearchByName);
-        etSearchByNo = findViewById(R.id.etSearchByNo);
+        etSearchItems = findViewById(R.id.etSearchItems);
 
         /////Buttons
-        btnPreview = findViewById(R.id.btnPreview);
         fabConvert = findViewById(R.id.fabConvert);
         fabPDF = findViewById(R.id.fabPDF);
         fabExcel = findViewById(R.id.fabExcel);
@@ -1842,8 +1453,6 @@ public class TransferReports extends AppCompatActivity {
         rvTransferReports = findViewById(R.id.rvTransferReports);
 
         /////Text Views
-        postedLabel = findViewById(R.id.postedLabel);
-        notPostedLabel = findViewById(R.id.notPostedLabel);
         tvEmpty = findViewById(R.id.tvEmpty);
 
         ////Spinner
@@ -1852,6 +1461,7 @@ public class TransferReports extends AppCompatActivity {
 
         ////ImageView
         imgEmpty = findViewById(R.id.imgEmpty);
+        backBtn = findViewById(R.id.backBtn);
 
         fromBottom = AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim);
         toBottom = AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim);

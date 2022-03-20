@@ -91,7 +91,7 @@ public class ExportData {
     public void exportReplacementList(List<ReplacementModel> replacementlist) {
         getReplacmentObject(replacementlist);
         pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
         pdRepla.setTitleText(context.getString(R.string.exportRep));
         pdRepla.setCancelable(false);
         pdRepla.show();
@@ -248,7 +248,7 @@ public class ExportData {
                         if (Login.serialsActive == 1) {
 
                             SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-                            savingDialog.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+                            savingDialog.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
                             savingDialog.setTitleText(context.getString(R.string.savingSerials));
                             savingDialog.setCancelable(false);
                             savingDialog.show();
@@ -257,7 +257,7 @@ public class ExportData {
                         } else {
 
                             SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-                            savingDialog.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+                            savingDialog.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
                             savingDialog.setTitleText(context.getString(R.string.saving));
                             savingDialog.setCancelable(false);
                             savingDialog.show();
@@ -306,7 +306,7 @@ public class ExportData {
 
                     }
                     SweetAlertDialog savingDialog2 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-                    savingDialog2.getProgressHelper().setBarColor(Color.parseColor("#FDD835"));
+                    savingDialog2.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
                     savingDialog2.setTitleText(context.getString(R.string.saving));
                     savingDialog2.setCancelable(false);
                     savingDialog2.show();

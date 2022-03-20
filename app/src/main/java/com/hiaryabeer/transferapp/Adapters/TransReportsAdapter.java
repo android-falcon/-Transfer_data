@@ -5,6 +5,8 @@ import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,14 +105,15 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
 
                     Dialog passwordDialog = new Dialog(context);
 
-                    View view = LayoutInflater.from(context).inflate(R.layout.prompt_password_dialog, null);
+                    View view = LayoutInflater.from(context).inflate(R.layout.passworddailog, null);
 
                     passwordDialog.setContentView(view);
                     passwordDialog.setCancelable(false);
+                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                    TextView closeBtn = passwordDialog.findViewById(R.id.closeBtn);
-                    EditText passwordEt = passwordDialog.findViewById(R.id.passwordEt);
-                    Button okBtn = passwordDialog.findViewById(R.id.okBtn);
+                    TextView closeBtn = passwordDialog.findViewById(R.id.cancel);
+                    EditText passwordEt = passwordDialog.findViewById(R.id.passwordd);
+                    Button okBtn = passwordDialog.findViewById(R.id.done);
 
                     closeBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -138,6 +141,8 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
                                     replacements.add(replacement);
                                     ExportData exportData = new ExportData(context);
                                     exportData.exportReplacementList(replacements);
+
+                                    holder.bodyRowParent.setBackgroundResource(R.color.postedBackground);
 
 //                                    transReportsAdapter = new TransReportsAdapter(context, reportsList);
 //                                    rvTransferReports.setAdapter(transReportsAdapter);
