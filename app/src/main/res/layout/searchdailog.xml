@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="330dp"
     android:layout_height="400dp"
+    android:background="@color/layer7"
     android:orientation="vertical">
 
 
@@ -10,22 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/search"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd= "20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:background="@drawable/background_container2"
         android:hint="@string/search"
-        android:textColor="@color/dark_blue_3"
-        android:textColorHint="#66075F8B" />
+        android:drawableStart="@drawable/ic_baseline_search_24"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_btn_bg_color" />
 
     <LinearLayout
         android:id="@+id/headerComp2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+
         android:layout_margin="2dp"
-        android:layout_weight="5"
+        android:layout_weight="1"
         android:background="@drawable/back_edit"
         android:gravity="center"
         android:orientation="horizontal"
@@ -47,7 +53,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1.7">
+        android:layout_weight="1">
 
 
         <ListView
