@@ -5,7 +5,7 @@
     android:layout_width="310dp"
     android:layout_height="wrap_content"
     android:padding="4dp"
-    android:background="@drawable/border"
+    android:background="@drawable/black_border"
     android:elevation="5dp"
     android:layout_gravity="center">
 
@@ -17,7 +17,6 @@
         android:focusable="true"
         app:drawableEndCompat="@drawable/ic_close2"
         android:elevation="10dp"
-        android:background="@color/darkOrange2"
         android:shadowRadius="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -26,11 +25,11 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
         android:text="@string/enter_serial_number"
-        android:textColor="@color/darkblue_"
+        android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editText"

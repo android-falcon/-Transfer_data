@@ -5,14 +5,13 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_weight="100"
-    android:background="@drawable/border"
+    android:background="@drawable/black_border"
     android:elevation="5dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
         android:gravity="end"
         android:padding="2dp">
 
@@ -20,12 +19,12 @@
             android:id="@+id/icClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/darkOrange2"
             android:clickable="true"
             android:elevation="10dp"
             android:focusable="true"
             android:shadowRadius="5"
-            app:drawableEndCompat="@drawable/ic_close2" />
+            app:drawableEndCompat="@drawable/ic_close2"
+            app:drawableTint="@color/black" />
 
     </LinearLayout>
 
@@ -44,13 +43,14 @@
             android:layout_marginEnd="25dp"
             android:gravity="center"
             android:text="@string/Itemname"
-            android:textColor="@color/colorblue1"
-            android:textSize="16sp" />
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_semibold_600"/>
 
         <TextView
             android:layout_width="2dp"
             android:layout_height="match_parent"
-            android:background="@color/dark_blue_3" />
+            android:background="@color/lightOrange" />
 
         <TextView
             android:id="@+id/tvItemCode"
@@ -59,8 +59,9 @@
             android:layout_marginStart="25dp"
             android:gravity="center"
             android:text="@string/itemCode"
-            android:textColor="@color/colorblue1"
-            android:textSize="16sp" />
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_semibold_600"/>
 
 
     </LinearLayout>
@@ -76,10 +77,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
+            android:layout_marginEnd="4dp"
             android:text="@string/serial_no"
-            android:textColor="@color/dark_blue_3"
-            android:textSize="17sp" />
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:fontFamily="@font/poppins_semibold_600"
+            />
 
         <EditText
             android:id="@+id/etSerial"
@@ -92,7 +95,8 @@
             android:selectAllOnFocus="true"
             android:textAlignment="center"
             android:textColor="#D88F8F8F"
-            android:textCursorDrawable="@color/red" />
+            android:textCursorDrawable="@color/red"
+            android:layout_marginStart="4dp"/>
 
         <TextView
             android:id="@+id/icScan"
@@ -100,7 +104,8 @@
             android:layout_height="37dp"
             android:layout_marginHorizontal="8dp"
             android:background="@drawable/ic_scan_black_24dp"
-            android:gravity="center" />
+            android:gravity="center"
+            />
 
 
         <TextView
@@ -108,7 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_edit"
-            android:gravity="center" />
+            android:gravity="center"
+            android:backgroundTint="@color/black"/>
 
     </LinearLayout>
 
@@ -117,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorblue_dark"
+        android:background="@color/lightOrange"
         android:orientation="horizontal"
         android:padding="7dp">
 
@@ -128,9 +134,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/serial_no"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -149,7 +155,8 @@
                 android:paddingHorizontal="10dp"
                 android:textSize="18sp"
                 android:visibility="visible"
-                app:drawableStartCompat="@drawable/ic_delete_all" />
+                app:drawableStartCompat="@drawable/ic_delete_all"
+                android:drawableTint="@color/black"/>
         </LinearLayout>
 
 
@@ -202,8 +209,9 @@
             android:layout_gravity="center"
             android:layout_marginEnd="14dp"
             android:text="@string/total_qty"
-            android:textColor="@color/dark_blue_3"
-            android:textStyle="bold" />
+            android:textColor="@color/gray"
+            android:fontFamily="@font/poppins_semibold_600"
+             />
 
         <TextView
             android:id="@+id/tvTotal"
@@ -220,14 +228,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="15dp"
         android:gravity="center">
 
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:background="@drawable/done_button"
+            android:layout_height="37dp"
+            android:background="@drawable/loginbtn"
             android:gravity="center"
             android:text="@string/add" />
 

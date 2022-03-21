@@ -2,6 +2,8 @@ package com.hiaryabeer.transferapp.Adapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -303,7 +305,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
                 InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
             }
-            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.yellow2));
+            holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.layer2));
 
         } else {
 
@@ -383,6 +385,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
                     final Dialog dialog = new Dialog(context);
                     dialog.setCancelable(false);
                     dialog.setContentView(R.layout.delete_entry);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

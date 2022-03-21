@@ -8,6 +8,8 @@ import static com.hiaryabeer.transferapp.Models.GeneralMethod.convertToEnglish;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,6 +99,7 @@ public class SerialsAdapter extends RecyclerView.Adapter<SerialsAdapter.SerialsV
                     final Dialog dialog = new Dialog(context);
                     dialog.setCancelable(false);
                     dialog.setContentView(R.layout.delete_entry);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

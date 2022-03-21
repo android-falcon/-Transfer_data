@@ -13,6 +13,8 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -218,6 +220,9 @@ public class MainActivity extends AppCompatActivity {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.main_menu, popup.getMenu());
+
+        popup.getMenu().findItem(R.id.menuImport).setVisible(Login.serialsActive == 1);
+
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -625,6 +630,7 @@ public class MainActivity extends AppCompatActivity {
         lp.width = 500;
         lp.height = 700;
         lp.gravity = Gravity.CENTER;
+        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog1.show();
         Log.e("size", AllItemDBlist.size() + "");
         final ListView listView = dialog1.findViewById(R.id.Rec);
@@ -1254,6 +1260,7 @@ public class MainActivity extends AppCompatActivity {
                                     Dialog dialog = new Dialog(MainActivity.this);
                                     dialog.setContentView(R.layout.item_serials_layout);
                                     dialog.setCancelable(true);
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                                     DisplayMetrics dm = new DisplayMetrics();
                                     MainActivity.this.getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -1915,7 +1922,7 @@ public class MainActivity extends AppCompatActivity {
     private void fillSp() {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, spinnerArray);
+                this, R.layout.spinner_item, spinnerArray);
         fromSpinner.setAdapter(adapter);
         toSpinner.setAdapter(adapter);
         toSpinner.setSelection(1);
@@ -2224,6 +2231,8 @@ public class MainActivity extends AppCompatActivity {
         EditText editText = editDialog.findViewById(R.id.editText);
         TextView icClose = editDialog.findViewById(R.id.icClose);
         Button okButton = editDialog.findViewById(R.id.okButton);
+
+        editDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         editDialog.show();
 //        editText.setText(etSerial.getText());

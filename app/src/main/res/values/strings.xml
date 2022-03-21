@@ -209,7 +209,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="wrong_password_msg">You\'re not authorized for this action.</string>
     <string name="welcome_to_">Welcome to your\nInventory Management\npartner</string>
     <string name="start_now">Start Now</string>
-    <string name="login_with">Sign in now with your username\nand password !</string>
+    <string name="login_with">Sign in with your username\nand password !</string>
     <string name="ip_address_">IP address settings</string>
     <string name="transfer_date_">Transfer Date :</string>
     <string name="transfer_no_">Transfer No. :</string>

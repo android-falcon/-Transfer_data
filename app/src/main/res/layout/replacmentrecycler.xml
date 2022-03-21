@@ -121,7 +121,8 @@
             android:gravity="end"
             android:textSize="14sp"
             android:visibility="visible"
-            app:drawableEndCompat="@drawable/ic_baseline_edit_24" />
+            app:drawableEndCompat="@drawable/ic_baseline_edit_24"
+            app:drawableTint="@color/black" />
 
         <TextView
             android:id="@+id/tvRemove"

@@ -16,7 +16,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/serial_no"
-        android:textColor="@color/dark_blue_3"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 
     <TextView
