@@ -9,6 +9,7 @@ public class CompanyInfo {
     private  String CoNo;
     private  String CoYear;
     private  String CoNameA;
+
     
 
     public CompanyInfo() {
