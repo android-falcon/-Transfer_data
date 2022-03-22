@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#043b6e</color>
-    <color name="colorPrimaryDark">#043b6e</color>
+    <color name="colorPrimary">#F07B52</color>
+    <color name="lightOrange">#FEBFA9</color>
+    <color name="colorPrimaryDark">#C44C22</color>
     <color name="colorAccent">#fad80a</color>
     <color name="layer1">#B6B6B4</color>
     <color name="layer2">#D1D0CE</color>
@@ -21,12 +22,17 @@
     <color name="dark_blue_3">#043b6e</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="black">#000</color>
     <color name="white_alphe">#9E9C9A9A</color>
-
+    <color name="yellow2"> #FFFF00</color>
+    <color name="gray">#7A7A7A</color>
 
     <color name="white_dark">#E9FFFFFF</color>
     <color name="darkblue_">#DF075F8B</color>
     <color name="text_color">#25383C</color>
     <color name="white_two">#85E4DCDC</color>
     <color name="darkOrange2">#D8FFEB3B</color>
+
+    <color name="postedBackground">#FFFFFF</color>
+    <color name="notPostedBackground">#DADADA</color>
 </resources>

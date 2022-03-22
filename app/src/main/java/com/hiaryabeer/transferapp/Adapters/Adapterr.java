@@ -10,24 +10,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.hiaryabeer.transferapp.Activities.Login;
 import com.hiaryabeer.transferapp.Models.AllItems;
 import com.hiaryabeer.transferapp.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.hiaryabeer.transferapp.MainActivity.colorData;
-import static com.hiaryabeer.transferapp.MainActivity.dialog1;
-import static com.hiaryabeer.transferapp.MainActivity.itemcode;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.dialog1;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
 
 public class Adapterr extends BaseAdapter {
     private Context context; //context
     private List<AllItems> items; //data source of the list adapter
+    public static final int REQUEST_Camera_Barcode = 1;
+
 
     //public constructor
     public Adapterr(Context context, List<AllItems> items) {
         this.context = context;
         this.items = items;
+//        this.my_database = RoomAllData.getInstanceDataBase(context);
+//        this.serialTransfers = new ArrayList<>();
     }
 
     @Override
@@ -56,27 +59,39 @@ public class Adapterr extends BaseAdapter {
         // get current item to be displayed
         AllItems currentItem = (AllItems) getItem(position);
 
+
         // get the TextView for item name and item description
         TextView textViewItemName = (TextView)
                 convertView.findViewById(R.id.itemname);
-        LinearLayout linearLayout= convertView.findViewById(R.id.linear);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        LinearLayout linearLayout = convertView.findViewById(R.id.linear);
+//        TextView icAddSerial = convertView.findViewById(R.id.icAddSerial);
+        LinearLayout parentLinear = convertView.findViewById(R.id.parentLinear);
+
+        if (Login.serialsActive == 0) {
+//            icAddSerial.setVisibility(View.GONE);
+            linearLayout.setOnClickListener(view -> {
 
                 itemcode.setText(items.get(position).getItemOcode());
-                Log.e("position6===",position+"");
+                Log.e("position6===", position + "");
                 //colorData.setText(position+"");
 
                 dialog1.dismiss();
 
-            }
-        });
+            });
+        } else {
+//            icAddSerial.setVisibility(View.VISIBLE);
+            parentLinear.setOnClickListener(v -> {
+
+                itemcode.setText(items.get(position).getItemOcode());
+            });
+        }
+
         //sets the text for item name and item description from the current item object
         textViewItemName.setText(currentItem.getItemName());
- //linearLayout.setBackgroundColor(context.getResources().getColor(R.color.yelow));
+        //linearLayout.setBackgroundColor(context.getResources().getColor(R.color.yelow));
 
         // returns the view for the current row
         return convertView;
     }
+
 }

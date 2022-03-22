@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TableRow
+            android:id="@+id/bodyRowParent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/notPostedBackground"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/downArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:background="@drawable/ic_expand_more" />
+
+            <TextView
+                android:id="@+id/reExport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:drawableEnd="@drawable/ic_export"
+                android:clickable="true"
+                android:focusable="true"
+                android:elevation="2dp"/>
+
+            <TextView
+                android:id="@+id/tvTransNo"
+                android:layout_width="88dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/TransferNo"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                 />
+
+
+            <TextView
+                android:id="@+id/tvFromStore"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="17dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/fromStore"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                 />
+
+
+            <TextView
+                android:id="@+id/tvToStore"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="25dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/toStore"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                 />
+
+            <TextView
+                android:id="@+id/tvItemName"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/Itemname"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                 />
+
+            <TextView
+                android:id="@+id/tvItemCode"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/itemCode"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                 />
+
+
+            <TextView
+                android:id="@+id/tvQty"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/Qty"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                 />
+
+        </TableRow>
+
+
+
+        <LinearLayout
+            android:id="@+id/serialsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/serials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/serials"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:layout_weight="0.8"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/dark_blue_3"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="0.2"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/dark_blue_3" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RVSerialsReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#BF043B6E" />
+
+
+</LinearLayout>

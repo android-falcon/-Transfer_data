@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/goToReports"
+        android:icon="@drawable/ic_report"
+        android:title="@string/TransfersReportTitle"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menuImport"
+        android:title="@string/Import"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/menuExport"
+        android:title="@string/export"
+        app:showAsAction="never" />
+
+</menu>

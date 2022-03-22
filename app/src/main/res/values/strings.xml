@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Transferapp</string>
+    <string name="app_name">Transfer App</string>
 
     <string name="NewShipment">New Shipment</string>
     <string name="Zone">Zone</string>
@@ -11,9 +11,9 @@
     <string name="required">required</string>
     <string name="open_drawer">open drawer</string>
     <string name="close_drawer">close drawer</string>
-    <string name="settings_ip">Settings Ip</string>
-    <string name="server_ip">Server ip</string>
-    <string name="IP_PORT">IP PORT</string>
+    <string name="settings_ip">Settings</string>
+    <string name="server_ip">Server IP</string>
+    <string name="IP_PORT">IP Port</string>
     <string name="CONO">CoNo</string>
     <string name="year">Year</string>
     <string name="save">Save</string>
@@ -21,7 +21,7 @@
     <string name="searchhere">Search her</string>
     <string name="itemqty">item qty</string>
     <string name="Items">#Items</string>
-    <string name="samestore">not allowed to choose the same store</string>
+    <string name="samestore">Not allowed to choose the same store</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="errorsaving">Error in Save</string>
     <string name="prompt_email">Email</string>
@@ -34,13 +34,14 @@
     <string name="login_failed">"Login failed"</string>
     <string name="ZoneCode">Zone Code</string>
     <string name="itemCode">Item Code</string>
+    <string name="itemCode_">Item Code:</string>
     <string name="Poqty">PoQty</string>
     <string name="notvaildqty">There is no enough quantity </string>
     <string name="notvaildqty2">There is no enough quantity in </string>
     <string name="reqired_filled">*Reqired</string>
-    <string name="savedSuccsesfule">Saved Succsesfule</string>
+    <string name="savedSuccsesfule">Saved Successfully</string>
 
-    <string name="msg3">all data already posted</string>
+    <string name="msg3">All data already posted</string>
     <string name="barcodeexists">invalid itemcode</string>
     <string name="boxnovalidate">boxNO does not exists in this PO</string>
     <string name="pono">PoNo</string>
@@ -48,8 +49,10 @@
     <string name="boxnum">BoxNo</string>
     <string name="barcode">BareCode</string>
     <string name="from">From</string>
+    <string name="from_">From:</string>
     <string name="enter_password">Enter Password</string>
     <string name="to">TO</string>
+    <string name="to_">TO:</string>
     <string name="nextBox">Next Box</string>
     <string name="login">login</string>
     <string name="Import">Import</string>
@@ -57,7 +60,7 @@
     <string name="recQty">recQty</string>
     <string name="invalidPONO">in valid PO number</string>
     <string name="existsBARCODE">BareCode not exists</string>
-    <string name="Itemname">Item name</string>
+    <string name="Itemname">Item Name</string>
     <string name="app_done">Done</string>
     <string name="Differ">Differ</string>
     <string name="confirm">Are you sure you want to select this entry?</string>
@@ -67,7 +70,7 @@
             \n delete this zone?</string>
     <string name="delete3"> Qty is 1, Are you sure you want to
             \n delete this item</string>
-    <string name="yes">yes</string>
+    <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="lastBox">Last Box Info:  </string>
     <string name="Arabic">ar</string>
@@ -78,7 +81,7 @@ This box is not available in this PO, do you want to add it? </string>
     <string name="barcodeconfirm">
 This barcode is not available in this PO, do you want to add it? </string>
     <string name="messageExit">Are You Sure To Exit ?</string>
-    <string name="messageExit2">all data saved locally, Are You Sure To Exit ?</string>
+    <string name="messageExit2">All data saved locally, Are You Sure To Exit ?</string>
     <string name="ok">OK</string>
     <string name="warning">Warning</string>
     <string name="fillYourList">Fill Your List !!</string>
@@ -91,7 +94,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="ComName">Com Name</string>
     <string name="COYear">COYear</string>
     <string name="Login">Login</string>
-    <string name="qtyerror3">not valid quantity </string>
+    <string name="qtyerror3">Not valid quantity </string>
     <string name="nopo">No Po exists</string>
     <string name="fillpo">fill po field</string>
     <string name="nobox">No Boxs for this Po</string>
@@ -138,5 +141,79 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="Reports">Reports</string>
     <string name="msg">To Transfer to other zones</string>
 
-    <string name="trsnferNo">trsnfer No</string>
+    <string name="trsnferNo">Transfer No</string>
+    <string name="transactionDate">Transaction Date</string>
+    <string name="previewBtn">Preview</string>
+    <string name="SearchByItemName">Search By Name</string>
+    <string name="SearchByItemNo">Search By Item No.</string>
+    <string name="TransferNo">Transfer No.</string>
+    <string name="fromStore">From Store</string>
+    <string name="toStore">To Store</string>
+    <string name="chooseDate">Choose Date</string>
+
+    <string name="TransfersReportTitle">Transfers Report</string>
+    <string name="AddTransferTitle">Add Transfer</string>
+    <string name="password">Password</string>
+    <string name="user_name">User Name</string>
+    <string name="device_id">Device ID</string>
+    <string name="posted_items">Posted Items</string>
+    <string name="not_posted_items">not posted Items</string>
+    <string name="no_enough_amount">There is not enough quantity of this item</string>
+    <string name="unsaved_data">There is previous data to be saved, Please export so you can add new transaction</string>
+    <string name="checkConnection">Check Connection</string>
+
+    <string name="notEnoughQuantity">Invalid Quantity\nMaximum quantity available for this item is: </string>
+    <string name="search">Search</string>
+    <string name="error">Error!</string>
+    <string name="searchByToStore">To Store :</string>
+    <string name="allStores">All Stores</string>
+    <string name="Empty">No Data</string>
+
+    <string name="exportRep">Exporting Replenishments</string>
+    <string name="importData">Importing Data</string>
+    <string name="getStore">Getting Stores Info</string>
+    <string name="fillIpAndComNo">Fill IP and Company No.</string>
+    <string name="fillIp">Fill IP</string>
+    <string name="ipConnectionFailed">Ip Connection Failed</string>
+    <string name="netWorkError">Network Error</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="getAllData">All data has been saved</string>
+    <string name="or">OR</string>
+    <string name="activateCheckQty">Activate quantity check feature </string>
+    <string name="serverError">Server Error!</string>
+    <string name="serverErrorMsg">An error has occurred while importing the quantity of this item from the server.</string>
+
+    <string name="inValidCode">InValid Code!</string>
+    <string name="serial_no">Serial No.</string>
+    <string name="add">Add</string>
+    <string name="saving">Saving</string>
+    <string name="enter_serial_number">Enter Serial Number</string>
+    <string name="uniqueSerial">Serial no. must be unique!</string>
+    <string name="uniqueSerialMsg">An entry with same serial number already exists in this transfer</string>
+    <string name="deleteAll">Delete All</string>
+    <string name="deleteAllMsg">Are you sure you want to delete all entered serials ?</string>
+    <string name="noUnsavedData">No new data to be saved</string>
+    <string name="serials">Serials</string>
+    <string name="savingSerials">Exporting Serials</string>
+
+    <string name="allTransfers">All Transfers</string>
+    <string name="export_to_pdf">Export To Pdf</string>
+
+    <string name="shareTo">Share to …</string>
+    <string name="serialNotFound">Serial not found!</string>
+    <string name="notFoundMsg">This serial no. doesn\'t exist for the selected item in the selected store</string>
+    <string name="storeSerials">Importing Item Serials</string>
+    <string name="errorSavingSerials">Error saving serials</string>
+    <string name="note_enter_password">Note: Enter required password to re-Export replacement.</string>
+    <string name="wrong_password">Wrong Password!</string>
+    <string name="wrong_password_msg">You\'re not authorized for this action.</string>
+    <string name="welcome_to_">Welcome to your\nInventory Management\npartner</string>
+    <string name="start_now">Start Now</string>
+    <string name="login_with">Sign in with your username\nand password !</string>
+    <string name="ip_address_">IP address settings</string>
+    <string name="transfer_date_">Transfer Date :</string>
+    <string name="transfer_no_">Transfer No. :</string>
+    <string name="search_item_">Search Item :</string>
+
+
 </resources>

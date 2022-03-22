@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "ITEM_TABLE")
-public  class AllItems {
+public class AllItems {
     @PrimaryKey(autoGenerate = true)
     int SERIAL;
 
@@ -21,7 +21,26 @@ public  class AllItems {
     String ItemName;
     @ColumnInfo(name = "ITEMOCODE")
     String ItemOcode;
+    @ColumnInfo(name = "BARCODE")
+    String barCode;
+    @ColumnInfo(name = "Has_Serial")
+    String hasSerial;
 
+    public String getHasSerial() {
+        return hasSerial;
+    }
+
+    public void setHasSerial(String hasSerial) {
+        this.hasSerial = hasSerial;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
 
     public String getItemName() {
         return ItemName;

@@ -15,14 +15,15 @@ public class ZoneModel {
     public int SERIALZONE;
 
     @ColumnInfo(name = "ZONECODE")
-    private   String zoneCode;
+    private String zoneCode;
 
     @ColumnInfo(name = "ITEMCODE")
-    private   String itemCode;
+    private String itemCode;
 
 
     @ColumnInfo(name = "UserNO")
     String UserNO;
+
     public String getUserNO() {
         return UserNO;
     }
@@ -32,24 +33,24 @@ public class ZoneModel {
     }
 
     @ColumnInfo(name = "QTYZONE")
-    private   String qty;
+    private String qty;
 
     @ColumnInfo(name = "ISPOSTED")
-    private   String isPostd;
+    private String isPostd;
 
     @ColumnInfo(name = "ZONEDATE")
-    private   String zoneDate;
+    private String zoneDate;
 
     @ColumnInfo(name = "ZONETIME")
-    private   String zoneTime;
+    private String zoneTime;
 
     @ColumnInfo(name = "STORENO")
-    private   String storeNo;
+    private String storeNo;
     @ColumnInfo(name = "ZONENAME")
-    private  String ZONENAME;
+    private String ZONENAME;
 
     @ColumnInfo(name = "ZONETYPE")
-    private  String ZONETYPE;
+    private String ZONETYPE;
 
     @ColumnInfo(name = "DEVICEID")
     String deviceId;
@@ -71,7 +72,6 @@ public class ZoneModel {
     }
 
     private String ItemName;
-
 
 
     public String getZONENAME() {
@@ -168,7 +168,7 @@ public class ZoneModel {
             obj.put("DEVICEID", deviceId);
 
         } catch (JSONException e) {
-            Log.e("Tag" , "JSONException");
+            Log.e("Tag", "JSONException");
         }
         return obj;
     }

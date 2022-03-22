@@ -13,6 +13,7 @@ import java.util.List;
 
 @Dao
 public interface SettingDao {
+
     @Insert
     void insert(appSettings appSettings);
     @Update

@@ -33,22 +33,27 @@ public interface ReplacementDao {
     @Query("SELECT * FROM REPLACEMENT_TABLE where ISPOSTED = :s")
     List<ReplacementModel> getUnpostedReplacement(String s);
 
-
     @Query("UPDATE REPLACEMENT_TABLE SET  ISPOSTED='1' WHERE ISPOSTED='0' ")
     void updateReplashmentPosted();
+
+    @Query("UPDATE REPLACEMENT_TABLE SET  ISPOSTED='1' WHERE ISPOSTED='0' AND TransNumber = :voucherNo AND ITEMCODE = :itemCode")
+    void postFor(String voucherNo, String itemCode);
+
     @Query("UPDATE REPLACEMENT_TABLE SET RECQTY = :qty WHERE ITEMCODE= :barcode AND ISPOSTED='0' AND TransNumber= :tran" )
     int updateQTY(String barcode, String qty,String tran);
 
     @Query("DELETE FROM REPLACEMENT_TABLE WHERE ITEMCODE= :barcode AND FROMSTORE= :FrSt AND TOSTORE= :ToSt AND ISPOSTED='0' AND TransNumber= :TNo")
     int  deleteReplacement(String barcode, String FrSt, String ToSt,String TNo);
 
-
-
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE TransNumber != :transNo")
+    List<ReplacementModel> getAllReplacements(String transNo);
+    @Query("UPDATE REPLACEMENT_TABLE SET availableQty = :qty WHERE ITEMCODE= :barcode AND TransNumber = :transNo")
+    int updateAvailableQTY(String transNo, String barcode, String qty);
 
     @Query("SELECT * FROM REPLACEMENT_TABLE WHERE ITEMCODE = :s AND ISPOSTED='0'")
     ReplacementModel getReplacement(String s);
 
-    @Query("SELECT  Max(CAST(TransNumber AS INTEGER))  as MaxTrans FROM REPLACEMENT_TABLE ")
+    @Query("SELECT  Max(CAST(TransNumber AS INTEGER)) as MaxTrans FROM REPLACEMENT_TABLE ")
     String getMaxReplacementNo();
 
     @Query("Delete from REPLACEMENT_TABLE WHERE TOSTORE= :ToSt AND ZONECODE= :Zone ")
@@ -76,4 +81,16 @@ public interface ReplacementDao {
     @Query("UPDATE REPLACEMENT_TABLE SET ISPOSTED= '1' WHERE TransNumber= :TransNumber ")
     int   updatepostState(String TransNumber);
 
+    /*** Get Replacements By Date ****/
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date")
+    List<ReplacementModel> getReplacementsByDate(String date);
+
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date AND TransNumber = :trans")
+    List<ReplacementModel> getByDateAndTrans(String date, String trans);
+
+    @Query("SELECT DISTINCT TransNumber FROM REPLACEMENT_TABLE WHERE REPLACEMENTDATE = :date")
+    List<String> getTranByDate(String date);
+
+    @Query("SELECT RECQTY FROM REPLACEMENT_TABLE WHERE ISPOSTED = '0' AND ITEMCODE = :itemCode AND TransNumber = :transNo")
+    String getQtyForItem(String itemCode, String transNo);
 }

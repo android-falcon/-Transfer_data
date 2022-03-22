@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Transferapp</string>
-    <string name="reqired_filled">مطلوب</string>
+    <string name="app_name">Transfer App</string>
+    <string name="reqired_filled">*مطلوب</string>
     <string name="about">المطور</string>
     <string name="barcode">الباركود</string>
     <string name="boxnum">رقم الصندوق</string>
     <string name="cancel">إلغاء</string>
     <string name="export">تصدير</string>
     <string name="from">من</string>
-    <string name="itemCode">كود المادة</string>
+    <string name="from_">من:</string>
+    <string name="itemCode">رقم المادة</string>
+    <string name="itemCode_">رقم المادة:</string>
     <string name="to">إلى</string>
+    <string name="to_">إلى:</string>
     <string name="pono">رقم الطلبية</string>
     <string name="savedSuccsesfule">تم الحفظ بنجاح</string>
     <string name="msg3"> لا يوجد سندات غير مرحلة</string>
@@ -19,18 +22,18 @@
     <string name="login_failed">فشل تسجيل الدخول</string>
     <string name="save">حفظ</string>
     <string name="year">السنة</string>
-    <string name="server_ip">server_ip</string>
-    <string name="settings_ip">settings_ip</string>
-    <string name="IP_PORT">IP_PORT</string>
+    <string name="server_ip">رقم السيرفر</string>
+    <string name="settings_ip">الإعدادات</string>
+    <string name="IP_PORT">مَنفذ IP</string>
     <string name="Items">عدد المواد</string>
     <string name="ZoneCode">رقم المنطقة</string>
     <string name="setting">الإعدادات</string>
     <string name="signout">تسجيل خروج</string>
     <string name="CONO">رقم الشركة</string>
-    <string name="action_sign_in">تسجيل دخول</string>
+    <string name="action_sign_in">تسجيل الدخول</string>
     <string name="invalid_username">اسم مستخدم غير صالح</string>
     <string name="invalid_password">رقم سري غير صالح</string>
-    <string name="enter_password">ادخل كلمة المرور</string>
+    <string name="enter_password">أدخل كلمة المرور</string>
     <string name="app_done">تم</string>
     <string name="edit">تعديل</string>
     <string name="welcome">مرحبا</string>
@@ -45,8 +48,8 @@
     <string name="Import">استيراد</string>
     <string name="ZoneName">اسم المنطقة</string>
     <string name="finish">إنهاء</string>
-    <string name="recQty">الكمية المدخلة</string>
-    <string name="Itemname">إسم المادة</string>
+    <string name="recQty">الكمية المُدخلة</string>
+    <string name="Itemname">اسم المادة</string>
     <string name="Differ">الفرق</string>
     <string name="Arabic">عربي</string>
     <string name="boxnovalidate">الصندوق غير موجود بهذه الطلبية</string>
@@ -56,7 +59,7 @@
     <string name="barcodeexists">رقم الماده غير صحيح</string>
     <string name="confirm_title">تأكيد</string>
     <string name="messageExit">هل تريد الخروج؟</string>
-    <string name="ok">نعم</string>
+    <string name="ok">حسناً</string>
     <string name="required">حقل فارغ</string>
     <string name="warning">تحذير</string>
     <string name="fillYourList">الجدول فارغ!!</string>
@@ -82,7 +85,7 @@
     <string name="barcodeconfirm">
 هذه المادة غير موجودة بهذه الطلبية، هل تريد أضافتها؟ </string>
     <string name="reduceqty">تعديل كمية المادة </string>
-    <string name="qtyerror3">كمية غير صحيحة  </string>
+    <string name="qtyerror3">كمية غير صالحة  </string>
     <string name="deleteitemt">حذف مادة </string>
     <string name="deletezone"> حذف منطقة </string>
     <string name="delete1">حذف  </string>
@@ -112,7 +115,7 @@
     <string name="saleprice">Sale Price</string>
     <string name="aviqty">AVI Qty</string>
     <string name="search1">search by ItemCode or ItemName</string>
-    <string name="total_qty">Total_Qty</string>
+    <string name="total_qty">مجموع الكميات</string>
     <string name="IsNew">IsNew</string>
     <string name="date">التاريخ</string>
     <string name="preview">اظهار</string>
@@ -123,4 +126,84 @@
     <string name="msg">للتحويل إلى الزونات الأخرى</string>
     <string name="notvaildqty2">  لا توجد كمية كافية في </string>
     <string name="trsnferNo">رقم السند </string>
+
+    <string name="transactionDate">تاريخ التحويل</string>
+    <string name="previewBtn">عرض النتائج</string>
+    <string name="SearchByItemName">اكتب اسم المادة</string>
+    <string name="SearchByItemNo">اكتب رقم المادة</string>
+    <string name="TransferNo">رقم السند</string>
+    <string name="fromStore">من المستودع</string>
+    <string name="toStore">إلى المستودع</string>
+    <string name="chooseDate">اختار التاريخ</string>
+
+    <string name="TransfersReportTitle">تقرير التحويلات</string>
+    <string name="AddTransferTitle">إضافة سند تحويل</string>
+
+    <string name="delete">هل أنت متأكد من حذف هذا المُدخَل؟</string>
+
+    <string name="existsBARCODE">يوجد خطأ في الباركود يرجى اعادة المحاولة</string>
+
+    <string name="Login">تسجيل الدخول</string>
+    <string name="password">كلمة المرور</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="device_id">رقم الجهاز</string>
+
+    <string name="title_activity_login">تسجيل الدخول</string>
+    <string name="posted_items"> العناصر التي تم تصديرها</string>
+    <string name="not_posted_items"> العناصر التي لم يتم تصديرها</string>
+    <string name="no_enough_amount">لا يوجد كمية كافية من هذا العنصر</string>
+    <string name="unsaved_data">يوجد بيانات سابقة لم يتم حفظها، يرجى تصديرها لاضافة سند جديد</string>
+    <string name="checkConnection">يرجى التحقق من الاتصال</string>
+    <string name="notEnoughQuantity">كمية غير متوفرة\n أقصى كمية يمكن ادخالها هي: </string>
+    <string name="search">بحث</string>
+    <string name="error">يوجد خطأ!</string>
+    <string name="searchByToStore">إلى المستودع :</string>
+    <string name="allStores">جميع المستودعات</string>
+    <string name="Empty">لا يوجد بيانات</string>
+
+    <string name="exportRep">جاري تصدير التحويلات</string>
+    <string name="importData">استيراد البيانات</string>
+    <string name="getStore">يتم تحميل بيانات المستودعات</string>
+
+    <string name="fillIpAndComNo">املأ الIP ورقم الشركة</string>
+    <string name="fillIp"> املأ الIP</string>
+    <string name="ipConnectionFailed">خطأ في اتصال السيرفر</string>
+    <string name="netWorkError">خطأ في الشبكة</string>
+    <string name="cancelled">تم الإلغاء</string>
+    <string name="getAllData">تم حفظ جميع البيانات</string>
+    <string name="or">أو</string>
+    <string name="activateCheckQty">تفعيل خاصية التحقق من الكميات</string>
+    <string name="serverError">خطأ في السيرڤر!</string>
+    <string name="serverErrorMsg">حدث خطأ أثناء عملية استيراد الكمية لهذه المادة من السيرڤر.</string>
+
+    <string name="inValidCode">الكود غير صحيح!</string>
+    <string name="serial_no">الرقم التسلسلي</string>
+    <string name="add">إضافة</string>
+    <string name="saving">جاري الحفظ</string>
+    <string name="enter_serial_number">أدخل الرقم التسلسلي</string>
+    <string name="uniqueSerial">رقم تسلسلي مُكرر!</string>
+    <string name="uniqueSerialMsg">هذا الرقم التسلسلي موجود بالفعل في هذه الفاتورة</string>
+    <string name="deleteAll">حذف الكل</string>
+    <string name="deleteAllMsg">هل أنت متأكد من حذف جميع الأرقام المتسلسلة المُدخلة ؟</string>
+    <string name="noUnsavedData">لا يوجد بيانات جديدة لحفظها</string>
+    <string name="serials">الأرقام التسلسلية</string>
+    <string name="savingSerials">تصدير الأرقام التسلسلية</string>
+    <string name="allTransfers">جميع السندات</string>
+    <string name="export_to_pdf" />
+
+    <string name="shareTo">المشاركة إلى …</string>
+    <string name="serialNotFound">الرقم غير موجود!</string>
+    <string name="notFoundMsg">هذا الرقم التسلسلي غير موجود للمادة المُختارة في المستودع المحدد</string>
+    <string name="storeSerials">استيراد الأرقام التسلسلية</string>
+    <string name="errorSavingSerials">خطأ في حفظ الأرقام التسلسلية</string>
+    <string name="note_enter_password">ملاحظة: أدخل كلمة المرور المطلوبة لإعادة تصدير التحويل.</string>
+    <string name="wrong_password">كلمة مرور خاطئة!</string>
+    <string name="wrong_password_msg">غير مصرح لك استخدام هذه الميزة.</string>
+    <string name="start_now">ابدأ الآن</string>
+    <string name="login_with">سجل الدخول باستخدام اسم المستخدم\nوكلمة المرور الخاصة بك !</string>
+    <string name="ip_address_">إعدادات عنوان IP</string>
+    <string name="transfer_date_">تاريخ السند :</string>
+    <string name="transfer_no_">رقم السند :</string>
+    <string name="search_item_">البحث عن مادة :</string>
+
 </resources>

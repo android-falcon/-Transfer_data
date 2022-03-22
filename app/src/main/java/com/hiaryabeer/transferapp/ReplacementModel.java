@@ -10,10 +10,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "REPLACEMENT_TABLE")
-public  class ReplacementModel {
+public class ReplacementModel {
 
     @ColumnInfo(name = "UserNO")
     String UserNO;
+
     public String getUserNO() {
         return UserNO;
     }
@@ -21,6 +22,7 @@ public  class ReplacementModel {
     public void setUserNO(String userNO) {
         UserNO = userNO;
     }
+
     @ColumnInfo(name = "FROMSTORE")
     String From;
     @ColumnInfo(name = "TOSTORE")
@@ -33,12 +35,23 @@ public  class ReplacementModel {
     String IsPosted;
     @ColumnInfo(name = "REPLACEMENTDATE")
     String ReplacementDate;
-    @ColumnInfo(name = "QTY")
-    String Qty;
+
     @ColumnInfo(name = "ITEMNAME")
     String itemname;
     @ColumnInfo(name = "TransNumber")
     String transNumber;
+
+    @ColumnInfo(name = "availableQty")
+    String availableQty;
+
+    public String getAvailableQty() {
+        return availableQty;
+    }
+
+    public void setAvailableQty(String qty) {
+        availableQty = qty;
+    }
+
 
     public String getTransNumber() {
         return transNumber;
@@ -55,6 +68,7 @@ public  class ReplacementModel {
     public void setItemname(String itemname) {
         this.itemname = itemname;
     }
+
     @ColumnInfo(name = "DEVICEID")
     String deviceId;
 
@@ -75,17 +89,24 @@ public  class ReplacementModel {
     }
 
     @ColumnInfo(name = "RECQTY")
-    private   String recQty;
+    private String recQty;
     @PrimaryKey(autoGenerate = true)
     int SERIALZONE;
 
-    public ReplacementModel(String from, String to, String zone, String itemcode, String qty) {
+    public ReplacementModel(String from, String to, String zone, String itemcode, String availableQty) {
         From = from;
         To = to;
         Zone = zone;
         Itemcode = itemcode;
-        Qty = qty;
+        this.availableQty = availableQty;
     }
+    public ReplacementModel(String from, String to, String itemcode, String recQty) {
+        From = from;
+        To = to;
+        Itemcode = itemcode;
+        this.recQty = recQty;
+    }
+
     String ToName;
 
     String FromName;
@@ -165,13 +186,7 @@ public  class ReplacementModel {
         Itemcode = itemcode;
     }
 
-    public String getQty() {
-        return Qty;
-    }
 
-    public void setQty(String qty) {
-        Qty = qty;
-    }
     public JSONObject getJSONObjectDelphi() {
         JSONObject obj = new JSONObject();
         try {
@@ -181,9 +196,10 @@ public  class ReplacementModel {
             obj.put("ITEMCODE", Itemcode);
             obj.put("QTY", recQty);
             obj.put("DEVICEID", deviceId);
+            obj.put("VHFNO", transNumber);
 
         } catch (JSONException e) {
-            Log.e("Tag" , "JSONException");
+            Log.e("Tag", "JSONException");
         }
         return obj;
     }
