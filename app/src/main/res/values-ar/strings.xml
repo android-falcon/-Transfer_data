@@ -135,6 +135,7 @@
     <string name="fromStore">من المستودع</string>
     <string name="toStore">إلى المستودع</string>
     <string name="chooseDate">اختار التاريخ</string>
+    <string name="welcome_to_">مرحبا بك \n في تطبيق \n ادارة المستودعات </string>
 
     <string name="TransfersReportTitle">تقرير التحويلات</string>
     <string name="AddTransferTitle">إضافة سند تحويل</string>
@@ -205,6 +206,7 @@
     <string name="transfer_date_">تاريخ السند :</string>
     <string name="transfer_no_">رقم السند :</string>
     <string name="search_item_">البحث عن مادة :</string>
+    <string name="Username">اسم المستخدم</string>
 
     <string name="request">تغيير</string>
     <string name="ip_settings">إعدادات الIP</string>

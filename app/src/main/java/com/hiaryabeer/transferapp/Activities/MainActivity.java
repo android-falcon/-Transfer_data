@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()) {
                     case R.id.goToReports: {
+                        finish();
                         Intent i = new Intent(MainActivity.this, TransferReports.class);
                         startActivity(i);
                         return true;

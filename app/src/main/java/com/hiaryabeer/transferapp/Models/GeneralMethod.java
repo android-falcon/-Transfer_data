@@ -24,10 +24,12 @@ public class GeneralMethod {
     public RoomAllData my_dataBase;
     public appSettings settings;
     List<appSettings> appSettingsList = new ArrayList<>();
+    private Calendar myCalendar;
 
     public GeneralMethod(Context context) {
         this.myContext = context;
         my_dataBase = RoomAllData.getInstanceDataBase(myContext);
+        myCalendar = Calendar.getInstance();
     }
 
     public static void showSweetDialog(Context context, int type, String title, String content) {
@@ -61,7 +63,7 @@ public class GeneralMethod {
         String dateCurent = "", timeCurrent, dateTime = "";
         Date currentTimeAndDate;
         SimpleDateFormat dateFormat, timeformat;
-        currentTimeAndDate = Calendar.getInstance().getTime();
+        currentTimeAndDate = myCalendar.getTime();
         if (flag == 1)// return date
         {
 
@@ -72,7 +74,7 @@ public class GeneralMethod {
         } else {
             if (flag == 2)// return time
             {
-                timeformat = new SimpleDateFormat("hh:mm");
+                timeformat = new SimpleDateFormat("hh:mm:ss");
                 dateCurent = timeformat.format(currentTimeAndDate);
                 dateTime = convertToEnglish(dateCurent);
             }

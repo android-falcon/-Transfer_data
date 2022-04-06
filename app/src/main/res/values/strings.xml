@@ -215,6 +215,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="transfer_date_">Transfer Date :</string>
     <string name="transfer_no_">Transfer No. :</string>
     <string name="search_item_">Search Item :</string>
+    <string name="Username">Username</string>
 
     <string name="request">Request</string>
     <string name="company_no">Company No</string>

@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.25"
                 android:fontFamily="@font/poppins_semibold_600"
-                android:text="@string/transfer_no_"
+                android:text="@string/TransferNo"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 

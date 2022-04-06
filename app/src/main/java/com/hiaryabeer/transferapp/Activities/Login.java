@@ -36,6 +36,7 @@ import com.hiaryabeer.transferapp.appSettings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Login extends AppCompatActivity {
     private Button login;
@@ -253,6 +254,7 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(onClickListener);
         request_ip_ = findViewById(R.id.request_ip_);
         request_ip_.setOnClickListener(onClickListener);
+        generalMethod=new GeneralMethod(this);
 
     }
 
@@ -294,6 +296,7 @@ public class Login extends AppCompatActivity {
         } else {
             checkboxQtyCheck.setVisibility(View.VISIBLE);
         }
+
 
         // conNO.setEnabled(false);
         //  years.setEnabled(false);
@@ -354,6 +357,7 @@ public class Login extends AppCompatActivity {
             //  years.setText(appSettings.get(0).getYears());
             try {
                 deviceId.setText(appSettings.get(0).getDeviceId());
+                deviceId.setEnabled(false);
             } catch (Exception e) {
                 Log.e("deviceId", "" + e.getMessage());
             }
@@ -375,8 +379,10 @@ public class Login extends AppCompatActivity {
 
         } else {
             //  if(ip.getText().toString().equals(""))
-            ip.setEnabled(true);
-            // usernum.setText(SET_userNO);
+             ip.setEnabled(true);
+             String deviceNo=getDeviceNo();
+             deviceId.setText(deviceNo.trim());
+             deviceId.setEnabled(false);
 
             //   else ip.setEnabled(false);
         }
@@ -448,6 +454,19 @@ public class Login extends AppCompatActivity {
             }
         });
 
+    }
+
+    private String getDeviceNo() {
+
+        Random rand = new Random();
+        String id = generalMethod.convertToEnglish( String.format("%04d", rand.nextInt(10000)));
+        String dat=generalMethod.getCurentTimeDate(2);
+        Log.e("randomNo","id="+id+"\t"+dat);
+        dat=dat.substring(6);
+        id=id+dat;
+
+        Log.e("randomNo","id="+id+"\t"+dat);
+        return  id;
     }
 
     private void getDataZone() {
