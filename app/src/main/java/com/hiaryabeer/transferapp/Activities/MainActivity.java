@@ -1141,7 +1141,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 } else {
                                     Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
-                                    itemcode.setError("InValid Code");
+                                    itemcode.setError("Invalid Code");
                                     itemcode.setText("");
                                 }
 
@@ -2517,11 +2517,11 @@ public class MainActivity extends AppCompatActivity {
             pdRepla2.cancel();
     }
 
-    @Override
-    public void onRestart() {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
+//    @Override
+//    public void onRestart() {
+//        super.onRestart();
+//        finish();
+//        startActivity(getIntent());
+//    }
 
 }
