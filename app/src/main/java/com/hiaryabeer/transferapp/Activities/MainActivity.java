@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -32,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,7 +58,10 @@ import com.hiaryabeer.transferapp.Store;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import android.widget.PopupMenu;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.convertToEnglish;
@@ -86,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     public String deviceId = "";
     public static TextView DZRE_zonecodeshow, DZRE_qtyshow;
     public static List<ReplacementModel> DB_replist = new ArrayList<>();
-    ;
+    private ImageButton btnShow;
     public static List<ReplacementModel> DB_replistcopy = new ArrayList<>();
     public static List<ReplacementModel> reducedqtyitemlist = new ArrayList<>();
     public static Dialog Re_searchdialog;
@@ -156,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     List<SerialsModel> allItemSerials = new ArrayList<>();
 
 
-//    @Override
+    //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
 //        switch (item.getItemId()) {
 //            case R.id.goToReports: {
@@ -282,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
 
                         zone.setText("");
                         itemcode.setText("");
-                        return true;     }
+                        return true;
+                    }
                     default:
                         return false;
                 }
@@ -301,6 +307,8 @@ public class MainActivity extends AppCompatActivity {
 
         my_dataBase = RoomAllData.getInstanceDataBase(MainActivity.this);
         init();
+        if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL)
+            btnShow.setRotationY(180);
         itemcode.setText("");
         minVo = my_dataBase.replacementDao().getMinVocherNo();
         Log.e("init-minVo==", minVo + "");
@@ -985,6 +993,7 @@ public class MainActivity extends AppCompatActivity {
         recqty = findViewById(R.id.qtyedt);
         replacmentRecycler = findViewById(R.id.replacmentRec);
         save = findViewById(R.id.save);
+        btnShow = findViewById(R.id.btnShow);
         respon = findViewById(R.id.respons);
         qtyrespons = findViewById(R.id.qtyrespon);
         //  recqty.setOnEditorActionListener(onEditAction);
@@ -2498,12 +2507,11 @@ public class MainActivity extends AppCompatActivity {
             pdRepla2.cancel();
     }
 
-//    @Override
-//    public void onRestart()
-//    {
-//        super.onRestart();
-//        finish();
-//        startActivity(getIntent());
-//    }
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
 }

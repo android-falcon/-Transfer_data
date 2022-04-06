@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -140,6 +141,10 @@ public class TransferReports extends AppCompatActivity {
 
         initViews();
         setVisibility(clicked);
+
+        if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL)
+            backBtn.setRotationY(180);
+
         //Initialize Views
         myDB = RoomAllData.getInstanceDataBase(this);
 
@@ -483,10 +488,10 @@ public class TransferReports extends AppCompatActivity {
         document.add(pdfPTableHeader);
         document.add(phrase);
 
-        pdfPTableHeader2.addCell(pdfCell(getString(R.string.transactionDate) + ":  " + etPickDate.getText().toString(),
+        pdfPTableHeader2.addCell(pdfCell(getString(R.string.transfer_date_) + " " + etPickDate.getText().toString(),
                 ALIGN_BASELINE, 1, font2, BaseColor.BLACK, false, false, null, true));
 
-        pdfPTableHeader2.addCell(pdfCell(getString(R.string.trsnferNo) + ":  " + spinnerTrans.getSelectedItem(),
+        pdfPTableHeader2.addCell(pdfCell(getString(R.string.trsnferNo) + " : " + spinnerTrans.getSelectedItem(),
                 ALIGN_BASELINE, 1, font2, BaseColor.BLACK, false, false, null, true));
 
 

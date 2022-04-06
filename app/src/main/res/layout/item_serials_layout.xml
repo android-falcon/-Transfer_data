@@ -95,7 +95,7 @@
             android:selectAllOnFocus="true"
             android:textAlignment="center"
             android:textColor="#D88F8F8F"
-            android:textCursorDrawable="@color/red"
+            android:textCursorDrawable="@color/colorPrimary"
             android:layout_marginStart="4dp"/>
 
         <TextView

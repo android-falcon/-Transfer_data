@@ -63,10 +63,10 @@
         android:layout_height="18dp"
         android:layout_alignTop="@+id/logo"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/menupopup"
-        android:onClick="showPopup"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"/>
+        android:background="@drawable/menupopup"
+        android:onClick="showPopup" />
 
     <LinearLayout
         android:id="@+id/part1"
