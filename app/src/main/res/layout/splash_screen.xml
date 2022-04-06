@@ -13,23 +13,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25">
+        app:layout_constraintVertical_bias="0.4">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/transfer_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.25"
+            app:layout_constraintHeight_percent="0.18"
+            android:maxWidth="117dp"
+            android:maxHeight="96dp"/>
+
+        <TextView
+            android:id="@+id/gap"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintHeight_percent="0.10"/>
 
         <TextView
             android:id="@+id/welcome_to_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
             android:fontFamily="@font/poppins_bold_700"
             android:gravity="center_horizontal|top"
             android:lineHeight="36sp"
@@ -38,22 +50,33 @@
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/gap"
+            />
+
+        <TextView
+            android:id="@+id/gap2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/welcome_to_"
+            app:layout_constraintHeight_percent="0.10"/>
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_height="0dp"
             android:src="@drawable/splash_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/welcome_to_" />
+            app:layout_constraintTop_toBottomOf="@+id/gap2"
+            app:layout_constraintHeight_percent="0.34"
+            android:maxHeight="198dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/startBtn"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="0dp"
             android:layout_marginTop="-13dp"
             android:background="@drawable/start_btn"
             android:drawableEnd="@drawable/ic_next"
@@ -68,7 +91,9 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:layout_constraintHeight_percent="0.1"
+            android:maxHeight="60dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

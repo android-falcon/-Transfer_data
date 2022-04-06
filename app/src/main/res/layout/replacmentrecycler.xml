@@ -10,15 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="3dp">
+        android:padding="10dp"
+        android:gravity="start|center_vertical">
 
 
         <TextView
             android:id="@+id/from"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="start"
             android:padding="4dp"
             android:text="from"
@@ -31,7 +31,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="start"
             android:text="to"
             android:textColor="@color/black"
@@ -40,22 +39,21 @@
 
         <TextView
             android:id="@+id/itemname"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="center"
-            android:padding="3dp"
             android:text="@string/Itemname"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_margin="2dp"
+
+            />
 
         <TextView
             android:id="@+id/zone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="zone"
             android:textColor="@color/black"
@@ -64,21 +62,19 @@
 
         <TextView
             android:id="@+id/itemcode"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/itemCode"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_margin="2dp"
+            />
 
         <EditText
             android:id="@+id/tblqty"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:imeOptions="actionDone"
             android:inputType="number"
@@ -88,14 +84,15 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textFontWeight="10"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_margin="2dp"
+            />
 
         <TextView
             android:id="@+id/itemqty"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="start"
             android:text="qty"
             android:textColor="@color/black"
@@ -104,19 +101,18 @@
 
         <TextView
             android:id="@+id/trsnferNo"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="1"
             android:gravity="center"
-            android:padding="2dp"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_margin="2dp"
+            />
 
         <TextView
             android:id="@+id/tvEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_margin="2dp"
             android:gravity="end"
             android:textSize="14sp"
@@ -138,7 +134,6 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:id="@+id/linearEdit"
         android:layout_width="match_parent"
@@ -150,8 +145,7 @@
             android:id="@+id/rvEditSerials"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-             />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <Button
             android:id="@+id/btnAddSerial"
@@ -160,14 +154,13 @@
             android:layout_gravity="center_horizontal"
             android:drawableStart="@drawable/ic_add"
             android:text="@string/add"
-            android:textAllCaps="false"
-            />
+            android:textAllCaps="false" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:visibility="invisible"
-        android:background="@color/dark_blue_3" />
+        android:background="@color/dark_blue_3"
+        android:visibility="invisible" />
 
 </LinearLayout>

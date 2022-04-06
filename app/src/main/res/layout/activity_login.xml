@@ -64,7 +64,9 @@
             android:text="@string/login_with"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/welcome" />
+            app:layout_constraintTop_toBottomOf="@+id/welcome"
+            android:textColor="#4F4F51"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/unameTextField"
@@ -72,13 +74,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:hint="Username"
+            android:hint="@string/user_name"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
             app:endIconMode="clear_text"
+            android:textColorHint="@color/gray"
+            app:hintTextColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_with_">
@@ -88,7 +92,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textAlignment="viewStart" />
+                android:textAlignment="viewStart"
+                android:textColor="#4E4E4E"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +112,9 @@
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
             app:endIconMode="password_toggle"
+            app:hintTextColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
+            android:textColorHint="@color/gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/unameTextField">
 
@@ -115,7 +123,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textAlignment="viewStart" />
+                android:textAlignment="viewStart"
+                android:textColor="#4E4E4E"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,7 +166,7 @@
                 android:gravity="top"
                 android:letterSpacing="0.05"
                 android:lineHeight="24sp"
-                android:text="Request"
+                android:text="@string/request"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -167,7 +177,7 @@
                 android:gravity="top"
                 android:letterSpacing="0.05"
                 android:lineHeight="24sp"
-                android:text="IP Address"
+                android:text="@string/ip_settings"
                 android:textColor="#47CEC7"
                 android:textSize="16sp" />
 

@@ -1346,11 +1346,21 @@ public class MainActivity extends AppCompatActivity {
 
                                                         ItemSerialTransfer serialTransfer =
                                                                 new ItemSerialTransfer(String.valueOf(transNo),
-                                                                        deviceId, itemcode.getText().toString().trim(), code,
+                                                                        deviceId, itemcode.getText().toString().trim(), code.trim(),
                                                                         (new GeneralMethod(MainActivity.this)).getCurentTimeDate(1),
                                                                         fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))),
                                                                         toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" ")))
                                                                 );
+
+                                                        if (ExistsInRepList(itemcode.getText().toString()))
+                                                            serialTransfer.setVSerial((replacementlist.size() - (repPosition + 1)) + 1);
+                                                        else {
+                                                            if (replacementlist.size() == 0)
+                                                                serialTransfer.setVSerial(1);
+                                                            else
+                                                                serialTransfer.setVSerial(replacementlist.size() + 1);
+                                                        }
+
                                                         etSerial.setError(null);
                                                         serialTransfers.add(serialTransfer);
                                                         my_dataBase.serialTransfersDao().insert(serialTransfer);
@@ -2268,7 +2278,7 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {//just for first time
                 Log.e("requestresult", "PERMISSION_GRANTED");
                 Intent i = new Intent(MainActivity.this, ScanActivity.class);
-                i.putExtra("key", "1");
+                i.putExtra("key", type);
                 startActivity(i);
                 // searchByBarcodeNo(s + "");
             }
@@ -2333,7 +2343,7 @@ public class MainActivity extends AppCompatActivity {
         allTransSerials = my_dataBase.serialTransfersDao().getAllIntrans(String.valueOf(transNo), deviceId);
         for (int i = 0; i < allTransSerials.size(); i++) {
 
-            if (allTransSerials.get(i).getSerialNo().equals(serial)) {
+            if (allTransSerials.get(i).getSerialNo().trim().equals(serial.replaceAll("\\s+", "").trim())) {
                 return true;
             }
 
@@ -2342,7 +2352,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> s = my_dataBase.serialTransfersDao().getSerialsForOther(itemcode.getText().toString());
         for (int i = 0; i < s.size(); i++) {
 
-            if (s.get(i).equals(serial)) {
+            if (s.get(i).replaceAll("\\s+", "").trim().equals(serial)) {
                 return true;
             }
 
@@ -2361,7 +2371,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < itemSerialsInStore.size(); i++) {
 
-            if (itemSerialsInStore.get(i).equals(serialNo))
+            if (itemSerialsInStore.get(i).replaceAll("\\s+", "").trim().equals(serialNo))
                 valid = true;
 
         }
@@ -2370,7 +2380,7 @@ public class MainActivity extends AppCompatActivity {
             List<ItemSerialTransfer> serialTransfers1 = my_dataBase.serialTransfersDao().getAll();
             if (serialTransfers1.size() != 0) {
                 for (int i = (serialTransfers1.size() - 1); i >= 0; i--) {
-                    if (serialTransfers1.get(i).getSerialNo().equals(serialNo)) {
+                    if (serialTransfers1.get(i).getSerialNo().replaceAll("\\s+", "").trim().equals(serialNo)) {
                         valid = serialTransfers1.get(i).getToStore().equals(fromNo);
                         break;
                     }

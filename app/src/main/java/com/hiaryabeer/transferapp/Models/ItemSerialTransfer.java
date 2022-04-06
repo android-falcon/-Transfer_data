@@ -2,7 +2,8 @@ package com.hiaryabeer.transferapp.Models;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
+
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -46,6 +47,9 @@ public class ItemSerialTransfer {
 
     @ColumnInfo(name = "Posted")
     private String isPosted;
+
+    @ColumnInfo(name = "vSerial", defaultValue = "0")
+    private int vSerial;
 
     public ItemSerialTransfer(String voucherNo, String deviceId, String itemCode, String serialNo,
                               String date, String fromStore, String toStore) {
@@ -149,6 +153,14 @@ public class ItemSerialTransfer {
         this.toStore = toStore;
     }
 
+    public int getVSerial() {
+        return vSerial;
+    }
+
+    public void setVSerial(int vSerial) {
+        this.vSerial = vSerial;
+    }
+
     public JSONObject getJSONObjectSerials() {
         JSONObject obj = new JSONObject();
         try {
@@ -157,6 +169,7 @@ public class ItemSerialTransfer {
             obj.put("ITEMSERIAL", serialNo);
             obj.put("QTY", qty);
             obj.put("FROMSTR", fromStore);
+            obj.put("VSERIAL", vSerial);
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");

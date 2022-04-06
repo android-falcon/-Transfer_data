@@ -206,4 +206,9 @@
     <string name="transfer_no_">رقم السند :</string>
     <string name="search_item_">البحث عن مادة :</string>
 
+    <string name="request">تغيير</string>
+    <string name="ip_settings">إعدادات الIP</string>
+    <string name="company_no">رقم الشركة</string>
+
+
 </resources>
