@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()) {
                     case R.id.goToReports: {
+                        finish();
                         Intent i = new Intent(MainActivity.this, TransferReports.class);
                         startActivity(i);
                         return true;
@@ -2497,12 +2498,12 @@ public class MainActivity extends AppCompatActivity {
             pdRepla2.cancel();
     }
 
-    @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
+//    @Override
+//    public void onRestart()
+//    {
+//        super.onRestart();
+//        finish();
+//        startActivity(getIntent());
+//    }
 
 }

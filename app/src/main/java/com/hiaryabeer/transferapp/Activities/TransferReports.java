@@ -90,6 +90,7 @@ public class TransferReports extends AppCompatActivity {
 
     public static List<ReplacementModel> allReports = new ArrayList<>();
     private ArrayList<ReplacementModel> searchList = new ArrayList<>();
+    private ArrayList<ReplacementModel> pdfList = new ArrayList<>();
     public static TransReportsAdapter transReportsAdapter;
 
     private Calendar calendar;
@@ -390,7 +391,12 @@ public class TransferReports extends AppCompatActivity {
             fabConvert.setVisibility(View.GONE);
         }
 
-        backBtn.setOnClickListener(v -> finish());
+        backBtn.setOnClickListener(v -> {
+
+            finish();
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        });
 
     }
 
@@ -401,6 +407,8 @@ public class TransferReports extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+        Intent i=new Intent(this,MainActivity.class);
+        startActivity(i);
     }
 
     /***************** METHODS *****************/
@@ -528,7 +536,17 @@ public class TransferReports extends AppCompatActivity {
             pdfPTableBody.setSpacingAfter(0f);
 
             List<String> serialCodes = new ArrayList<>();
-            for (int i = 0; i < allReports.size(); i++) {
+
+            if(searchList.size()!=0)
+            {
+                pdfList.clear();
+                pdfList.addAll(searchList);
+            }
+            else {
+                pdfList.clear();
+                pdfList.addAll(allReports);
+            }
+            for (int i = 0; i < pdfList.size(); i++) {
                 serialCodes.clear();
                 serialCodes = myDB.serialTransfersDao().getSerialCodes(allReports.get(i).getTransNumber(), allReports.get(i).getItemcode());
                 Log.e("Serials Size", serialCodes.size() + "");

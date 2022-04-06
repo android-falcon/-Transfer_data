@@ -10,7 +10,7 @@ public class CompanyInfo {
     private  String CoYear;
     private  String CoNameA;
 
-    
+
 
     public CompanyInfo() {
     }
