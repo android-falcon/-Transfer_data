@@ -768,6 +768,7 @@ public class ImportData {
                     link = "http://" + ipAddress.trim() + headerDll.trim() + "/IrGetAllItems?CONO=" + CONO.trim();
 
                     Log.e("link", "" + link);
+
                 }
             } catch (Exception e) {
                 Log.e("Exception", "" + e.getMessage());

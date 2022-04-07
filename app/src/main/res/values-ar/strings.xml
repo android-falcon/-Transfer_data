@@ -193,7 +193,7 @@
     <string name="export_to_pdf" />
 
     <string name="shareTo">المشاركة إلى …</string>
-    <string name="serialNotFound">الرقم غير موجود!</string>
+    <string name="serialNotFound">الرقم التسلسلي غير موجود.</string>
     <string name="notFoundMsg">هذا الرقم التسلسلي غير موجود للمادة المُختارة في المستودع المحدد</string>
     <string name="storeSerials">استيراد الأرقام التسلسلية</string>
     <string name="errorSavingSerials">خطأ في حفظ الأرقام التسلسلية</string>
@@ -212,5 +212,12 @@
     <string name="ip_settings">إعدادات الIP</string>
     <string name="company_no">رقم الشركة</string>
 
+    <string name="this_serial_">يتواجد هذا الرقم التسلسلي في مستودع آخر.</string>
+    <string name="this_serial_transferred">لقد تم نقل الرقم التسلسلي هذا الى مستودع آخر مسبقاً.</string>
+    <string name="serial_another_item">ينتمي الرقم التسلسلي هذا الى مادة أو مستودع آخر.</string>
+
+    <string name="store_no_">رقم المستودع:</string>
+
+    <string name="invalid_serial">رقم غير صحيح !</string>
 
 </resources>

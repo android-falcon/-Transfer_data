@@ -1278,7 +1278,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
                                     layoutParams.copyFrom(dialog.getWindow().getAttributes());
-                                    layoutParams.width = (int) (width / 1.3);
+                                    layoutParams.width = (int) (width / 1.24);
                                     dialog.getWindow().setAttributes(layoutParams);
 
                                     TextView icClose = dialog.findViewById(R.id.icClose);
@@ -1343,7 +1343,9 @@ public class MainActivity extends AppCompatActivity {
                                                 Log.e("SerialScanned", code);
                                                 if (!isRepeated(code)) {
 
-                                                    if (existInItemSerialList(itemcode.getText().toString().trim(), code)) {
+                                                    int serialValidation = existInItemSerialList(itemcode.getText().toString().trim(), code);
+
+                                                    if ( serialValidation == 1) {
 
                                                         ItemSerialTransfer serialTransfer =
                                                                 new ItemSerialTransfer(String.valueOf(transNo),
@@ -1425,8 +1427,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                                                         openSmallCapture(6);
-                                                    } else {
-                                                        showSweetDialog(MainActivity.this, 3, getString(R.string.serialNotFound), getString(R.string.notFoundMsg));
+                                                    }
+                                                    else if (serialValidation == 0){
+                                                        showSweetDialog(MainActivity.this, 3, getString(R.string.invalid_serial) , getString(R.string.serialNotFound));
                                                     }
                                                 } else {
                                                     showSweetDialog(MainActivity.this, 3, getString(R.string.uniqueSerial), getString(R.string.uniqueSerialMsg));
@@ -1602,7 +1605,8 @@ public class MainActivity extends AppCompatActivity {
                                     dialog1.dismiss();
                                 }
 
-                            } else if (existsInSerialsList(itemcode.getText().toString().trim())) {
+                            }
+                            else if (existsInSerialsList(itemcode.getText().toString().trim())) {
                                 Log.e(" Case2 ", "Exist in serial list");
 
                             } else if (existBarcode(itemcode.getText().toString().trim())) {
@@ -1885,7 +1889,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int t = 0; t < allItemsList.size(); t++) {
 
-            if (allItemsList.get(t).getBarCode().equals(code)) {
+            if (allItemsList.get(t).getBarCode().replaceAll("\\s+", "").equals(code)) {
                 codeScanned = allItemsList.get(t).getItemOcode();
                 itemcode.setText(codeScanned);
                 flag = true;
@@ -1902,15 +1906,37 @@ public class MainActivity extends AppCompatActivity {
 
         String fromNo = fromSpinner.getSelectedItem().toString().substring(0, fromSpinner.getSelectedItem().toString().indexOf(" "));
         List<SerialsModel> serialsModelList = my_dataBase.serialsDao().getSerialsInStore(fromNo);
+
+
         boolean flag = false;
 
         for (int s = 0; s < serialsModelList.size(); s++) {
 
-            if (serialsModelList.get(s).getSerialNo().trim().equals(code.trim())) {
+            if (serialsModelList.get(s).getSerialNo().replaceAll("\\s+", "").trim().equals(code.trim())) {
                 codeScanned = serialsModelList.get(s).getItemNo();
                 itemcode.setText(codeScanned);
                 flag = true;
                 break;
+            }
+
+        }
+
+        if (!flag) {
+
+            List<SerialsModel> serials = my_dataBase.serialsDao().getAllSerials();
+
+            for (int s = 0; s < serials.size(); s++) {
+
+                if (serials.get(s).getSerialNo().replaceAll("\\s+", "").trim().equals(code.trim())) {
+                    if (!serials.get(s).getStore().equals(fromNo))
+                    {
+
+                        showSweetDialog(MainActivity.this, 3, getString(R.string.this_serial_), "("+getString(R.string.store_no_)+" "+serials.get(s).getStore()+")");
+
+                    }
+                    break;
+                }
+
             }
 
         }
@@ -1925,7 +1951,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("ExsitsInItemlist==", "ExsitsInItemlist");
         boolean flage = false;
         for (int x1 = 0; x1 < AllItemDBlist.size(); x1++) {
-            if (AllItemDBlist.get(x1).getItemOcode().trim().equals(itemcode.trim())) {
+            if (AllItemDBlist.get(x1).getItemOcode().replaceAll("\\s+", "").trim().equals(itemcode.trim())) {
                 pos = x1;
 
                 flage = true;
@@ -2362,9 +2388,14 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public boolean existInItemSerialList(String itemNo, String serialNo) {
+    public int existInItemSerialList(String itemNo, String serialNo) {
 
-        boolean valid = false;
+        // 0 --> not exist serial
+        // 1 --> exist & valid for the item in the selected store
+        // 2 --> exist but for another item or another store
+        // 3 --> serial transferred to another store
+
+        int result = 0;
 
         String fromNo = fromSpinner.getSelectedItem().toString().substring(0, fromSpinner.getSelectedItem().toString().indexOf(" "));
         List<String> itemSerialsInStore = my_dataBase.serialsDao().getItemSerialsInStore(fromNo, itemNo);
@@ -2373,24 +2404,54 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < itemSerialsInStore.size(); i++) {
 
             if (itemSerialsInStore.get(i).replaceAll("\\s+", "").trim().equals(serialNo))
-                valid = true;
+                result = 1;
 
         }
 
-        if (valid) {
+        if (result == 1) {
             List<ItemSerialTransfer> serialTransfers1 = my_dataBase.serialTransfersDao().getAll();
             if (serialTransfers1.size() != 0) {
                 for (int i = (serialTransfers1.size() - 1); i >= 0; i--) {
                     if (serialTransfers1.get(i).getSerialNo().replaceAll("\\s+", "").trim().equals(serialNo)) {
-                        valid = serialTransfers1.get(i).getToStore().equals(fromNo);
+                        if (!serialTransfers1.get(i).getToStore().equals(fromNo)) {
+
+                            result = 3;
+                            showSweetDialog(MainActivity.this, 3, getString(R.string.this_serial_transferred), "("+ getString(R.string.store_no_) +" "+serialTransfers1.get(i).getToStore()+")");
+
+                        }
                         break;
                     }
                 }
             }
         }
 
-        Log.e("VALID", valid + "");
-        return valid;
+        if (result != 1 && result != 3) {
+
+            List<SerialsModel> allSerials = my_dataBase.serialsDao().getAllSerials();
+
+            for (int i = 0; i < allSerials.size(); i++) {
+
+                if (allSerials.get(i).getSerialNo().replaceAll("\\s+", "").trim().equals(serialNo)) {
+
+                    if (!allSerials.get(i).getStore().equals(fromNo) ||
+                            !allSerials.get(i).getItemNo().replaceAll("\\s+", "").trim().equals(itemNo)) {
+
+                        result = 2;
+                        showSweetDialog(MainActivity.this, 3, getString(R.string.serial_another_item),   "(" + getString(R.string.store_no_) + " " + allSerials.get(i).getStore()
+                                + ")\n(" + getString(R.string.itemCode_) + " " + allSerials.get(i).getItemNo()+")");
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
+        Log.e("Result_serial", result + "");
+        return result;
 
     }
 

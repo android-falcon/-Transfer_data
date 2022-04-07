@@ -200,7 +200,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="export_to_pdf">Export To Pdf</string>
 
     <string name="shareTo">Share to …</string>
-    <string name="serialNotFound">Serial not found!</string>
+    <string name="serialNotFound">Serial No. not found.</string>
     <string name="notFoundMsg">This serial no. doesn\'t exist for the selected item in the selected store</string>
     <string name="storeSerials">Importing Item Serials</string>
     <string name="errorSavingSerials">Error saving serials</string>
@@ -220,5 +220,11 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="request">Request</string>
     <string name="company_no">Company No</string>
 
+    <string name="this_serial_">This serial no. is in another store.</string>
+    <string name="this_serial_transferred">This serial has been transferred previously into another store.</string>
+    <string name="serial_another_item">This serial no. belongs to another item or store.</string>
+
+    <string name="store_no_">Store no.:</string>
+    <string name="invalid_serial">Invalid Serial !</string>
 
 </resources>
