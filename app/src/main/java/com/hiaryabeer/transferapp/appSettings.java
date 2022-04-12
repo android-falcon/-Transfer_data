@@ -29,6 +29,17 @@ public class appSettings {
     @ColumnInfo(name = "Check_Qty")
     private String checkQty;
 
+    @ColumnInfo(name = "Rawahneh_Add_Item")
+    private String rawahneh_add_item;
+
+    public String getRawahneh_add_item() {
+        return rawahneh_add_item;
+    }
+
+    public void setRawahneh_add_item(String rawahneh_add_item) {
+        this.rawahneh_add_item = rawahneh_add_item;
+    }
+
     public String getCheckQty() {
         return checkQty;
     }

@@ -290,11 +290,17 @@ public class Login extends AppCompatActivity {
 
         ///////B
         final CheckBox checkboxQtyCheck = dialog.findViewById(R.id.checkboxQtyCheck);
+        final CheckBox rawahnehAddQty = dialog.findViewById(R.id.rawahnehAddQty);
+
         if (serialsActive == 1) {
             checkboxQtyCheck.setChecked(false);
             checkboxQtyCheck.setVisibility(View.GONE);
+            rawahnehAddQty.setChecked(true);
+            rawahnehAddQty.setVisibility(View.VISIBLE);
         } else {
             checkboxQtyCheck.setVisibility(View.VISIBLE);
+            rawahnehAddQty.setVisibility(View.GONE);
+            rawahnehAddQty.setChecked(false);
         }
 
 
@@ -377,6 +383,18 @@ public class Login extends AppCompatActivity {
                 }
             }
 
+            if (appSettings.get(0).getRawahneh_add_item() != null) {
+
+                if (appSettings.get(0).getRawahneh_add_item().equals("1")) {
+                    rawahnehAddQty.setChecked(true);
+                } else {
+                    rawahnehAddQty.setChecked(false);
+                }
+                if (serialsActive == 0){
+                    rawahnehAddQty.setChecked(false);
+                }
+            }
+
         } else {
             //  if(ip.getText().toString().equals(""))
              ip.setEnabled(true);
@@ -403,6 +421,8 @@ public class Login extends AppCompatActivity {
                 ///////B
                 String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
 
+                String rawahneh_add_item = rawahnehAddQty.isChecked() ? "1" : "0";
+
 
 //                Log.e("port",""+port);
                 //usernum.setText(SET_userNO);
@@ -424,6 +444,8 @@ public class Login extends AppCompatActivity {
 
                 ////B
                 setting.setCheckQty(checkQty);
+
+                setting.setRawahneh_add_item(rawahneh_add_item);
 
                 if (deviceId.getText().toString().trim().length() != 0) {
                     if (ip.getText().toString().trim().length() != 0) {

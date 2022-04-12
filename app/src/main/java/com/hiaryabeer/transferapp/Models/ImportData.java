@@ -131,7 +131,7 @@ public class ImportData {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_LONG).show();
         }
 
-        headerDll = "/Falcons/VAN.Dll/";
+//        headerDll = "/Falcons/VAN.Dll/";
     }
 
     public void getAllItems() {
@@ -872,6 +872,8 @@ public class ImportData {
                                 allItems.setItemOcode(jsonObject1.getString("ItemOCode"));
                                 allItems.setItemName(jsonObject1.getString("ItemNameA"));
                                 allItems.setBarCode(jsonObject1.getString("ItemNCode"));
+                                allItems.setCategory(jsonObject1.getString("ItemG"));
+                                allItems.setKind(jsonObject1.getString("ItemK"));
                                 if (Login.serialsActive == 1)
                                     allItems.setHasSerial(jsonObject1.getString("ITEMHASSERIAL"));
                                 else

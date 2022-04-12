@@ -167,12 +167,27 @@
             android:layout_marginTop="15dp"
             android:checked="true"
             android:text="@string/activateCheckQty"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:visibility="visible"/>
+
+        <CheckBox
+            android:id="@+id/rawahnehAddQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkboxQtyCheck"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="15dp"
+            android:checked="true"
+            android:text="Rawahneh Add Item Method"
+            android:textColor="@color/black"
+            android:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/checkboxQtyCheck"
+            android:layout_below="@id/rawahnehAddQty"
             android:layout_alignParentEnd="true"
             android:layout_centerHorizontal="true"
             android:layout_marginHorizontal="16dp"

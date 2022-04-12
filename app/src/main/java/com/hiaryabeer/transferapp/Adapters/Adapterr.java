@@ -80,10 +80,7 @@ public class Adapterr extends BaseAdapter {
             });
         } else {
 //            icAddSerial.setVisibility(View.VISIBLE);
-            parentLinear.setOnClickListener(v -> {
-
-                itemcode.setText(items.get(position).getItemOcode());
-            });
+            parentLinear.setOnClickListener(v -> itemcode.setText(items.get(position).getItemOcode()));
         }
 
         //sets the text for item name and item description from the current item object

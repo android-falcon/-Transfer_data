@@ -135,7 +135,7 @@
     <string name="fromStore">من المستودع</string>
     <string name="toStore">إلى المستودع</string>
     <string name="chooseDate">اختار التاريخ</string>
-    <string name="welcome_to_">مرحبا بك \n في تطبيق \n ادارة المستودعات </string>
+    <string name="welcome_to_">مرحبا بك  في \nتطبيق ادارة المستودعات </string>
 
     <string name="TransfersReportTitle">تقرير التحويلات</string>
     <string name="AddTransferTitle">إضافة سند تحويل</string>
@@ -219,5 +219,12 @@
     <string name="store_no_">رقم المستودع:</string>
 
     <string name="invalid_serial">رقم غير صحيح !</string>
+    <string name="required_quantity">الكمية المطلوبة:</string>
+
+    <string name="category">القسم</string>
+    <string name="kind">النوع</string>
+
+    <string name="all_categories">جميع الأقسام</string>
+    <string name="all_kinds">جميع الأنواع</string>
 
 </resources>

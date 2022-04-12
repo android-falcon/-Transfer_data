@@ -22,4 +22,8 @@ public interface ItemDao {
 
     @Query("SELECT Has_Serial FROM ITEM_TABLE WHERE ITEMOCODE = :itemCode")
     List<String> itemHasSerial(String itemCode);
+
+    @Query("SELECT DISTINCT Item_Kind FROM ITEM_TABLE WHERE Item_Category = :category AND TRIM(Item_Kind) <> '' ")
+    List<String> getKinds(String category);
+
 }

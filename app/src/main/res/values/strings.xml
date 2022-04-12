@@ -226,5 +226,12 @@ This barcode is not available in this PO, do you want to add it? </string>
 
     <string name="store_no_">Store no.:</string>
     <string name="invalid_serial">Invalid Serial !</string>
+    <string name="required_quantity">Required Quantity:</string>
+
+    <string name="category">Category</string>
+    <string name="kind">Kind</string>
+
+    <string name="all_categories">All Categories</string>
+    <string name="all_kinds">All Kinds</string>
 
 </resources>

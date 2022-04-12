@@ -25,6 +25,26 @@ public class AllItems {
     String barCode;
     @ColumnInfo(name = "Has_Serial")
     String hasSerial;
+    @ColumnInfo(name = "Item_Category")
+    String category;
+    @ColumnInfo(name = "Item_Kind")
+    String kind;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
     public String getHasSerial() {
         return hasSerial;

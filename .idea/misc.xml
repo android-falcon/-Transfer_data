@@ -27,6 +27,7 @@
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_expand_circle_down.xml" value="0.2203125" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_expand_less.xml" value="0.2203125" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_expand_more.xml" value="0.2203125" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_export.xml" value="0.168" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_key2.xml" value="0.19722222222222222" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_person2.xml" value="0.19722222222222222" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/drawable/ic_person_black_24dp.xml" value="0.16" />
@@ -40,9 +41,10 @@
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/font-v26/arabic_font.xml" value="0.234375" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/font/arabic_font.xml" value="0.234375" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/font/poppins_bold.xml" value="0.234375" />
-        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_transfer_reports.xml" value="0.22" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/add_qty_dialog.xml" value="0.33" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/delete_entry.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/dialog_edit_serial.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/enter_serial_layout.xml" value="0.22" />
@@ -50,7 +52,7 @@
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/item_serials_layout.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/passworddailog.xml" value="0.2" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/prompt_password_dialog.xml" value="0.33" />
-        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/replacmentrecycler.xml" value="0.33" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/replacmentrecycler.xml" value="0.5" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rv_serial_transfer.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rv_serials_report.xml" value="0.33" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/searchdailog.xml" value="0.33" />
