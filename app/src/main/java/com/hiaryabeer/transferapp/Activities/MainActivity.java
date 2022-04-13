@@ -809,25 +809,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                if (categorySpinner.getSelectedItemPosition() != 0) {
+
+                    String selectedKind = kindSpinner.getSelectedItem().toString();
+                    List<String> kinds2 = new ArrayList<>();
+                    kinds2.add(getString(R.string.all_kinds));
+                    kinds2.addAll(my_dataBase.itemDao().getKinds(categorySpinner.getSelectedItem().toString()));
+
+                    ArrayAdapter<String> kindAdapter2 = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, kinds2);
+                    kindSpinner.setAdapter(kindAdapter2);
+                    kindSpinner.setSelection(0);
+
+                } else {
+
+                    String selectedKind = kindSpinner.getSelectedItem().toString();
+                    List<String> kinds2 = new ArrayList<>();
+                    kinds2.add(getString(R.string.all_kinds));
+                    kinds2.addAll(my_dataBase.itemDao().getAllKinds());
+
+                    ArrayAdapter<String> kindAdapter2 = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, kinds2);
+                    kindSpinner.setAdapter(kindAdapter2);
+                    kindSpinner.setSelection(0);
+
+                }
+
                 if (categorySpinner.getSelectedItemPosition() == 0 && kindSpinner.getSelectedItemPosition() == 0 && search.getText().toString().trim().equals("")) {
 
                     Adapterr adapter1 = new Adapterr(MainActivity.this, AllItemDBlist);
                     listView.setAdapter(adapter1);
 
                 } else {
-
-                    if (categorySpinner.getSelectedItemPosition() != 0) {
-
-                        String selectedKind = kindSpinner.getSelectedItem().toString();
-                        List<String> kinds2 = new ArrayList<>();
-                        kinds2.add(getString(R.string.all_kinds));
-                        kinds2.addAll(my_dataBase.itemDao().getKinds(categorySpinner.getSelectedItem().toString()));
-
-                        ArrayAdapter<String> kindAdapter2 = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, kinds2);
-                        kindSpinner.setAdapter(kindAdapter2);
-                        kindSpinner.setSelection(0);
-
-                    }
 
                     searchItems(position, categorySpinner.getSelectedItem().toString(),
                             kindSpinner.getSelectedItemPosition(), kindSpinner.getSelectedItem().toString(),

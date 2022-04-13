@@ -226,5 +226,6 @@
 
     <string name="all_categories">جميع الأقسام</string>
     <string name="all_kinds">جميع الأنواع</string>
+    <string name="show_quantity_dialog_when_adding_an_item">تحديد الكمية قبل إضافة مادة.</string>
 
 </resources>

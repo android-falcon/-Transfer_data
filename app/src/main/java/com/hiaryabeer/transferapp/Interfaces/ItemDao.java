@@ -26,4 +26,7 @@ public interface ItemDao {
     @Query("SELECT DISTINCT Item_Kind FROM ITEM_TABLE WHERE Item_Category = :category AND TRIM(Item_Kind) <> '' ")
     List<String> getKinds(String category);
 
+    @Query("SELECT DISTINCT Item_Kind FROM ITEM_TABLE WHERE Item_Kind IS NOT NULL AND TRIM(Item_Kind) <> '' ")
+    List<String> getAllKinds();
+
 }

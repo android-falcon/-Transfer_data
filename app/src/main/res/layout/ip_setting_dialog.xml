@@ -180,7 +180,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="15dp"
             android:checked="true"
-            android:text="Rawahneh Add Item Method"
+            android:text="@string/show_quantity_dialog_when_adding_an_item"
             android:textColor="@color/black"
             android:visibility="visible" />
 

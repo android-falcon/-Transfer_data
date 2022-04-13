@@ -233,5 +233,6 @@ This barcode is not available in this PO, do you want to add it? </string>
 
     <string name="all_categories">All Categories</string>
     <string name="all_kinds">All Kinds</string>
+    <string name="show_quantity_dialog_when_adding_an_item">Specifying quantity before adding an item.</string>
 
 </resources>
