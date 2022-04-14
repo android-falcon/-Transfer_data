@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/white_bg_top_radius"
-    >
+    android:background="@drawable/white_bg_top_radius">
 
     <RelativeLayout
         android:id="@+id/mainLinearAdapter"
@@ -12,13 +11,12 @@
         android:layout_height="wrap_content"
         android:layoutDirection="locale"
         android:orientation="vertical"
-        android:textDirection="locale"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:paddingVertical="35dp"
-        >
+        android:textDirection="locale"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/ip_address_"
@@ -44,16 +42,15 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="30dp"
             android:hint="@string/server_ip"
+            android:textColorHint="@color/gray"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:endIconMode="clear_text"
-            app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"
-            android:textColorHint="@color/gray"
-            >
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ipEditText"
@@ -74,16 +71,15 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="14dp"
             android:hint="@string/IP_PORT"
+            android:textColorHint="@color/gray"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:endIconMode="clear_text"
-            app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"
-            android:textColorHint="@color/gray"
-            >
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/portSetting"
@@ -105,16 +101,15 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="14dp"
             android:hint="@string/company_no"
+            android:textColorHint="@color/gray"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:endIconMode="clear_text"
-            app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"
-            android:textColorHint="@color/gray"
-            >
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cono"
@@ -136,15 +131,14 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="14dp"
             android:hint="@string/device_id"
+            android:textColorHint="@color/gray"
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusTopStart="10dp"
-            app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"
-            android:textColorHint="@color/gray"
-            >
+            app:hintTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/deviceId"
@@ -155,20 +149,72 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/printLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/deviceTextField"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:text="@string/print_option"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <RadioGroup
+                android:id="@+id/printRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/colorPrimary"
+                    android:checked="true"
+                    android:text="@string/wi_fi"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/bluetooth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/colorPrimary"
+                    android:text="@string/bluetooth"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
 
         <CheckBox
             android:id="@+id/checkboxQtyCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/deviceTextField"
+            android:layout_below="@id/printLinear"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:checked="true"
             android:text="@string/activateCheckQty"
             android:textColor="@color/black"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <CheckBox
             android:id="@+id/rawahnehAddQty"
@@ -182,7 +228,7 @@
             android:checked="true"
             android:text="@string/show_quantity_dialog_when_adding_an_item"
             android:textColor="@color/black"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -200,11 +246,11 @@
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/loginbtn"
                 android:elevation="3dp"
+                android:fontFamily="@font/inter_bold_700"
                 android:text="@string/save"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textAllCaps="false"
-                android:fontFamily="@font/inter_bold_700"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
                 app:layout_constraintStart_toStartOf="parent"
@@ -217,11 +263,11 @@
                 android:layout_marginStart="5dp"
                 android:background="@drawable/cancel_button"
                 android:elevation="3dp"
+                android:fontFamily="@font/inter_bold_700"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"
-                android:fontFamily="@font/inter_bold_700"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/saveSetting"

@@ -227,5 +227,12 @@
     <string name="all_categories">جميع الأقسام</string>
     <string name="all_kinds">جميع الأنواع</string>
     <string name="show_quantity_dialog_when_adding_an_item">تحديد الكمية قبل إضافة مادة.</string>
+    <string name="print_option">خيار الطباعة:</string>
+    <string name="wi_fi">وايفاي</string>
+    <string name="bluetooth">بلوتوث</string>
+
+    <string name="specify_transfer">يرجى تحديد رقم السند.</string>
+    <string name="save_before_getting_new_data">يرجى الحفظ قبل الحصول على بيانات جديدة !</string>
+
 
 </resources>
