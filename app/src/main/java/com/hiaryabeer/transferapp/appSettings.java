@@ -32,6 +32,17 @@ public class appSettings {
     @ColumnInfo(name = "Rawahneh_Add_Item")
     private String rawahneh_add_item;
 
+    @ColumnInfo(name = "Print_Option") // 0 -- Wi-Fi _ 1 -- Bluetooth
+    private Integer print_option;
+
+    public Integer getPrint_option() {
+        return print_option;
+    }
+
+    public void setPrint_option(Integer print_option) {
+        this.print_option = print_option;
+    }
+
     public String getRawahneh_add_item() {
         return rawahneh_add_item;
     }

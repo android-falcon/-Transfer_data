@@ -22,7 +22,7 @@ import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
 
 
-@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class}, version = 22, exportSchema = false)
+@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class}, version = 23, exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private static RoomAllData database;
     public static String dataBaseName = "DBRoomTransfer";
@@ -44,7 +44,7 @@ public abstract class RoomAllData extends RoomDatabase {
     /////////////////
 
 
-    static final Migration MIGRATION_17_22 = new Migration(17, 22) {
+    static final Migration MIGRATION_17_23 = new Migration(17, 23) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
 
@@ -57,11 +57,13 @@ public abstract class RoomAllData extends RoomDatabase {
 
             database.execSQL("ALTER TABLE ITEM_TABLE ADD COLUMN Item_Kind TEXT");
 
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN Print_Option INTEGER");
+
 
         }
     };
 
-    static final Migration MIGRATION_18_22 = new Migration(18, 22) {
+    static final Migration MIGRATION_18_23 = new Migration(18, 23) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
 
@@ -72,11 +74,14 @@ public abstract class RoomAllData extends RoomDatabase {
 
             database.execSQL("ALTER TABLE ITEM_TABLE ADD COLUMN Item_Kind TEXT");
 
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN Print_Option INTEGER");
+
+
 
         }
     };
 
-    static final Migration MIGRATION_19_22 = new Migration(19, 22) {
+    static final Migration MIGRATION_19_23 = new Migration(19, 23) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
 
@@ -86,10 +91,13 @@ public abstract class RoomAllData extends RoomDatabase {
 
             database.execSQL("ALTER TABLE ITEM_TABLE ADD COLUMN Item_Kind TEXT");
 
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN Print_Option INTEGER");
+
+
         }
     };
 
-    static final Migration MIGRATION_20_22 = new Migration(20, 22) {
+    static final Migration MIGRATION_20_23 = new Migration(20, 23) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
 
@@ -99,10 +107,13 @@ public abstract class RoomAllData extends RoomDatabase {
 
             database.execSQL("ALTER TABLE ITEM_TABLE ADD COLUMN Item_Kind TEXT");
 
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN Print_Option INTEGER");
+
+
         }
     };
 
-    static final Migration MIGRATION_21_22 = new Migration(21, 22) {
+    static final Migration MIGRATION_21_23 = new Migration(21, 23) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
 
@@ -110,6 +121,20 @@ public abstract class RoomAllData extends RoomDatabase {
             database.execSQL("ALTER TABLE ITEM_TABLE ADD COLUMN Item_Category TEXT");
 
             database.execSQL("ALTER TABLE ITEM_TABLE ADD COLUMN Item_Kind TEXT");
+
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN Print_Option INTEGER");
+
+
+        }
+    };
+
+    static final Migration MIGRATION_22_23 = new Migration(22, 23) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN Print_Option INTEGER");
+
 
         }
     };
@@ -120,11 +145,12 @@ public abstract class RoomAllData extends RoomDatabase {
             database = Room.databaseBuilder(context.getApplicationContext(),
                     RoomAllData.class, dataBaseName)
                     .addMigrations(
-                            MIGRATION_17_22,
-                            MIGRATION_18_22,
-                            MIGRATION_19_22,
-                            MIGRATION_20_22,
-                            MIGRATION_21_22)
+                            MIGRATION_17_23,
+                            MIGRATION_18_23,
+                            MIGRATION_19_23,
+                            MIGRATION_20_23,
+                            MIGRATION_21_23,
+                            MIGRATION_22_23)
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .build();

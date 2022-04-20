@@ -593,7 +593,15 @@ public class MainActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                importAll();
+                if (allPosted()) {
+
+                    importAll();
+
+                } else {
+
+                    showSweetDialog(MainActivity.this, 3, null, getString(R.string.save_before_getting_new_data));
+
+                }
             }
         });
 
@@ -707,6 +715,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return saved;
+    }
+
+    public boolean allPosted() {
+
+        boolean allPosted = my_dataBase.replacementDao().getallReplacement().size() <= 0;
+
+        return allPosted;
+
     }
 
     private void opensearchDailog() {

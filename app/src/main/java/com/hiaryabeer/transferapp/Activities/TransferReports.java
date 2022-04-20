@@ -6,6 +6,7 @@ import static com.itextpdf.text.Element.ALIGN_CENTER;
 
 import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_CENTER;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,6 +26,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -42,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hiaryabeer.transferapp.Adapters.PdfDocumentAdapter;
 import com.hiaryabeer.transferapp.Adapters.TransReportsAdapter;
 import com.hiaryabeer.transferapp.BuildConfig;
 import com.hiaryabeer.transferapp.Models.GeneralMethod;
@@ -81,6 +87,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class TransferReports extends AppCompatActivity {
@@ -207,7 +215,6 @@ public class TransferReports extends AppCompatActivity {
         });
 
 
-
 /////////
 
 /********* Initialize ToStore Spinner ********/
@@ -313,7 +320,7 @@ public class TransferReports extends AppCompatActivity {
                         if (TransferReports.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                                 && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
                             try {
-                                createPdf();
+                                createPdf(1);
                             } catch (DocumentException | IOException e) {
                                 e.printStackTrace();
                             }
@@ -329,7 +336,7 @@ public class TransferReports extends AppCompatActivity {
                     } else { // permission is automatically granted on sdk<23 upon
                         // installation
                         try {
-                            createPdf();
+                            createPdf(1);
                         } catch (DocumentException | IOException e) {
                             e.printStackTrace();
                         }
@@ -393,7 +400,79 @@ public class TransferReports extends AppCompatActivity {
             });
 
         } else {
-            fabConvert.setVisibility(View.GONE);
+
+            fabConvert.setVisibility(View.VISIBLE);
+
+            fabConvert.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (spinnerTrans.getSelectedItemPosition() == 0) {
+
+                        new SweetAlertDialog(TransferReports.this, SweetAlertDialog.WARNING_TYPE)
+                                .setContentText(getString(R.string.specify_transfer))
+                                .setConfirmText(getString(R.string.ok))
+                                .show();
+
+                    } else {
+
+                        searchList.clear();
+
+                        for (int s = 0; s < allReports.size(); s++) {
+
+                            if (allReports.get(s).getTransNumber().equals(spinnerTrans.getSelectedItem().toString())) {
+                                searchList.add(allReports.get(s));
+                            }
+
+                        }
+
+                        int p = 0;
+
+                        if (myDB.settingDao().getallsetting().get(0).getPrint_option() != null) {
+
+                            p = myDB.settingDao().getallsetting().get(0).getPrint_option();
+
+                        }
+
+
+                        if (p == 0) {
+
+                            if (Build.VERSION.SDK_INT >= 23) {
+                                if (TransferReports.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                                        && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                                    try {
+                                        createPdf(0);
+                                    } catch (DocumentException | IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Log.v("", "Permission is granted");
+                                } else {
+                                    Log.v("", "Permission is revoked");
+                                    ActivityCompat.requestPermissions(
+                                            TransferReports.this,
+                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            1000);
+                                }
+                            } else { // permission is automatically granted on sdk<23
+
+                                try {
+                                    createPdf(0);
+                                } catch (DocumentException | IOException e) {
+                                    e.printStackTrace();
+                                }
+                                Log.v("", "Permission is granted");
+                            }
+                        } else {
+
+
+
+                        }
+
+                    }
+
+                }
+            });
+
         }
 
         backBtn.setOnClickListener(v -> {
@@ -401,6 +480,7 @@ public class TransferReports extends AppCompatActivity {
             finish();
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
+
         });
 
     }
@@ -408,26 +488,51 @@ public class TransferReports extends AppCompatActivity {
 
 /////////
 
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 1000) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                try {
+//                    createPdf(0);
+//                } catch (DocumentException | IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            } else {
+//                Toast.makeText(this, "Storage permission denied !", Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
+
 
     @Override
     public void onBackPressed() {
         finish();
-        Intent i=new Intent(this,MainActivity.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
 
     /***************** METHODS *****************/
 
 
-    public void createPdf() throws DocumentException, IOException {
-        File filePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString() + "/Transfers_" + etPickDate.getText().toString().substring(0, 2) + "_" + etPickDate.getText().toString().substring(3, 5) + ".pdf");
-//        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+    public void createPdf(int c) throws DocumentException, IOException { // 0 -- print / 1 -- show
+
+
+        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/Transfers_Report/";
+        File file = new File(directory_path);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        String targetPdf = directory_path + "Transfers_" + etPickDate.getText().toString().substring(0, 2) + "_" + etPickDate.getText().toString().substring(3, 5) + ".pdf";
+
+        File pdfFile = new File(targetPdf);
 
 
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
         com.itextpdf.text.pdf.PdfWriter writer = com.itextpdf.text.pdf.PdfWriter.getInstance(
-                document, new FileOutputStream(filePath));
+                document, new FileOutputStream(pdfFile));
         writer.setRunDirection(com.itextpdf.text.pdf.PdfWriter.RUN_DIRECTION_RTL);
 
         document.setPageSize(PageSize.A3);
@@ -441,7 +546,7 @@ public class TransferReports extends AppCompatActivity {
         }
 
         Font font0 = new Font(base, 14f, Font.NORMAL, new BaseColor(0, 0, 0));
-        Font font1 = new Font(base, 15f, Font.NORMAL, new BaseColor(255, 255, 255));
+        Font font1 = new Font(base, 15f, Font.BOLD, new BaseColor(0, 0, 0));
         Font font2 = new Font(base, 17f, Font.NORMAL, new BaseColor(128, 128, 128));
         Font font3 = new Font(base, 18f, Font.BOLD, new BaseColor(0, 0, 0));
         Font font4 = new Font(base, 14f, Font.NORMAL, BaseColor.LIGHT_GRAY);
@@ -507,31 +612,31 @@ public class TransferReports extends AppCompatActivity {
         if (!Locale.getDefault().getLanguage().equals("ar")) {
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.trsnferNo),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.fromStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.toStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Itemname),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.itemCode),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Qty),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.serials),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             document.add(pdfPTableHeader3);
 
@@ -542,12 +647,10 @@ public class TransferReports extends AppCompatActivity {
 
             List<String> serialCodes = new ArrayList<>();
 
-            if(searchList.size()!=0)
-            {
+            if (searchList.size() != 0) {
                 pdfList.clear();
                 pdfList.addAll(searchList);
-            }
-            else {
+            } else {
                 pdfList.clear();
                 pdfList.addAll(allReports);
             }
@@ -560,22 +663,22 @@ public class TransferReports extends AppCompatActivity {
 //                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getTransNumber()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getFromName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getToName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemname()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemcode()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getRecQty()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
 
                     if (serialCodes.size() > 0) {
@@ -583,13 +686,13 @@ public class TransferReports extends AppCompatActivity {
                             Log.e("size > 0", "size > 0");
                             pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(j)),
                                     ALIGN_CENTER, 1, font0, BaseColor.BLACK, true, true,
-                                    new BaseColor(214, 214, 214), false));
+                                    new BaseColor(255, 255, 255), false));
                         }
                     } else {
                         Log.e("size = 0", "size = 0");
                         pdfPTableBody.addCell(pdfCell("   ",
                                 ALIGN_CENTER, 1, font4, BaseColor.BLACK, true, true,
-                                new BaseColor(214, 214, 214), false));
+                                new BaseColor(255, 255, 255), false));
                     }
 
 
@@ -637,31 +740,31 @@ public class TransferReports extends AppCompatActivity {
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.serials),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Qty),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.itemCode),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.Itemname),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.toStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.fromStore),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.trsnferNo),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
-                    new BaseColor(240, 123, 82), false));
+                    new BaseColor(255, 255, 255), false));
 
             document.add(pdfPTableHeader3);
 
@@ -681,44 +784,44 @@ public class TransferReports extends AppCompatActivity {
                         Log.e("size > 0", "size > 0");
                         pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(0)),
                                 ALIGN_CENTER, 1, font0, BaseColor.BLACK, true, true,
-                                new BaseColor(214, 214, 214), false));
+                                new BaseColor(255, 255, 255), false));
                     } else {
                         Log.e("size = 0", "size = 0");
                         pdfPTableBody.addCell(pdfCell("   ",
                                 ALIGN_CENTER, 1, font4, BaseColor.BLACK, true, true,
-                                new BaseColor(214, 214, 214), false));
+                                new BaseColor(255, 255, 255), false));
                     }
 
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getRecQty()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemcode()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getItemname()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getToName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getFromName()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
 //                table.addCell(new Cell(serialCodes.size(), 1).setBackgroundColor(new DeviceRgb(214, 214, 214)).add(new Paragraph(String.valueOf(reportsList.get(i).getReplacementDate()))));
                     pdfPTableBody.addCell(pdfCell(String.valueOf(allReports.get(i).getTransNumber()),
                             ALIGN_CENTER, serialCodes.size(), font0, BaseColor.BLACK, true, true,
-                            new BaseColor(214, 214, 214), false));
+                            new BaseColor(255, 255, 255), false));
 
                     if (serialCodes.size() > 0) {
                         for (int j = 1; j < serialCodes.size(); j++) {
                             pdfPTableBody.addCell(pdfCell(String.valueOf(serialCodes.get(j)),
                                     ALIGN_CENTER, 1, font0, BaseColor.BLACK, true, true,
-                                    new BaseColor(214, 214, 214), false));
+                                    new BaseColor(255, 255, 255), false));
                         }
                     }
 
@@ -780,24 +883,41 @@ public class TransferReports extends AppCompatActivity {
         }
 
         document.close();
-        Log.e("PDF Created", filePath + "");
+        Log.e("PDF Created", pdfFile + "");
         Toast.makeText(this, "PDF Created", Toast.LENGTH_LONG).show();
 
-        try {
-            Log.e("startViewPdf", "PDF");
-            Uri path = FileProvider.getUriForFile(TransferReports.this, getApplicationContext().getPackageName() + ".provider", filePath);
-            Intent objIntent = new Intent(Intent.ACTION_VIEW);
-            objIntent.setDataAndType(path, "application/pdf");
-            objIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            objIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (c == 1) { /// View PDF
+
             try {
-                TransferReports.this.startActivity(objIntent);
+                Log.e("startViewPdf", "PDF");
+                Uri path = FileProvider.getUriForFile(TransferReports.this, getApplicationContext().getPackageName() + ".provider", pdfFile);
+                Intent objIntent = new Intent(Intent.ACTION_VIEW);
+                objIntent.setDataAndType(path, "application/pdf");
+                objIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                objIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                try {
+                    TransferReports.this.startActivity(objIntent);
+                } catch (Exception e) {
+                    Toast.makeText(TransferReports.this, "Pdf program needed!", Toast.LENGTH_SHORT).show();
+                }
             } catch (Exception e) {
-                Toast.makeText(TransferReports.this, "Pdf program needed!", Toast.LENGTH_SHORT).show();
+                Log.e("ExceptionPdf", "" + e.getMessage());
             }
-        } catch (Exception e) {
-            Log.e("ExceptionPdf", "" + e.getMessage());
+
+        } else { /// Print PDF
+
+            PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+            try {
+                PrintDocumentAdapter printAdapter = new PdfDocumentAdapter(TransferReports.this, String.valueOf(pdfFile));
+                Log.e("path2==", String.valueOf(pdfFile));
+                printManager.print("Document", printAdapter, new PrintAttributes.Builder().build());
+                Log.e("path3==", String.valueOf(pdfFile));
+            } catch (Exception e) {
+                Log.e("Exception==", e.getMessage());
+            }
+
         }
+
     }
 
     public PdfPCell pdfCell(String text, int align, int rowSpan, Font font, BaseColor borderColor,

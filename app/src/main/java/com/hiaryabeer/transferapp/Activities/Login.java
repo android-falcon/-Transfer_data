@@ -25,6 +25,7 @@ import android.widget.EditText;
 
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -292,15 +293,21 @@ public class Login extends AppCompatActivity {
         final CheckBox checkboxQtyCheck = dialog.findViewById(R.id.checkboxQtyCheck);
         final CheckBox rawahnehAddQty = dialog.findViewById(R.id.rawahnehAddQty);
 
+        final RadioGroup printRG = dialog.findViewById(R.id.printRG);
+        final LinearLayout printLinear = dialog.findViewById(R.id.printLinear);
+
         if (serialsActive == 1) {
             checkboxQtyCheck.setChecked(false);
             checkboxQtyCheck.setVisibility(View.GONE);
             rawahnehAddQty.setChecked(true);
             rawahnehAddQty.setVisibility(View.VISIBLE);
+            printLinear.setVisibility(View.GONE);
+
         } else {
             checkboxQtyCheck.setVisibility(View.VISIBLE);
             rawahnehAddQty.setVisibility(View.GONE);
             rawahnehAddQty.setChecked(false);
+            printLinear.setVisibility(View.VISIBLE);
         }
 
 
@@ -395,6 +402,16 @@ public class Login extends AppCompatActivity {
                 }
             }
 
+            if (appSettings.get(0).getPrint_option() != null) {
+
+                if (appSettings.get(0).getPrint_option() == 0) {
+                    printRG.check(R.id.wifi);
+                } else {
+                    printRG.check(R.id.bluetooth);
+                }
+
+            }
+
         } else {
             //  if(ip.getText().toString().equals(""))
              ip.setEnabled(true);
@@ -423,29 +440,21 @@ public class Login extends AppCompatActivity {
 
                 String rawahneh_add_item = rawahnehAddQty.isChecked() ? "1" : "0";
 
-
-//                Log.e("port",""+port);
-                //usernum.setText(SET_userNO);
-
-//                if (qtyUP.isChecked())
-//                    SET_qtyup = "1";
-//                else
-//                    SET_qtyup = "0";
+                int print = printRG.getCheckedRadioButtonId() == R.id.wifi ? 0 : 1;
 
                 setting = new appSettings();
                 setting.setIP(SET_IP);
                 setting.setCompanyNum(SET_conNO);
-//                setting.setUpdateQTY(SET_qtyup);
                 setting.setPort(port);
-                //  setting.setYears(SET_years);
-                //  setting.setUserNumber(usernum.getText().toString().trim());
+
                 setting.setDeviceId(deviceId.getText().toString().trim());
-//                Log.e("setting", "==" + setting.getDeviceId());
 
                 ////B
                 setting.setCheckQty(checkQty);
 
                 setting.setRawahneh_add_item(rawahneh_add_item);
+
+                setting.setPrint_option(print);
 
                 if (deviceId.getText().toString().trim().length() != 0) {
                     if (ip.getText().toString().trim().length() != 0) {
