@@ -240,5 +240,8 @@ This barcode is not available in this PO, do you want to add it? </string>
 
     <string name="specify_transfer">Please specify the transfer number.</string>
     <string name="save_before_getting_new_data">Please save before getting new data !</string>
+    
+    <string name="cancel_dialog_msg">This will discard ALL replacements in the current transfer. Do you want to continue?</string>
+
 
 </resources>

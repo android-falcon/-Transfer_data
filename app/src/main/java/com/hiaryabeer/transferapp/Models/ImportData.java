@@ -131,7 +131,7 @@ public class ImportData {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_LONG).show();
         }
 
-        headerDll = "/Falcons/VAN.Dll/";
+//        headerDll = "/Falcons/VAN.Dll/";
     }
 
     public void getAllItems() {

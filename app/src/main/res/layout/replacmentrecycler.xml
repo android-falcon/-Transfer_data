@@ -45,7 +45,7 @@
             android:gravity="center"
             android:text="@string/Itemname"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:layout_marginStart="10dp"
             android:layout_marginVertical="5dp"
 
@@ -59,7 +59,7 @@
             android:gravity="center"
             android:text="zone"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:visibility="gone" />
 
         <TextView
@@ -70,7 +70,7 @@
             android:gravity="center"
             android:text="@string/itemCode"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/tblqty"
@@ -86,7 +86,7 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textFontWeight="10"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/itemqty"
@@ -96,7 +96,7 @@
             android:gravity="start"
             android:text="qty"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:visibility="gone" />
 
         <TextView
@@ -106,7 +106,7 @@
             android:layout_marginHorizontal="2dp"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvEdit"

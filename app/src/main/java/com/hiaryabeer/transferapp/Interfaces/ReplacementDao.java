@@ -93,4 +93,14 @@ public interface ReplacementDao {
 
     @Query("SELECT RECQTY FROM REPLACEMENT_TABLE WHERE ISPOSTED = '0' AND ITEMCODE = :itemCode AND TransNumber = :transNo")
     String getQtyForItem(String itemCode, String transNo);
+
+    @Query("UPDATE REPLACEMENT_TABLE SET TOSTORE = :toStoreNo, ToName = :toStoreName WHERE ISPOSTED='0' AND TransNumber= :tran" )
+    int updateToStore(String toStoreNo, String toStoreName, String tran);
+
+    @Query("UPDATE REPLACEMENT_TABLE SET FROMSTORE = :fromNo, FromName = :fromName WHERE ISPOSTED='0' AND TransNumber= :tran" )
+    int updateFromStore(String fromNo, String fromName, String tran);
+
+    @Query("DELETE FROM REPLACEMENT_TABLE WHERE TransNumber = :trans")
+    void deleteAllinTransfer(String trans);
+
 }

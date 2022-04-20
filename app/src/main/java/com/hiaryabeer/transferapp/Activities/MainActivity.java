@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private int transNo;
     String codeScanned;
     List<SerialsModel> allItemSerials = new ArrayList<>();
-    Button saveBtn;
+    private Button saveBtn, cancelBtn;
     private ImageButton btnRefresh;
 
 
@@ -590,18 +592,59 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setMessage(R.string.cancel_dialog_msg);
+
+                builder.setIcon(android.R.drawable.ic_dialog_alert);
+
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (replacementlist.size() > 0) {
+
+                            my_dataBase.replacementDao().deleteAllinTransfer(replacementlist.get(0).getTransNumber());
+
+                            if (Login.serialsActive == 1)
+                                my_dataBase.serialTransfersDao().deleteAllinTransfer(replacementlist.get(0).getTransNumber());
+
+                        }
+
+                        replacementlist.clear();
+
+                        fillAdapter();
+
+                        itemcode.setText("");
+                        fromSpinner.setEnabled(true);
+                        toSpinner.setEnabled(true);
+
+                        dialog.cancel();
+
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
+            }
+        });
+
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (allPosted()) {
-
-                    importAll();
-
-                } else {
-
-                    showSweetDialog(MainActivity.this, 3, null, getString(R.string.save_before_getting_new_data));
-
-                }
+                importAll();
             }
         });
 
@@ -717,14 +760,6 @@ public class MainActivity extends AppCompatActivity {
         return saved;
     }
 
-    public boolean allPosted() {
-
-        boolean allPosted = my_dataBase.replacementDao().getallReplacement().size() <= 0;
-
-        return allPosted;
-
-    }
-
     private void opensearchDailog() {
         AllItemstest.clear();
         dialog1 = new Dialog(MainActivity.this);
@@ -742,27 +777,21 @@ public class MainActivity extends AppCompatActivity {
         final EditText search = dialog1.findViewById(R.id.search);
         final Spinner categorySpinner = dialog1.findViewById(R.id.categorySpinner);
         final Spinner kindSpinner = dialog1.findViewById(R.id.kindSpinner);
-        final ImageButton clear_text = dialog1.findViewById(R.id.clear_text);
-
-        if (search.getText().toString().equals(""))
-            clear_text.setVisibility(View.GONE);
-        else
-            clear_text.setVisibility(View.VISIBLE);
 
         List<String> categories = new ArrayList<>();
         List<String> kinds = new ArrayList<>();
 
-        categories.add(0, getString(R.string.all_categories));
-        kinds.add(0, getString(R.string.all_kinds));
+        categories.add(0, getString(R.string.category));
+        kinds.add(0, getString(R.string.kind));
 
         for (int i = 0; i < AllItemDBlist.size(); i++) {
 
             if (AllItemDBlist.get(i).getCategory() != null && AllItemDBlist.get(i).getKind() != null) {
 
-                if (!categories.contains(AllItemDBlist.get(i).getCategory()) && !AllItemDBlist.get(i).getCategory().trim().equals(""))
+                if (!categories.contains(AllItemDBlist.get(i).getCategory()) && !AllItemDBlist.get(i).getCategory().equals(""))
                     categories.add(AllItemDBlist.get(i).getCategory());
 
-                if (!kinds.contains(AllItemDBlist.get(i).getKind()) && !AllItemDBlist.get(i).getKind().trim().equals(""))
+                if (!kinds.contains(AllItemDBlist.get(i).getKind()) && !AllItemDBlist.get(i).getKind().equals(""))
                     kinds.add(AllItemDBlist.get(i).getKind());
 
             }
@@ -780,8 +809,28 @@ public class MainActivity extends AppCompatActivity {
         Adapterr adapter1 = new Adapterr(this, AllItemDBlist);
         listView.setAdapter(adapter1);
 
-        clear_text.setOnClickListener(v -> search.getText().clear());
+        search.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_START = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_END = 2;
+                final int DRAWABLE_BOTTOM = 3;
 
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int end = v.getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL ? search.getLeft() : search.getRight();
+
+                    if (event.getRawX() >= (end - search.getCompoundDrawables()[DRAWABLE_END].getBounds().width())) {
+
+                        search.setText("");
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -796,11 +845,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
-                if (editable.toString().equals(""))
-                    clear_text.setVisibility(View.GONE);
-                else
-                    clear_text.setVisibility(View.VISIBLE);
 
                 if (categorySpinner.getSelectedItemPosition() == 0 && kindSpinner.getSelectedItemPosition() == 0 && editable.toString().trim().equals("")) {
 
@@ -824,30 +868,6 @@ public class MainActivity extends AppCompatActivity {
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if (categorySpinner.getSelectedItemPosition() != 0) {
-
-                    String selectedKind = kindSpinner.getSelectedItem().toString();
-                    List<String> kinds2 = new ArrayList<>();
-                    kinds2.add(getString(R.string.all_kinds));
-                    kinds2.addAll(my_dataBase.itemDao().getKinds(categorySpinner.getSelectedItem().toString()));
-
-                    ArrayAdapter<String> kindAdapter2 = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, kinds2);
-                    kindSpinner.setAdapter(kindAdapter2);
-                    kindSpinner.setSelection(0);
-
-                } else {
-
-                    String selectedKind = kindSpinner.getSelectedItem().toString();
-                    List<String> kinds2 = new ArrayList<>();
-                    kinds2.add(getString(R.string.all_kinds));
-                    kinds2.addAll(my_dataBase.itemDao().getAllKinds());
-
-                    ArrayAdapter<String> kindAdapter2 = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_dropdown_item_1line, kinds2);
-                    kindSpinner.setAdapter(kindAdapter2);
-                    kindSpinner.setSelection(0);
-
-                }
 
                 if (categorySpinner.getSelectedItemPosition() == 0 && kindSpinner.getSelectedItemPosition() == 0 && search.getText().toString().trim().equals("")) {
 
@@ -1308,6 +1328,7 @@ public class MainActivity extends AppCompatActivity {
         generalMethod = new GeneralMethod(MainActivity.this);
 
         saveBtn = findViewById(R.id.saveBtn);
+        cancelBtn = findViewById(R.id.cancelBtn);
 
         btnRefresh = findViewById(R.id.btnRefresh);
 
@@ -1337,8 +1358,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("herea", "aaaaa");
                         my_dataBase.itemDao().dELETEAll();
                         my_dataBase.itemDao().insertAll(AllImportItemlist);
-                        AllItemDBlist.clear();
-                        AllItemDBlist.addAll(AllImportItemlist);
                         Toast.makeText(MainActivity.this, getString(R.string.getAllData), Toast.LENGTH_SHORT).show();
                         ImportData.pdRepla.dismissWithAnimation();
 

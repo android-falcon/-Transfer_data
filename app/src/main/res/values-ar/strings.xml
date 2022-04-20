@@ -55,7 +55,7 @@
     <string name="boxnovalidate">الصندوق غير موجود بهذه الطلبية</string>
     <string name="boxconfirm">
 هذا الصندوق غير موجود بهذه الطلبية، هل تريد أضافته </string>
-    <string name="samestore">غير مسموح اختيار نفس المخزن</string>
+    <string name="samestore">غير مسموح اختيار نفس المستودع</string>
     <string name="barcodeexists">رقم الماده غير صحيح</string>
     <string name="confirm_title">تأكيد</string>
     <string name="messageExit">هل تريد الخروج؟</string>
@@ -233,6 +233,8 @@
 
     <string name="specify_transfer">يرجى تحديد رقم السند.</string>
     <string name="save_before_getting_new_data">يرجى الحفظ قبل الحصول على بيانات جديدة !</string>
+
+    <string name="cancel_dialog_msg">سيؤدي هذا الى التراجع عن جميع التحويلات في السند الحالي. هل تريد الاستمرار؟</string>
 
 
 </resources>

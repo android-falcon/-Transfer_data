@@ -462,9 +462,10 @@ public class TransferReports extends AppCompatActivity {
                                 }
                                 Log.v("", "Permission is granted");
                             }
+
                         } else {
 
-
+                            
 
                         }
 

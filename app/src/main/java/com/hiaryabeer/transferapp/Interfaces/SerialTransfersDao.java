@@ -56,4 +56,14 @@ public interface SerialTransfersDao {
 
     @Query("SELECT * FROM ITEM_SERIAL_TRANSFERS WHERE Added_To_Rep = '1' AND Posted = '0'")
     List<ItemSerialTransfer> getUnPosted();
+
+    @Query("UPDATE ITEM_SERIAL_TRANSFERS SET To_Store = :toStoreNo WHERE Posted = '0' AND Voucher_No = :tran" )
+    int updateToStore(String toStoreNo, String tran);
+
+    @Query("UPDATE ITEM_SERIAL_TRANSFERS SET From_Store = :fromNo WHERE Posted = '0' AND Voucher_No = :tran" )
+    int updateFromStore(String fromNo, String tran);
+
+    @Query("DELETE FROM ITEM_SERIAL_TRANSFERS WHERE Voucher_No = :trans")
+    void deleteAllinTransfer(String trans);
+
 }
