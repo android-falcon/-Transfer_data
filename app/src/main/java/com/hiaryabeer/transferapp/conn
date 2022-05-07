@@ -1,0 +1,94 @@
+ class connTask extends AsyncTask<BluetoothDevice, Void, Integer> {
+        private final ProgressDialog dialog = new ProgressDialog(bMITP.this);
+
+        connTask() {
+        }
+
+        protected void onPreExecute() {
+            String s = "";
+            this.dialog.setTitle(" Try Connect ");
+            this.dialog.setMessage("Please Wait ....");
+            this.dialog.show();
+            super.onPreExecute();
+        }
+
+        protected Integer doInBackground(BluetoothDevice... params) {
+            Integer retVal = null;
+            String s = "";
+            try {
+                bMITP.this.bluetoothPort.connect(params[0]);
+                bMITP.this.lastConnAddr = params[0].getAddress();
+                retVal = 0;
+            } catch (IOException var4) {
+                Log.e("BluetoothConnectMenu", var4.getMessage());
+                retVal = -1;
+            }
+
+            return retVal;
+        }
+
+        @SuppressLint("WrongThread")
+        protected void onPostExecute(Integer result) {
+            if (result == 0) {
+                RequestHandler rh = new RequestHandler();
+                bMITP.this.hThread = new Thread(rh);
+                bMITP.this.hThread.start();
+                bMITP.this.connectButton.setText("Connect");
+                bMITP.this.connectButton.setEnabled(false);
+                bMITP.this.list.setEnabled(false);
+                bMITP.this.btAddrBox.setEnabled(false);
+                bMITP.this.searchButton.setEnabled(false);
+                if (this.dialog.isShowing()) {
+                    this.dialog.dismiss();
+                }
+
+                int count = Integer.parseInt(getData);
+                ESCPSample2 sample = new ESCPSample2(bMITP.this);
+
+                int settings = 0;
+                try {
+//                     settings = obj.getAllSettings().get(0).getNumOfCopy();
+                } catch (Exception e) {
+                    Log.e("Exc", "print1***" + e.getMessage());
+                    settings = 0;
+                }
+                try {
+                    int printShape = 0;
+
+                    switch (count) {
+
+                        case 0:
+
+                            sample.printMultilingualFontEsc3(Print_List);
+
+                            break;
+
+
+                    }
+
+
+//                    sample.printMultilingualFont();
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("Exc", "print1***" + e.getMessage());
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e("Exc", "print222222***" + e.getMessage());
+                }
+                finish();
+
+
+                if (bMITP.this.chkDisconnect.isChecked()) {
+                    bMITP.this.registerReceiver(bMITP.this.disconnectReceiver, new IntentFilter("android.bluetooth.device.action.ACL_CONNECTED"));
+                    bMITP.this.registerReceiver(bMITP.this.disconnectReceiver, new IntentFilter("android.bluetooth.device.action.ACL_DISCONNECTED"));
+                }
+            } else {
+                if (this.dialog.isShowing()) {
+                    this.dialog.dismiss();
+                }
+
+                AlertView.showAlert("Disconnect Bluetoothُ", "Try Again ,,,.", bMITP.this.context);
+            }
+
+            super.onPostExecute(result);
+        }
+    }
