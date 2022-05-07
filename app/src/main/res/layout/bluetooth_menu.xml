@@ -58,7 +58,7 @@
             android:layout_height="30dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/search_btn"
+            android:background="@drawable/ic_baseline_search_24"
             android:textColor="@color/white" />
     </LinearLayout>
     <!--<LinearLayout-->
@@ -88,5 +88,5 @@
         android:visibility="gone"
         android:textSize="16sp"
         android:textColor="@color/colorblue_dark"
-        android:text="@string/Printing"/>
+        android:text="Printing .."/>
 </LinearLayout>

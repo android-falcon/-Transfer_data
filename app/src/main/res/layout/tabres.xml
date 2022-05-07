@@ -32,25 +32,25 @@
             android:layout_marginBottom="5dp">
 
             <TextView
-                android:id="@+id/total"
+                android:id="@+id/qty"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="المجموع"
+                android:text="الكمية"
                 android:textColor="@color/add_button"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
             <TextView
-                android:id="@+id/item_discount"
+                android:id="@+id/code"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:visibility="visible"
-                android:text="  الخصم "
+                android:text="الرقم"
                 android:textColor="@color/add_button"
                 android:textDirection="rtl"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/item_"
@@ -64,25 +64,14 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/price"
+                android:id="@+id/name"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="سعر الوحده"
+                android:text="اسم المادة"
                 android:textColor="@color/add_button"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-
-            <TextView
-                android:id="@+id/qty"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="العدد"
-                android:textColor="@color/add_button"
-                android:textSize="17sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView

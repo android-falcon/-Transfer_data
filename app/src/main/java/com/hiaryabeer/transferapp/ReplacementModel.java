@@ -1,5 +1,7 @@
 package com.hiaryabeer.transferapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.room.ColumnInfo;
@@ -10,10 +12,40 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "REPLACEMENT_TABLE")
-public class ReplacementModel {
+public class ReplacementModel implements Parcelable {
 
     @ColumnInfo(name = "UserNO")
     String UserNO;
+
+    protected ReplacementModel(Parcel in) {
+        UserNO = in.readString();
+        From = in.readString();
+        To = in.readString();
+        Zone = in.readString();
+        Itemcode = in.readString();
+        IsPosted = in.readString();
+        ReplacementDate = in.readString();
+        itemname = in.readString();
+        transNumber = in.readString();
+        availableQty = in.readString();
+        deviceId = in.readString();
+        recQty = in.readString();
+        SERIALZONE = in.readInt();
+        ToName = in.readString();
+        FromName = in.readString();
+    }
+
+    public static final Creator<ReplacementModel> CREATOR = new Creator<ReplacementModel>() {
+        @Override
+        public ReplacementModel createFromParcel(Parcel in) {
+            return new ReplacementModel(in);
+        }
+
+        @Override
+        public ReplacementModel[] newArray(int size) {
+            return new ReplacementModel[size];
+        }
+    };
 
     public String getUserNO() {
         return UserNO;
@@ -202,6 +234,34 @@ public class ReplacementModel {
             Log.e("Tag", "JSONException");
         }
         return obj;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(UserNO);
+        dest.writeString(From);
+        dest.writeString(To);
+        dest.writeString(Zone);
+        dest.writeString(Itemcode);
+        dest.writeString(IsPosted);
+
+        dest.writeString(ReplacementDate);
+        dest.writeString(itemname);
+        dest.writeString(transNumber);
+        dest.writeString(availableQty);
+        dest.writeString(deviceId);
+        dest.writeString(recQty);
+
+        dest.writeInt(SERIALZONE);
+        dest.writeString(ToName);
+        dest.writeString(FromName);
+
     }
 }
 

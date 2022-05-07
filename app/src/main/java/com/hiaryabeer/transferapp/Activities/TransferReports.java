@@ -85,8 +85,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -465,7 +467,10 @@ public class TransferReports extends AppCompatActivity {
 
                         } else {
 
-                            
+                            Intent intent = new Intent(TransferReports.this, bMITP.class);
+                            intent.putExtra("printKey", "0");
+                            intent.putParcelableArrayListExtra("Print_List", searchList);
+                            startActivity(intent);
 
                         }
 
@@ -485,6 +490,7 @@ public class TransferReports extends AppCompatActivity {
         });
 
     }
+
 
 
 /////////

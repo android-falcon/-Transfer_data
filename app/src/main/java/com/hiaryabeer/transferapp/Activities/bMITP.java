@@ -1,9 +1,9 @@
 package com.hiaryabeer.transferapp.Activities;
 
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,23 +12,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hiaryabeer.transferapp.R;
-import com.sewoo.port.android.BluetoothPort;
+
+import com.hiaryabeer.transferapp.ReplacementModel;
 import com.sewoo.request.android.RequestHandler;
 
 import java.io.File;
@@ -37,12 +47,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+
 
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by Fernflower decompiler)
@@ -63,27 +75,24 @@ public class bMITP extends Activity {
     private Button connectButton;
     private Button searchButton;
     private ListView list;
-
+    private  com.hiaryabeer.transferapp.Activities.BluetoothPort bluetoothPort;
     private CheckBox chkDisconnect;
 
-    private static String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "//temp";
+    private static  String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "//temp";
     private static final String fileName;
     private String lastConnAddr;
-    static String idname;
-    //    DatabaseHandler obj;
+    static  String idname;
+
     String getData;
-    //   Voucher printVoucher;
-//    List<Item>itemPrint;
-//    List<Item> allStudents;
+
     LinearLayout mainLinearPrinting;
     TextView text_hideDialog;
-    double itemDiscount = 0;
+    double itemDiscount=0;
+    ArrayList<ReplacementModel> Print_List = new ArrayList<>();
 
     static {
         fileName = dir + "//BTPrinter";
     }
-
-    private BluetoothPort bluetoothPort;
 
     public bMITP() {
 
@@ -133,8 +142,9 @@ public class bMITP extends Activity {
             FileWriter fWriter = new FileWriter(fileName);// crash
             if (this.lastConnAddr != null) {
                 fWriter.write(this.lastConnAddr);
-            } else {
-                Log.e("lastConnAddr", "" + lastConnAddr);
+            }
+            else {
+                Log.e("lastConnAddr",""+lastConnAddr);
                 fWriter.close();
             }
 
@@ -143,18 +153,21 @@ public class bMITP extends Activity {
             Log.e("BluetoothConnectMenu1", var3.getMessage(), var3);
 
 
-            if (getData.equals("6")) {
-//                clearData.setText("1");
-                finish();
-
-//                Intent i=new Intent(context,Stock_Activity.class);
-//                startActivity(i);
-            }
+//            if(getData.equals("6"))
+//            { clearData.setText("1");
+//                finish();
+//
+////                Intent i=new Intent(context,Stock_Activity.class);
+////                startActivity(i);
+//            }
 
 
         } catch (IOException var4) {
             Log.e("BluetoothConnectMenu2", var4.getMessage(), var4);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+
+        {
             Log.e("BluetoothConnectMenu3", e.getMessage());
         }
 
@@ -167,13 +180,13 @@ public class bMITP extends Activity {
     private void addPairedDevices() {
         Iterator iter = this.mBluetoothAdapter.getBondedDevices().iterator();
 
-        while (iter.hasNext()) {
-            BluetoothDevice pairedDevice = (BluetoothDevice) iter.next();
+        while(iter.hasNext()) {
+            BluetoothDevice pairedDevice = (BluetoothDevice)iter.next();
 //            if (this.bluetoothPort.isValidAddress(pairedDevice.getAddress())) {
             this.remoteDevices.add(pairedDevice);
             this.adapter.add(pairedDevice.getName() + "\n[" + pairedDevice.getAddress() + "] [Paired]");
         }
-        Log.e("remoteDevices", "" + remoteDevices.size());
+        Log.e("remoteDevices",""+remoteDevices.size());
 //        }
 
     }
@@ -181,27 +194,28 @@ public class bMITP extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.bluetooth_menu);
-        this.mainLinearPrinting = (LinearLayout) this.findViewById(R.id.mainLinearPrinting);
+        this.mainLinearPrinting= (LinearLayout) this.findViewById(R.id.mainLinearPrinting);
         text_hideDialog = (TextView) this.findViewById(R.id.text_hideDialog);
-        this.btAddrBox = (EditText) this.findViewById(R.id.EditTextAddressBT);
-        this.connectButton = (Button) this.findViewById(R.id.ButtonConnectBT);
+        this.btAddrBox = (EditText)this.findViewById(R.id.EditTextAddressBT);
+        this.connectButton = (Button)this.findViewById(R.id.ButtonConnectBT);
         bMITP.this.connectButton.setEnabled(true);
-        this.searchButton = (Button) this.findViewById(R.id.ButtonSearchBT);
-        this.list = (ListView) this.findViewById(R.id.BtAddrListView);
-        this.chkDisconnect = (CheckBox) this.findViewById(R.id.check_disconnect);
+        this.searchButton = (Button)this.findViewById(R.id.ButtonSearchBT);
+        this.list = (ListView)this.findViewById(R.id.BtAddrListView);
+        this.chkDisconnect = (CheckBox)this.findViewById(R.id.check_disconnect);
         this.chkDisconnect.setChecked(true);
         this.context = this;
-//        obj=new DatabaseHandler(bMITP.this);
+
 
 
 //
         getData = getIntent().getStringExtra("printKey");
+        Print_List = getIntent().getParcelableArrayListExtra("Print_List");
 //        Bundle bundle = getIntent().getExtras();
 //         allStudents = (List<Item>) bundle.get("ExtraData");
 //
 //         Log.e("all",allStudents.get(0).getBarcode());
 
-        Log.e("printKey", "" + getData);
+        Log.e("printKey",""+getData);
         this.loadSettingFile();
         this.bluetoothSetup();
         this.connectButton.setOnClickListener(new View.OnClickListener() {
@@ -236,42 +250,80 @@ public class bMITP extends Activity {
 
             }
         });
-        this.adapter = new ArrayAdapter(bMITP.this, R.layout.cci);
+        this.adapter = new ArrayAdapter(bMITP.this , R.layout.cci );
 
         this.list.setAdapter(this.adapter);
         this.addPairedDevices();
         BluetoothDevice btDev = null;
 
-//        if(obj.getAllSettings().size()!=0)
-//        {
 
-        mainLinearPrinting.setVisibility(View.VISIBLE);
-        text_hideDialog.setVisibility(View.GONE);
-        this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+                mainLinearPrinting.setVisibility(View.VISIBLE);
+                text_hideDialog.setVisibility(View.GONE);
+                this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 //                BluetoothDevice btDev = (BluetoothDevice) bMITP.this.remoteDevices.elementAt(0);
-                BluetoothDevice btDev = (BluetoothDevice) bMITP.this.remoteDevices.elementAt(arg2);
+                        BluetoothDevice btDev = (BluetoothDevice) bMITP.this.remoteDevices.elementAt(arg2);
 
-                try {
-                    if (bMITP.this.mBluetoothAdapter.isDiscovering()) {
-                        bMITP.this.mBluetoothAdapter.cancelDiscovery();
+                        try {
+                            if (bMITP.this.mBluetoothAdapter.isDiscovering()) {
+                                bMITP.this.mBluetoothAdapter.cancelDiscovery();
+                            }
+
+                            bMITP.this.btAddrBox.setText(btDev.getAddress().toString());
+                            Log.e("onItemClick_IOException",""+btDev.getAddress().toString());
+                            bMITP.this.btConn(btDev);
+                        } catch (IOException var8) {
+                            Log.e("onItemClick_IOException",""+var8);
+                            AlertView.showAlert(var8.getMessage(), bMITP.this.context);
+                        }
                     }
+                });
+//            }
+//            else {
+//                mainLinearPrinting.setVisibility(View.GONE);
+//                text_hideDialog.setVisibility(View.VISIBLE);
+//                if(remoteDevices.size()!=0)
+//                {
+//
+//                    try {
+//                        btDev = (BluetoothDevice) bMITP.this.remoteDevices.elementAt(0);
+//                    }
+//                    catch (Exception e)
+//                    {       }
+////
+//                    try {
+//                        if (bMITP.this.mBluetoothAdapter.isDiscovering()) {
+//                            bMITP.this.mBluetoothAdapter.cancelDiscovery();
+//                        }
+//
+//                        bMITP.this.btAddrBox.setText(btDev.getAddress());
+//                        bMITP.this.btConn(btDev);
+//                    } catch (IOException var8) {
+//                        AlertView.showAlert(var8.getMessage(), bMITP.this.context);
+//                    }
+//
+//                }
+//                else {
+//                    new SweetAlertDialog(bMITP.this, SweetAlertDialog.ERROR_TYPE)
+//                            .setTitleText(getResources().getString(R.string.warning_message))
+//                            .setContentText(getResources().getString(R.string.checkBlutoothPrinterPaired))
+//                            .setConfirmButton(getResources().getString(R.string.app_ok), new SweetAlertDialog.OnSweetClickListener() {
+//                                @Override
+//                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+//                                    finish();
+//                                }
+//                            })
+//                            .show();
+//
+//                }
 
-                    bMITP.this.btAddrBox.setText(btDev.getAddress());
-                    bMITP.this.btConn(btDev);
-                } catch (IOException var8) {
-                    AlertView.showAlert(var8.getMessage(), bMITP.this.context);
-                }
-            }
-        });
 
-
-//        }
 
 
         this.discoveryResult = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-                BluetoothDevice remoteDevice = (BluetoothDevice) intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
+                BluetoothDevice remoteDevice = (BluetoothDevice)intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
                 if (remoteDevice != null) {
                     String key;
                     if (remoteDevice.getBondState() != 12) {
@@ -280,11 +332,16 @@ public class bMITP extends Activity {
                         key = remoteDevice.getName() + "\n[" + remoteDevice.getAddress() + "] [Paired]";
                     }
 
+                            if (bMITP.this.bluetoothPort.isValidAddress(remoteDevice.getAddress())) {
+                                bMITP.this.remoteDevices.add(remoteDevice);
+                                bMITP.this.adapter.add(key);
+                            }
 
-                    if (bMITP.this.bluetoothPort.isValidAddress(remoteDevice.getAddress())) {
-                        bMITP.this.remoteDevices.add(remoteDevice);
-                        bMITP.this.adapter.add(key);
-                    }
+                        else {
+                            bMITP.this.remoteDevices.add(remoteDevice);
+                            bMITP.this.adapter.add(key);
+                        }
+
 
 
 //                    if (bMITP.this.bluetoothPort.isValidAddress(remoteDevice.getAddress())) {
@@ -319,7 +376,7 @@ public class bMITP extends Activity {
             this.disconnectReceiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
                     String action = intent.getAction();
-                    BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
+                    BluetoothDevice device = (BluetoothDevice)intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
                     if (!"android.bluetooth.device.action.ACL_CONNECTED".equals(action) && "android.bluetooth.device.action.ACL_DISCONNECTED".equals(action)) {
                         bMITP.this.DialogReconnectionOption();
                     }
@@ -384,8 +441,8 @@ public class bMITP extends Activity {
     }
 
     private void btConn(BluetoothDevice btDev) throws IOException {
-        if (remoteDevices.size() != 0)
-            (new connTask()).execute(new BluetoothDevice[]{btDev});
+        if(remoteDevices.size()!=0)
+            (new bMITP.connTask()).execute(new BluetoothDevice[]{btDev});
     }
 
     private void btDisconn() {
@@ -410,6 +467,7 @@ public class bMITP extends Activity {
         toast.show();
     }
 
+
     class connTask extends AsyncTask<BluetoothDevice, Void, Integer> {
         private final ProgressDialog dialog = new ProgressDialog(bMITP.this);
 
@@ -430,6 +488,7 @@ public class bMITP extends Activity {
             try {
                 bMITP.this.bluetoothPort.connect(params[0]);
                 bMITP.this.lastConnAddr = params[0].getAddress();
+                Log.e("onItemClick_IOException","2"+params[0].getAddress());
                 retVal = 0;
             } catch (IOException var4) {
                 Log.e("BluetoothConnectMenu", var4.getMessage());
@@ -470,13 +529,8 @@ public class bMITP extends Activity {
                     switch (count) {
 
                         case 0:
-//                          printVoucher = vouch1;
-//                          itemPrint = items;
-//                          List<Item> itemVOCHER = new ArrayList<>();
-//                           itemVOCHER=obj.getAllItemsBYVOCHER(String.valueOf(printVoucher.getVoucherNumber()),printVoucher.getVoucherType());
-//                          itemPrint.clear();
-//                          itemPrint=itemVOCHER;
-                            sample.printMultilingualFontEsc3(0, printVoucher, itemPrint);
+
+                            sample.printMultilingualFontEsc3(Print_List);
 
                             break;
 
@@ -485,9 +539,6 @@ public class bMITP extends Activity {
 
 
 //                    sample.printMultilingualFont();
-                } catch (UnsupportedEncodingException e) {
-                    Log.e("Exc", "print1***" + e.getMessage());
-                    e.printStackTrace();
                 } catch (Exception e) {
                     Log.e("Exc", "print222222***" + e.getMessage());
                 }
@@ -509,7 +560,6 @@ public class bMITP extends Activity {
             super.onPostExecute(result);
         }
     }
-
     public String convertToEnglish(String value) {
         String newValue = (((((((((((value + "").replaceAll("١", "1")).replaceAll("٢", "2")).replaceAll("٣", "3")).replaceAll("٤", "4")).replaceAll("٥", "5")).replaceAll("٦", "6")).replaceAll("٧", "7")).replaceAll("٨", "8")).replaceAll("٩", "9")).replaceAll("٠", "0").replaceAll("٫", "."));
         return newValue;
@@ -517,3 +567,4 @@ public class bMITP extends Activity {
 
 
 }
+
