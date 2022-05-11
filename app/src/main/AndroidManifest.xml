@@ -49,7 +49,7 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activities.Login"
-            android:windowSoftInputMode="adjustPan|adjustResize">
+          >
 
         </activity>
         <activity

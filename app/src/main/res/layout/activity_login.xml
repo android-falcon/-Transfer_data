@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
         android:fontFamily="@font/noto_sans"
-        android:text="    V 15 - veTransfer"
+        android:text="    V 16 - veTransfer"
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textSize="16sp"

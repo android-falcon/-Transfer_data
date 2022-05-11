@@ -53,6 +53,7 @@ public class Login extends AppCompatActivity {
     private String selectedCom;
     private String cono, coYear;
     ListView listCompany;
+    EditText unameEdt,passEdt;
 
     public static EditText itemKintText1;
 
@@ -80,8 +81,21 @@ public class Login extends AppCompatActivity {
                 case R.id.login: {
                     getDataZone();
                     if (appSettings.size() != 0) {
-                        Intent intent = new Intent(Login.this, MainActivity.class);
-                        startActivity(intent);
+                        if(unameEdt.getText().toString().trim().toLowerCase().equals("admin"))
+                        {
+                            if( passEdt.getText().toString().trim().equals("100"))
+                            {
+                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                startActivity(intent);
+                            }else{
+                                passEdt.setError("Invalid");
+                        }
+                        }else {
+                            unameEdt.setError("Invalid");
+                        }
+
+
+
                     } else {
                         openSettingDialog();
                     }
@@ -256,6 +270,8 @@ public class Login extends AppCompatActivity {
         request_ip_ = findViewById(R.id.request_ip_);
         request_ip_.setOnClickListener(onClickListener);
         generalMethod=new GeneralMethod(this);
+        unameEdt= findViewById(R.id.unameEdt);
+        passEdt = findViewById(R.id.passEdt);
 
     }
 

@@ -809,28 +809,28 @@ public class MainActivity extends AppCompatActivity {
         Adapterr adapter1 = new Adapterr(this, AllItemDBlist);
         listView.setAdapter(adapter1);
 
-        search.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_START = 0;
-                final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_END = 2;
-                final int DRAWABLE_BOTTOM = 3;
-
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    int end = v.getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL ? search.getLeft() : search.getRight();
-
-                    if (event.getRawX() >= (end - search.getCompoundDrawables()[DRAWABLE_END].getBounds().width())) {
-
-                        search.setText("");
-
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
+//        search.setOnTouchListener(new View.OnTouchListener() {
+//            @SuppressLint("ClickableViewAccessibility")
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final int DRAWABLE_START = 0;
+//                final int DRAWABLE_TOP = 1;
+//                final int DRAWABLE_END = 2;
+//                final int DRAWABLE_BOTTOM = 3;
+//
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    int end = v.getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL ? search.getLeft() : search.getRight();
+//
+//                    if (event.getRawX() >= (end - search.getCompoundDrawables()[DRAWABLE_END].getBounds().width())) {
+//
+//                        search.setText("");
+//
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1436,7 +1436,7 @@ public class MainActivity extends AppCompatActivity {
                             //  for(int i=0;i<replacementlist.size();i++)
                             saved = 1;
                             Log.e("max+++", max + "");
-                            Log.e("TransferNo===", TransferNo + "");
+//                            Log.e("TransferNo===", TransferNo + "");
                             //        my_dataBase.replacementDao().updatepostState(minVo);
 
                             //    exportAllData();
@@ -1686,25 +1686,35 @@ public class MainActivity extends AppCompatActivity {
                                             Log.e("QTY Response ", qty);
 //                                        qty = "20";
                                             replacementModel.setAvailableQty(qty);
-                                            if ((Integer.parseInt(qty)) > 0) {
-                                                replacementModel.setAvailableQty(String.valueOf(Integer.parseInt(qty) - 1));
-                                                replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
-                                                replacementModel.setRecQty("1");
-                                                replacementlist.add(0, replacementModel);
-                                                SaveRow(replacementModel);
-                                                colorlastrow.setText("0");
-                                                fillAdapter();
-                                                Log.e("case3", "case3");
-                                                save.setEnabled(true);
+                                            double qtyInt=1;
+                                            try {
+                                                 qtyInt=Double.parseDouble(qty);
 
-                                                fromSpinner.setEnabled(false);
-                                                toSpinner.setEnabled(false);
+                                                if (qtyInt > 0)
+                                                {
+                                                    replacementModel.setAvailableQty(((int)qtyInt - 1)+"");
+                                                    replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
+                                                    replacementModel.setRecQty("1");
+                                                    replacementlist.add(0, replacementModel);
+                                                    SaveRow(replacementModel);
+                                                    colorlastrow.setText("0");
+                                                    fillAdapter();
+                                                    Log.e("case3", "case3");
+                                                    save.setEnabled(true);
+
+                                                    fromSpinner.setEnabled(false);
+                                                    toSpinner.setEnabled(false);
 
 
-                                            } else {
-                                                showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
-                                                itemcode.setText("");
+                                                } else {
+                                                    showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
+                                                    itemcode.setText("");
+                                                }
+                                            }catch (Exception e){
+                                                Log.e("getItemQty",""+e.getMessage()+"\t"+qtyInt);
+
                                             }
+
 
 
                                         }
