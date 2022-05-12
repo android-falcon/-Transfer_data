@@ -42,7 +42,7 @@
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/font/arabic_font.xml" value="0.234375" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/font/poppins_bold.xml" value="0.234375" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_login.xml" value="0.22" />
-        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/activity_transfer_reports.xml" value="0.22" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/add_qty_dialog.xml" value="0.33" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/bluetooth_menu.xml" value="0.33" />
@@ -54,7 +54,8 @@
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/item_serials_layout.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/passworddailog.xml" value="0.2" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/prompt_password_dialog.xml" value="0.33" />
-        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/replacmentrecycler.xml" value="0.5" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/replacmentrecycler.xml" value="0.1" />
+        <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rrow.xml" value="0.1" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rv_serial_transfer.xml" value="0.25" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/rv_serials_report.xml" value="0.33" />
         <entry key="..\:/Users/PROG-NEW/AndroidStudioProjects/TranspherStock/app/src/main/res/layout/searchdailog.xml" value="0.33" />

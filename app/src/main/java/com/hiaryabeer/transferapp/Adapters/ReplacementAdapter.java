@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,12 +64,17 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull replacementViewHolder holder, int position) {
+
+        // Gets the layout params that will allow you to resize the layout
+
+
+
         holder.from.setText(list.get(position).getFromName());
         holder.to.setText(list.get(position).getToName());
         holder.itemname.setText(list.get(position).getItemname());
         holder.TransferNo.setText(list.get(position).getTransNumber());
         //   holder.zone.setText(list.get(position).getZone());
-        holder.itemcode.setText(list.get(position).getItemcode());
+          holder.itemcode.setText(list.get(position).getItemcode());
         //    Log.e("onBindViewHolder202020",""+list.get(position).getRecQty());
         holder.qty.setText(list.get(position).getRecQty());
 //        holder.itemcode.setTag(position);
@@ -279,11 +286,14 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         }
 
         if (Login.serialsActive == 0) {
+            Log.e("ca1", "CCCC");
             holder.tvEdit.setVisibility(View.INVISIBLE);
         } else {
+            Log.e("ca2", "CCCC");
             List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
 
             if (hasSerial.get(0).equals("1")) {
+                Log.e("ca3", "CCCC");
                 holder.tvEdit.setVisibility(View.VISIBLE);
                 holder.tvEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -291,21 +301,24 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
                         itemcode.setText(list.get(holder.getAdapterPosition()).getItemcode());
                     }
                 });
-            } else
+            } else {
+                Log.e("ca4", "CCCC");
                 holder.tvEdit.setVisibility(View.INVISIBLE);
-
+            }
         }
 
         Log.e("pos===", position + "highligtedItemPosition=== " + highligtedItemPosition + "highligtedItemPosition2==" + highligtedItemPosition2);
         if (position == highligtedItemPosition2) {
-
-            if (Login.serialsActive == 0) {
+            Log.e("AAAAA", "AAAAAA");
+        if (Login.serialsActive == 0) {
+                Log.e("CCCCC", "CCCC");
                 holder.qty.setEnabled(true);
                 holder.qty.requestFocus();
                 InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
-            }
+           }
             holder.linearLayoutColoring.setBackgroundColor(context.getResources().getColor(R.color.layer2));
+
 
         } else {
 
@@ -315,6 +328,18 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void removeItem(int position) {
         if (position < list.size()) {
@@ -360,6 +385,9 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         public replacementViewHolder(@NonNull View itemView) {
             super(itemView);
             linearLayoutColoring = itemView.findViewById(R.id.row);
+
+
+
             TransferNo = itemView.findViewById(R.id.trsnferNo);
             itemname = itemView.findViewById(R.id.itemname);
             my_dataBase = RoomAllData.getInstanceDataBase(context);

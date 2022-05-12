@@ -41,6 +41,7 @@
             android:name=".Activities.TransferReports"
             android:exported="false"
             android:parentActivityName=".Activities.MainActivity"
+
             android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity
             android:name=".Activities.ScanActivity"
@@ -54,6 +55,7 @@
         </activity>
         <activity
             android:name=".Activities.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
             android:windowSoftInputMode="adjustPan|adjustResize" />
 
         <activity

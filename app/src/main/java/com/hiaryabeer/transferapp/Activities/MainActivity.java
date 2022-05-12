@@ -1230,8 +1230,8 @@ public class MainActivity extends AppCompatActivity {
         highligtedItemPosition2 = pos;
 
         if (adapter != null) adapter.notifyDataSetChanged();
-        replacmentRecycler.scrollToPosition(pos);
-
+   //    replacmentRecycler.scrollToPosition(pos);
+        replacmentRecycler.smoothScrollToPosition(pos);
 
     }
 
@@ -1242,8 +1242,8 @@ public class MainActivity extends AppCompatActivity {
         highligtedItemPosition = pos;
 
         adapter.notifyDataSetChanged();
-        replacmentRecycler.scrollToPosition(pos);
-
+   //     replacmentRecycler.scrollToPosition(pos);
+        replacmentRecycler.smoothScrollToPosition(pos);
 
     }
 
@@ -1318,6 +1318,7 @@ public class MainActivity extends AppCompatActivity {
         qty = findViewById(R.id.qty);
         recqty = findViewById(R.id.qtyedt);
         replacmentRecycler = findViewById(R.id.replacmentRec);
+        replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         save = findViewById(R.id.save);
         btnShow = findViewById(R.id.btnShow);
         respon = findViewById(R.id.respons);
@@ -1692,7 +1693,12 @@ public class MainActivity extends AppCompatActivity {
 
                                                 if (qtyInt > 0)
                                                 {
+                                                    Log.e("case1+++", "case");
                                                     replacementModel.setAvailableQty(((int)qtyInt - 1)+"");
+                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getItemName()+"");
+                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getItemOcode()+"");
+                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getBarCode()+"");
+                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getItemOcode()+"");
                                                     replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
                                                     replacementModel.setRecQty("1");
                                                     replacementlist.add(0, replacementModel);
@@ -1707,6 +1713,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                                 } else {
+                                                    Log.e("case2+++", "case");
                                                     showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
                                                     itemcode.setText("");
                                                 }
@@ -1744,6 +1751,7 @@ public class MainActivity extends AppCompatActivity {
                         if (editable.toString().length() != 0) {
 
                             {
+                                Log.e("case5+++", "case");
                                 Log.e("itemcode===", "aaaaaa");
                                 Log.e("itemcode===", editable.toString());
                                 From = fromSpinner.getSelectedItem().toString();
@@ -1935,7 +1943,7 @@ public class MainActivity extends AppCompatActivity {
                                                     int serialValidation = existInItemSerialList(itemcode.getText().toString().trim(), code);
 
                                                     if (serialValidation == 1) {
-
+                                                        Log.e("case1--", "case1");
                                                         ItemSerialTransfer serialTransfer =
                                                                 new ItemSerialTransfer(String.valueOf(transNo),
                                                                         deviceId, itemcode.getText().toString().trim(), code.trim(),
@@ -1945,8 +1953,12 @@ public class MainActivity extends AppCompatActivity {
                                                                 );
 
                                                         if (ExistsInRepList(itemcode.getText().toString()))
-                                                            serialTransfer.setVSerial((replacementlist.size() - (repPosition + 1)) + 1);
+                                                        {       serialTransfer.setVSerial((replacementlist.size() - (repPosition + 1)) + 1);
+
+                                                            Log.e("case2--", "case2");
+                                                        }
                                                         else {
+                                                            Log.e("case3--", "case3");
                                                             if (replacementlist.size() == 0)
                                                                 serialTransfer.setVSerial(1);
                                                             else
@@ -1959,7 +1971,7 @@ public class MainActivity extends AppCompatActivity {
                                                         updateAdapter();
 
                                                         if (ExistsInRepList(itemcode.getText().toString())) {
-
+                                                            Log.e("case4--", "case4");
                                                             int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + 1;
                                                             replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
                                                             my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo));
@@ -1977,6 +1989,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                                         } else {
+                                                            Log.e("case5--", "case5");
                                                             ReplacementModel replacementModel = new ReplacementModel();
 
                                                             replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
@@ -1999,7 +2012,7 @@ public class MainActivity extends AppCompatActivity {
                                                             ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
                                                             replacmentRecycler.setAdapter(adapter);
 
-                                                            replacmentRecycler.smoothScrollToPosition(0);
+                                                        //    replacmentRecycler.smoothScrollToPosition(0);
                                                             colorlastrow.setText("0");
 
                                                             save.setEnabled(true);
@@ -2017,6 +2030,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                         openSmallCapture(6);
                                                     } else if (serialValidation == 0) {
+
                                                         showSweetDialog(MainActivity.this, 3, getString(R.string.invalid_serial), getString(R.string.serialNotFound));
                                                     }
                                                 } else {
@@ -2185,7 +2199,7 @@ public class MainActivity extends AppCompatActivity {
                                             ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
                                             replacmentRecycler.setAdapter(adapter);
 
-                                            replacmentRecycler.smoothScrollToPosition(0);
+                                     //       replacmentRecycler.smoothScrollToPosition(0);
                                             colorlastrow.setText("0");
 
 
@@ -2295,7 +2309,7 @@ public class MainActivity extends AppCompatActivity {
                                                         ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
                                                         replacmentRecycler.setAdapter(adapter);
 
-                                                        replacmentRecycler.smoothScrollToPosition(0);
+                                            //            replacmentRecycler.smoothScrollToPosition(0);
                                                         colorlastrow.setText("0");
 
 
@@ -2716,11 +2730,11 @@ public class MainActivity extends AppCompatActivity {
         replacmentRecycler.setAdapter(adapter);
         //  colorlastrow.setText(position + "");
         //    colorlastrow.setText((0)+"");
-        if (replacementlist.size() > 1) {
-            Log.e("position=====", position + "");
-            replacmentRecycler.smoothScrollToPosition(position);
-
-        }
+//        if (replacementlist.size() > 1) {
+//            Log.e("position=====", position + "");
+//            replacmentRecycler.smoothScrollToPosition(position);
+//
+//        }
 
 
     }
