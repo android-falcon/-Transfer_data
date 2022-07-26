@@ -283,6 +283,7 @@ public class TransferReports extends AppCompatActivity {
             fabConvert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e("fabConvertonClick","fabConvertonClick");
                     clicked = !clicked;
                     setVisibility(clicked);
                     setAnimation(clicked);
@@ -318,10 +319,15 @@ public class TransferReports extends AppCompatActivity {
 //                    }
 
 //                    convertToPdf();
+                    Toast.makeText(TransferReports.this, "fabPDF", Toast.LENGTH_SHORT).show();
+
+
                     if (Build.VERSION.SDK_INT >= 23) {
                         if (TransferReports.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                                && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                                && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                        && TransferReports.this.checkSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                             try {
+
                                 createPdf(1);
                             } catch (DocumentException | IOException e) {
                                 e.printStackTrace();
@@ -330,14 +336,18 @@ public class TransferReports extends AppCompatActivity {
                         } else {
 
                             Log.v("", "Permission is revoked");
+                            Toast.makeText(TransferReports.this, "Permission is revoked", Toast.LENGTH_SHORT).show();
+
                             ActivityCompat.requestPermissions(
                                     TransferReports.this,
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE},
                                     1);
                         }
                     } else { // permission is automatically granted on sdk<23 upon
                         // installation
                         try {
+                            Toast.makeText(TransferReports.this, "createPdf2222", Toast.LENGTH_SHORT).show();
+
                             createPdf(1);
                         } catch (DocumentException | IOException e) {
                             e.printStackTrace();
@@ -417,7 +427,6 @@ public class TransferReports extends AppCompatActivity {
                                 .show();
 
                     } else {
-
                         searchList.clear();
 
                         for (int s = 0; s < allReports.size(); s++) {
@@ -433,26 +442,80 @@ public class TransferReports extends AppCompatActivity {
                         if (myDB.settingDao().getallsetting().get(0).getPrint_option() != null) {
 
                             p = myDB.settingDao().getallsetting().get(0).getPrint_option();
+                            Log.e("getPrint_option==", p + "");
 
                         }
 
-
+//
+//                        if (p == 0) {
+//
+//                            if (Build.VERSION.SDK_INT >= 23)
+//                            {
+//                                if (TransferReports.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+//                                        && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+//                                &&(TransferReports.this.checkSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+//                                ) {
+//                                    try {
+//                                        Toast.makeText(TransferReports.this, "createPdf333333", Toast.LENGTH_SHORT).show();
+//
+//                                        createPdf(0);
+//                                    } catch (DocumentException | IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    Toast.makeText(TransferReports.this, "Permission is granted", Toast.LENGTH_SHORT).show();
+//
+//                                    Log.v("", "");
+//                                } else {
+//                                    Toast.makeText(TransferReports.this, "Permission is revoked??", Toast.LENGTH_SHORT).show();
+//
+//                                    Log.v("", "Permission is revoked");
+//                                    ActivityCompat.requestPermissions(
+//                                            TransferReports.this,
+//                                            new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+//                                            1000);
+//                                }
+//                            } else { // permission is automatically granted on sdk<23
+//
+//                                try {
+//                                    Toast.makeText(TransferReports.this, "createPdf11111", Toast.LENGTH_SHORT).show();
+//
+//                                    createPdf(0);
+//                                } catch (DocumentException | IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                Log.v("", "Permission is granted");
+//                            }
+//                          //  Toast.makeText(TransferReports.this, "Permission is granted", Toast.LENGTH_SHORT).show();
+//
+//
+//                        } else {
+//
+//                            Intent intent = new Intent(TransferReports.this, bMITP.class);
+//                            intent.putExtra("printKey", "0");
+//                            intent.putParcelableArrayListExtra("Print_List", searchList);
+//                            startActivity(intent);
+//
+//                        }
                         if (p == 0) {
 
                             if (Build.VERSION.SDK_INT >= 23) {
                                 if (TransferReports.this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                                        && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
-                                    try {
+                                        && (TransferReports.this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                                        && (TransferReports.this.checkSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                                ) { try {
                                         createPdf(0);
                                     } catch (DocumentException | IOException e) {
                                         e.printStackTrace();
                                     }
-                                    Log.v("", "Permission is granted");
+                                    Log.v("Permission==", "Permission is granted");
                                 } else {
-                                    Log.v("", "Permission is revoked");
+                                    Toast.makeText(TransferReports.this, "Permission is revoked", Toast.LENGTH_SHORT).show();
+
+
+                                    Log.v("Permission==", "Permission is revoked");
                                     ActivityCompat.requestPermissions(
                                             TransferReports.this,
-                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE},
                                             1000);
                                 }
                             } else { // permission is automatically granted on sdk<23
@@ -466,16 +529,9 @@ public class TransferReports extends AppCompatActivity {
                             }
 
                         } else {
-
-                            Intent intent = new Intent(TransferReports.this, bMITP.class);
-                            intent.putExtra("printKey", "0");
-                            intent.putParcelableArrayListExtra("Print_List", searchList);
-                            startActivity(intent);
-
                         }
 
                     }
-
                 }
             });
 
@@ -527,7 +583,9 @@ public class TransferReports extends AppCompatActivity {
     public void createPdf(int c) throws DocumentException, IOException { // 0 -- print / 1 -- show
 
 
+        Log.e("createPdf====", "createPdf");
         String directory_path = Environment.getExternalStorageDirectory().getPath() + "/Transfers_Report/";
+
         File file = new File(directory_path);
         if (!file.exists()) {
             file.mkdir();
@@ -536,7 +594,7 @@ public class TransferReports extends AppCompatActivity {
 
         File pdfFile = new File(targetPdf);
 
-
+        Log.e("targetPdf====",targetPdf);
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
         com.itextpdf.text.pdf.PdfWriter writer = com.itextpdf.text.pdf.PdfWriter.getInstance(
                 document, new FileOutputStream(pdfFile));
@@ -547,9 +605,15 @@ public class TransferReports extends AppCompatActivity {
 
         BaseFont base = null;
         try {
+            Log.e("try====","try");
             base = BaseFont.createFont("/assets/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Log.e("base====", base.toString());
+
         } catch (DocumentException | IOException e) {
-            e.printStackTrace();
+
+           Log.e("ecxption====", e.getMessage());
+
+
         }
 
         Font font0 = new Font(base, 14f, Font.NORMAL, new BaseColor(0, 0, 0));
@@ -743,7 +807,8 @@ public class TransferReports extends AppCompatActivity {
             }
 
             document.add(pdfPTableBody);
-        } else {
+        } else
+        {
 
             pdfPTableHeader3.addCell(pdfCell(getString(R.string.serials),
                     ALIGN_CENTER, 1, font1, BaseColor.BLACK, true, true,
@@ -891,7 +956,7 @@ public class TransferReports extends AppCompatActivity {
 
         document.close();
         Log.e("PDF Created", pdfFile + "");
-        Toast.makeText(this, "PDF Created", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "PDF Created!!", Toast.LENGTH_LONG).show();
 
         if (c == 1) { /// View PDF
 
@@ -1618,5 +1683,7 @@ public class TransferReports extends AppCompatActivity {
 
     }
 
-
+void Toast(String msg){
+    Toast.makeText(TransferReports.this, msg+"", Toast.LENGTH_SHORT).show();
+}
 }

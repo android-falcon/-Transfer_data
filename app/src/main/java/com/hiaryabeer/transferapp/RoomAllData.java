@@ -10,6 +10,7 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.hiaryabeer.transferapp.Interfaces.ItemDao;
+import com.hiaryabeer.transferapp.Interfaces.ItemSwitchDao;
 import com.hiaryabeer.transferapp.Interfaces.ReplacementDao;
 import com.hiaryabeer.transferapp.Interfaces.SerialTransfersDao;
 import com.hiaryabeer.transferapp.Interfaces.SerialTransfersDao;
@@ -19,10 +20,11 @@ import com.hiaryabeer.transferapp.Interfaces.StoreDao;
 import com.hiaryabeer.transferapp.Interfaces.ZoneDao;
 import com.hiaryabeer.transferapp.Models.AllItems;
 import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
+import com.hiaryabeer.transferapp.Models.ItemSwitch;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
 
 
-@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class}, version = 23, exportSchema = false)
+@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class}, version = 24, exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private static RoomAllData database;
     public static String dataBaseName = "DBRoomTransfer";
@@ -36,7 +38,7 @@ public abstract class RoomAllData extends RoomDatabase {
     public abstract ItemDao itemDao();
 
     public abstract StoreDao storeDao();
-
+    public abstract ItemSwitchDao itemSwitchDao();
     public abstract SerialTransfersDao serialTransfersDao();
 
     public abstract SerialsDao serialsDao();

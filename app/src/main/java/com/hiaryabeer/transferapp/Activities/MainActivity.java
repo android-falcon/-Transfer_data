@@ -2,17 +2,14 @@ package com.hiaryabeer.transferapp.Activities;
 
 import static android.view.View.LAYOUT_DIRECTION_RTL;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -28,10 +25,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -55,6 +50,7 @@ import com.hiaryabeer.transferapp.Models.ExportData;
 import com.hiaryabeer.transferapp.Models.GeneralMethod;
 import com.hiaryabeer.transferapp.Models.ImportData;
 import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
+import com.hiaryabeer.transferapp.Models.ItemSwitch;
 import com.hiaryabeer.transferapp.Models.KeyboardUtil;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
 import com.hiaryabeer.transferapp.R;
@@ -99,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<ReplacementModel> DB_replist = new ArrayList<>();
     private ImageButton btnShow;
     public static List<ReplacementModel> DB_replistcopy = new ArrayList<>();
+    public static List<ItemSwitch> DB_itemswitch = new ArrayList<>();
     public static List<ReplacementModel> reducedqtyitemlist = new ArrayList<>();
     public static Dialog Re_searchdialog;
     EditText recqty;
@@ -311,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AllItemDBlist.clear();
-
+        DB_itemswitch.clear();
 
         my_dataBase = RoomAllData.getInstanceDataBase(MainActivity.this);
         importData = new ImportData(MainActivity.this);
@@ -333,6 +330,7 @@ public class MainActivity extends AppCompatActivity {
 
         new KeyboardUtil(this, replacmentRecycler);
         AllItemDBlist.addAll(my_dataBase.itemDao().getAll());
+        DB_itemswitch.addAll(my_dataBase.itemSwitchDao().getAll());
 //        if(AllItemDBlist .size()==0)
 //            importData.getAllItems();
 //      my_dataBase.storeDao().deleteall();
@@ -711,7 +709,6 @@ public class MainActivity extends AppCompatActivity {
 
         my_dataBase.storeDao().deleteall();
 
-
         if (Login.serialsActive == 1) {
 
             importData.getAllSerials(new ImportData.GetSerialsCallBack() {
@@ -732,6 +729,7 @@ public class MainActivity extends AppCompatActivity {
                     my_dataBase.serialsDao().insertAll(allItemSerials);
 
                     getStors();
+
                 }
 
                 @Override
@@ -740,10 +738,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        } else
+        } else {
             getStors();
 
-
+        }
     }
 
 
@@ -1068,7 +1066,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (replacementlist.size() != 0) {
             for (int i = 0; i < replacementlist.size(); i++) {
-                if (convertToEnglish(replacementlist.get(i).getItemcode()).equals(convertToEnglish(replacement.getItemcode()))) {
+                if (
+                        convertToEnglish(replacementlist.get(i).getItemcode()).equals(convertToEnglish(replacement.getItemcode()))
+
+                ||
+                                convertToEnglish(replacementlist.get(i).getItemcode()).equals(convertToEnglish(my_dataBase.itemSwitchDao().getitemocode(replacement.getItemcode())))
+                ) {
 
                     position = i;
                     flag = true;
@@ -1134,6 +1137,13 @@ public class MainActivity extends AppCompatActivity {
     private void getStors() {
         actvityflage = 1;
         importData.getStore();
+    }
+    private void getitemswitch(){
+        Log.e("getitemswitch","getitemswitch");
+        ImportData importData=new ImportData(MainActivity.this);
+        importData.getItemSwitch();
+
+
     }
 
 //    public void exportData() {
@@ -1361,11 +1371,14 @@ public class MainActivity extends AppCompatActivity {
                         my_dataBase.itemDao().insertAll(AllImportItemlist);
                         Toast.makeText(MainActivity.this, getString(R.string.getAllData), Toast.LENGTH_SHORT).show();
                         ImportData.pdRepla.dismissWithAnimation();
+                        my_dataBase.itemSwitchDao().dELETEAll();
+                       getitemswitch();
 
                     } else if (editable.toString().equals("nodata")) {
                         Toast.makeText(MainActivity.this, getString(R.string.netWorkError), Toast.LENGTH_SHORT).show();
 
                         ImportData.pdRepla.dismissWithAnimation();
+                        getitemswitch();
                     }
 
 
@@ -1695,10 +1708,10 @@ public class MainActivity extends AppCompatActivity {
                                                 {
                                                     Log.e("case1+++", "case");
                                                     replacementModel.setAvailableQty(((int)qtyInt - 1)+"");
-                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getItemName()+"");
-                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getItemOcode()+"");
-                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getBarCode()+"");
-                                                    Log.e("AllItemDBlist.get(pos).getItemName()", AllItemDBlist.get(pos).getItemOcode()+"");
+                                                    Log.e("getItemName", AllItemDBlist.get(pos).getItemName()+"");
+                                                    Log.e("getItemName", AllItemDBlist.get(pos).getItemOcode()+"");
+                                                    Log.e("getItemName", AllItemDBlist.get(pos).getBarCode()+"");
+                                                    Log.e("getItemName", AllItemDBlist.get(pos).getItemOcode()+"");
                                                     replacementModel.setItemname(AllItemDBlist.get(pos).getItemName());
                                                     replacementModel.setRecQty("1");
                                                     replacementlist.add(0, replacementModel);
@@ -1735,9 +1748,65 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 } else {
-                                    Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
+                                    //new edit by aya
+                                    if (Exsitsin_itemswitchlist(itemcode.getText().toString())){
+                                        Log.e("Exsitsin_itemswitchlist", "yes");
+                                        importData.getItemQty(editable.toString(), FromNo, new ImportData.GetItemQtyCallBack() {
+                                            @Override
+                                            public void onResponse(String qty) {
+                                                Log.e("QTY Response ", qty);
+//                                        qty = "20";
+                                                replacementModel.setAvailableQty(qty);
+                                                replacementModel.setItemcode(DB_itemswitch.get(pos).getItem_OCODE());
+                                                double qtyInt=1;
+                                                try {
+                                                    qtyInt=Double.parseDouble(qty);
+
+                                                    if (qtyInt > 0)
+                                                    {
+                                                        Log.e("case1+++", "case");
+                                                        replacementModel.setAvailableQty(((int)qtyInt - 1)+"");
+                                                        Log.e("NAMEA", DB_itemswitch.get(pos).getItem_NAMEA()+"");
+                                                        Log.e("OCODE", DB_itemswitch.get(pos).getItem_OCODE()+"");
+                                                        Log.e("NCODE", DB_itemswitch.get(pos).getItem_NCODE()+"");
+
+                                                        replacementModel.setItemname(DB_itemswitch.get(pos).getItem_NAMEA());
+                                                        replacementModel.setRecQty("1");
+                                                        replacementlist.add(0, replacementModel);
+                                                        SaveRow(replacementModel);
+                                                        colorlastrow.setText("0");
+                                                        fillAdapter();
+                                                        Log.e("case3", "case3");
+                                                        save.setEnabled(true);
+
+                                                        fromSpinner.setEnabled(false);
+                                                        toSpinner.setEnabled(false);
+
+
+                                                    } else {
+                                                        Log.e("case2+++", "case");
+                                                        showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.no_enough_amount), "");
+                                                        itemcode.setText("");
+                                                    }
+                                                }catch (Exception e){
+                                                    Log.e("getItemQty",""+e.getMessage()+"\t"+qtyInt);
+
+                                                }
+
+
+
+                                            }
+
+                                            @Override
+                                            public void onError(String error) {
+                                                showSweetDialog(MainActivity.this, 3, "Error!", getString(R.string.checkConnection));
+                                                itemcode.setText("");
+                                            }
+                                        });
+                                    }else {
+                                    Log.e(" Case4 ", "Not Exist in ItemList and not in itemswitch, Invalid code!");
                                     itemcode.setError("Invalid Code");
-                                    itemcode.setText("");
+                                    itemcode.setText("");}
                                 }
 
 //                            Log.e("case4", "case4");
@@ -1816,9 +1885,29 @@ public class MainActivity extends AppCompatActivity {
 
 
                                     } else {
-                                        Log.e(" Case4 ", "Not Exist in ItemList, Invalid code!");
-                                        itemcode.setError("InValid Code");
-                                        itemcode.setText("");
+
+                                        //new edit by aya
+                                        if (Exsitsin_itemswitchlist(itemcode.getText().toString()))
+                                        {
+                                            itemcode.setError(null);
+                                            Log.e(" Case4 ", "Not in itemlist but in ItemSwitch");
+                                            replacementModel.setItemcode(DB_itemswitch.get(pos).getItem_OCODE());
+                                            replacementModel.setItemname(DB_itemswitch.get(pos).getItem_NAMEA());
+                                            replacementModel.setRecQty("1");
+                                            replacementlist.add(0, replacementModel);
+                                            SaveRow(replacementModel);
+                                            colorlastrow.setText("0");
+                                            fillAdapter();
+                                            Log.e("case4", "case4");
+                                            save.setEnabled(true);
+
+                                            fromSpinner.setEnabled(false);
+                                            toSpinner.setEnabled(false);
+                                        }else{
+                                            Log.e(" Case16", "Not Exist in ItemList, Invalid code!");
+                                            itemcode.setError("InValid Code");
+                                            itemcode.setText("");
+                                        }
                                     }
 
                                 }
@@ -1833,7 +1922,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             });
-        } else { /////Serials
+        }
+        else { /////Serials
 
             itemcode.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -2209,7 +2299,7 @@ public class MainActivity extends AppCompatActivity {
                                             toSpinner.setEnabled(false);
 
                                         }
-                                        dialog1.dismiss();
+if(dialog1!=null)                                        dialog1.dismiss();
                                     } else {
 
                                         Dialog qtyDialog = new Dialog(MainActivity.this);
@@ -2305,9 +2395,12 @@ public class MainActivity extends AppCompatActivity {
                                                         replacementlist.add(0, replacementModel);
                                                         my_dataBase.replacementDao().insert(replacementModel);
 
-                                                        replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                                                        ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
-                                                        replacmentRecycler.setAdapter(adapter);
+//                                                        replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+//                                                        ReplacementAdapter adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
+//                                                        replacmentRecycler.setAdapter(adapter);
+                                                        fillAdapter();
+
+                                                        Log.e("replacementlist=====",replacementlist.size()+"");
 
                                             //            replacmentRecycler.smoothScrollToPosition(0);
                                                         colorlastrow.setText("0");
@@ -2331,7 +2424,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
 
-                            } else if (existsInSerialsList(itemcode.getText().toString().trim())) {
+                            }
+                            else if (existsInSerialsList(itemcode.getText().toString().trim())) {
                                 Log.e(" Case2 ", "Exist in serial list");
 
                             } else if (existBarcode(itemcode.getText().toString().trim())) {
@@ -2430,6 +2524,28 @@ public class MainActivity extends AppCompatActivity {
         for (int x1 = 0; x1 < AllItemDBlist.size(); x1++) {
             if (AllItemDBlist.get(x1).getItemOcode().replaceAll("\\s+", "").trim().equals(itemcode.trim())) {
                 pos = x1;
+                Log.e("ExsitsInItemlist,,==",AllItemDBlist.get(x1).getItemOcode());
+                flage = true;
+                break;
+            } else {
+                flage = false;
+            }
+
+
+        }
+        return flage;
+    }
+    private boolean Exsitsin_itemswitchlist(String itemcode) {
+
+        Log.e("Exsitsin_itemswitchlist==", "Exsitsin_itemswitchlist");
+        boolean flage = false;
+        for (int x1 = 0; x1 < DB_itemswitch.size(); x1++) {
+       //     Log.e("itemcode==", itemcode+  "    "+ DB_itemswitch.get(x1).getItem_NCODE());
+            if   (DB_itemswitch.get(x1).getItem_NCODE().replaceAll("\\s+", "").trim().
+                    equals(itemcode.trim()
+
+            )) {
+                pos = x1;
 
                 flage = true;
                 break;
@@ -2452,6 +2568,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("sss1", "sss1");
         if (AllItemDBlist.size() == 0)
             importData.getAllItems();
+
     }
 
 

@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
     public static int serialsActive;
 
     static {
-        serialsActive = 0;
+        serialsActive = 1;
     }
 
     @Override
@@ -313,6 +313,7 @@ public class Login extends AppCompatActivity {
         final LinearLayout printLinear = dialog.findViewById(R.id.printLinear);
 
         if (serialsActive == 1) {
+            Log.e("case1==","serialsActive");
             checkboxQtyCheck.setChecked(false);
             checkboxQtyCheck.setVisibility(View.GONE);
             rawahnehAddQty.setChecked(true);
@@ -320,6 +321,7 @@ public class Login extends AppCompatActivity {
             printLinear.setVisibility(View.GONE);
 
         } else {
+            Log.e("case2==","serials not Active");
             checkboxQtyCheck.setVisibility(View.VISIBLE);
             rawahnehAddQty.setVisibility(View.GONE);
             rawahnehAddQty.setChecked(false);
@@ -534,6 +536,7 @@ public class Login extends AppCompatActivity {
         my_dataBase.settingDao().deleteALL();
         my_dataBase.storeDao().deleteall();
         my_dataBase.itemDao().dELETEAll();
+        my_dataBase.itemSwitchDao().dELETEAll();
         my_dataBase.serialsDao().deleteAllSerials();
         my_dataBase.settingDao().insert(settings);
 
