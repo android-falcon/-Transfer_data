@@ -227,8 +227,7 @@
             android:layout_marginTop="15dp"
             android:checked="true"
             android:text="@string/show_quantity_dialog_when_adding_an_item"
-            android:textColor="@color/black"
-            android:visibility="gone" />
+            android:textColor="@color/black" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
