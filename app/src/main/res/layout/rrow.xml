@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+
+    android:layout_height="70dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/row"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="90dp"
+            android:id="@+id/from"
+
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="90dp"
+            android:visibility="gone"
+            android:id="@+id/to"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="90dp"
+            android:id="@+id/zone"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="120dp"
+
+            android:id="@+id/itemname"
+            android:padding="2dp"
+
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="120dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:textColor="@color/black"
+
+            android:id="@+id/itemcode"
+            android:layout_height="match_parent"/>
+        <EditText
+            android:layout_width="120dp"
+            android:id="@+id/tblqty"
+            android:inputType="number"
+            android:padding="2dp"
+            android:gravity="center"
+            android:selectAllOnFocus="true"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="120dp"
+            android:textColor="@color/black"
+            android:id="@+id/itemqty"
+            android:padding="2dp"
+            android:gravity="start"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="120dp"
+            android:id="@+id/trsnferNo"
+            android:gravity="center"
+            android:padding="2dp"
+            android:textColor="@color/black"
+            android:layout_height="match_parent"/>
+
+
+        <TextView
+            android:layout_width="24dp"
+            android:id="@+id/tvEdit"
+            android:padding="2dp"
+            android:textColor="@color/black"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="90dp"
+            android:id="@+id/tvRemove"
+            android:drawableEnd="@drawable/delete2"
+            android:padding="2dp"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEditSerials"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           />
+
+        <Button
+            android:id="@+id/btnAddSerial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableStart="@drawable/ic_add"
+            android:text="@string/add"
+            android:textAllCaps="false" />
+    </LinearLayout>
+</LinearLayout>
