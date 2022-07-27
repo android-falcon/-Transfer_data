@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
     public static int serialsActive;
 
     static {
-        serialsActive = 1;
+        serialsActive =1;
     }
 
     @Override

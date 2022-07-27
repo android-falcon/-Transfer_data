@@ -113,7 +113,8 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
                     }
                 });
-            } else {
+            } else
+            {
 
                 holder.qty.setEnabled(true);
                 holder.qty.addTextChangedListener(new TextWatcher() {
@@ -171,7 +172,8 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
             }
 
-        } else {
+        }
+        else {
 //            holder.qty.setEnabled(true);
 //            holder.qty.requestFocus();
 //            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -288,7 +290,8 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         if (Login.serialsActive == 0) {
             Log.e("ca1", "CCCC");
             holder.tvEdit.setVisibility(View.INVISIBLE);
-        } else {
+        }
+        else {
             Log.e("ca2", "CCCC");
             List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
 
@@ -303,6 +306,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
                 });
             } else {
                 Log.e("ca4", "CCCC");
+                Log.e("itemcode", holder.itemcode.getText()+"");
                 holder.tvEdit.setVisibility(View.INVISIBLE);
             }
         }

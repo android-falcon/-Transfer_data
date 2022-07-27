@@ -2181,7 +2181,7 @@ public class MainActivity extends AppCompatActivity {
                                     btnAdd.setOnClickListener(v12 -> {
 //                                    if (serialTransfers.size() > 0) {
 //                                        if (ExistsInRepList(s.toString().trim())) {
-
+//
 //                                            int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + serialTransfers.size();
 //                                            replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
 //                                            my_dataBase.replacementDao().updateQTY(s.toString().trim(), String.valueOf(sumQty), String.valueOf(transNo));
@@ -2237,6 +2237,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         fromSpinner.setEnabled(false);
                                         toSpinner.setEnabled(false);
+                                        fillAdapter();
 //                                    }
 
                                     });
@@ -2297,10 +2298,12 @@ public class MainActivity extends AppCompatActivity {
 
                                             fromSpinner.setEnabled(false);
                                             toSpinner.setEnabled(false);
-
+                                                   Log.e("endd","end");
+                                                   fillAdapter();//5555
                                         }
-if(dialog1!=null)                                        dialog1.dismiss();
-                                    } else {
+                         if(dialog1!=null)        dialog1.dismiss();
+                                    }
+                                    else {
 
                                         Dialog qtyDialog = new Dialog(MainActivity.this);
                                         qtyDialog.setContentView(R.layout.add_qty_dialog);
@@ -2339,7 +2342,7 @@ if(dialog1!=null)                                        dialog1.dismiss();
                                             confirmBtn.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-
+                                                 Log.e("onClickconfirm==","case1");
                                                     String qty = qtyEdt.getText().toString().trim();
                                                     if (qty.equals("0") || qty.equals(""))
                                                         qtyEdt.setError("Invalid number");
@@ -2355,9 +2358,9 @@ if(dialog1!=null)                                        dialog1.dismiss();
 
                                                         replacmentRecycler.smoothScrollToPosition(repPosition);
                                                         colorlastrow.setText(repPosition + "");
-
+                                                        Log.e("onClickconfirm==","case2");
                                                         qtyDialog.dismiss();
-
+                                                        fillAdapter();//5555
                                                     }
 
                                                 }
@@ -2376,7 +2379,7 @@ if(dialog1!=null)                                        dialog1.dismiss();
                                                         qtyEdt.setError("Invalid number");
 
                                                     else {
-
+                                                        Log.e("onClickconfirm==","case3");
                                                         ReplacementModel replacementModel = new ReplacementModel();
 
                                                         replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
@@ -2412,7 +2415,7 @@ if(dialog1!=null)                                        dialog1.dismiss();
                                                         toSpinner.setEnabled(false);
 
                                                         qtyDialog.dismiss();
-
+                                                        fillAdapter();//5555
                                                     }
 
                                                 }
@@ -2841,7 +2844,7 @@ if(dialog1!=null)                                        dialog1.dismiss();
     }
 
     public void fillAdapter() {
-        Log.e(" fillAdapter", " fillAdapter");
+        Log.e(" fillAdapter", " fillAdapter"+replacementlist.size());
         replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
         replacmentRecycler.setAdapter(adapter);
