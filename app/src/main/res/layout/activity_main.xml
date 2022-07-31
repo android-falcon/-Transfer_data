@@ -53,17 +53,17 @@
         android:layout_alignTop="@+id/logo"
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/ic_baseline_refresh_24" />
 
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/transfer_logo" />
 
 
@@ -73,7 +73,7 @@
         android:layout_height="18dp"
         android:layout_alignTop="@+id/logo"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/menupopup"
         android:onClick="showPopup" />
@@ -154,7 +154,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/part2"
         android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical">
 
@@ -207,7 +207,7 @@
                 android:id="@+id/searchitemCode"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="3dp"
                 android:layout_weight="1"
                 android:elevation="2dp"
                 android:gravity="center"
@@ -407,11 +407,13 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
         android:fillViewport="true"
+        android:orientation="vertical"
         android:layout_marginBottom="2dp">
 
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
+            android:orientation="vertical"
             android:layout_height="match_parent">
 
             <TableRow
@@ -512,6 +514,7 @@
                     android:background="@color/lightOrange"
                     android:gravity="end"
                     android:textSize="14sp"
+
                     android:visibility="visible" />
 
                 <TextView
@@ -533,8 +536,7 @@
                 android:layout_below="@id/part4"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="1dp"
-                >
+                android:layout_marginTop="1dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/replacmentRec"
@@ -543,7 +545,7 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
     </HorizontalScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
