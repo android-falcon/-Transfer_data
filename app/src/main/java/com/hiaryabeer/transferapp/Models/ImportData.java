@@ -1,5 +1,6 @@
 package com.hiaryabeer.transferapp.Models;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -31,8 +32,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +53,7 @@ import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 //zamel: 92.253.93.250:80 / 295
 public class ImportData {
     public static ArrayList<ZoneModel> listAllZone = new ArrayList<>();
+    public static ArrayList<ItemSwitch> listAllItemSwitch = new ArrayList<>();
     public static int posize;
     public static String itemn;
     public static String item_name = "";
@@ -62,7 +69,7 @@ public class ImportData {
     public static List<ZoneModel> listQtyZone = new ArrayList<>();
     public static ArrayList<CompanyInfo> companyInList = new ArrayList<>();
     public static String barcode = "";
-    public static SweetAlertDialog pdRepla, pdRepla2;
+    public static SweetAlertDialog pdRepla, pdRepla2,pdRepla3;
     public JSONArray jsonArrayPo;
     public JSONObject stringNoObject;
 
@@ -131,7 +138,7 @@ public class ImportData {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_LONG).show();
         }
 
-        headerDll = "/Falcons/VAN.Dll/";
+ headerDll = "/Falcons/VAN.Dll/";
     }
 
     public void getAllItems() {
@@ -196,6 +203,200 @@ public class ImportData {
             new JSONTask_getAllStoreData().execute();
         else
             Toast.makeText(context, context.getString(R.string.fillIp), Toast.LENGTH_SHORT).show();
+    }
+    public void getItemSwitch() {
+        pdRepla3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pdRepla3.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+        pdRepla3.setTitleText("Get ItemSwitch");
+        pdRepla3.setCancelable(false);
+        pdRepla3.show();
+        if (!ipAddress.equals(""))
+            new JSONTaskGetItemSwitch().execute();
+        else
+            Toast.makeText(context, context.getString(R.string.fillIp), Toast.LENGTH_SHORT).show();
+    }
+
+    private class JSONTaskGetItemSwitch extends AsyncTask<String, String,  List<ItemSwitch> > {
+
+
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected List<ItemSwitch>  doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+
+                try {
+
+                    //+custId
+
+
+
+                        link = "http://" + ipAddress.trim() +headerDll.trim() + "/GetVanAllData?STRNO=" + "1" + "&CONO=" + CONO;
+
+//                        } else {
+//                            URL_TO_HIT = "http://" + ipAddress.trim() + ":" + ipWithPort.trim() + headerDll.trim() + "/GetVanAllData?STRNO=" + SalesManLogin + "&CONO=" + CONO;
+//
+//                        }
+
+                        Log.e("URL_TO_HIT", "" + link);
+
+                } catch (Exception e) {
+
+                }
+
+
+
+                URL url = new URL(link);
+
+                //*************************************
+
+                String JsonResponse = null;
+                StringBuffer sb = new StringBuffer("");
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                request.setURI(new URI(link));
+
+
+                HttpResponse response = null;
+
+                try {
+                    response = client.execute(request);
+                } catch (Exception e) {
+                    // Log.e("response",""+response.toString());
+                    Handler h = new Handler(Looper.getMainLooper());
+                    h.post(new Runnable() {
+                        public void run() {
+                            pdRepla3.dismiss();
+
+                        }
+                    });
+                }
+
+
+                try {
+                    BufferedReader in = new BufferedReader(new
+                            InputStreamReader(response.getEntity().getContent()));
+
+
+                    String line = "";
+                    // Log.e("finalJson***Import", sb.toString());
+
+                    while ((line = in.readLine()) != null) {
+                        sb.append(line);
+                    }
+
+                    in.close();
+                } catch (Exception e) {
+                    Handler h = new Handler(Looper.getMainLooper());
+                    h.post(new Runnable() {
+                        public void run() {
+                            pdRepla3.dismiss();
+
+                        }
+                    });
+                }
+
+
+                // JsonResponse = sb.toString();
+
+                String finalJson = sb.toString();
+                JSONObject parentObject = new JSONObject(finalJson);
+
+
+
+
+            try {
+                my_dataBase.itemSwitchDao().dELETEAll();
+                listAllItemSwitch.clear();
+                    JSONArray parentArrayItem_Switch = parentObject.getJSONArray("item_swich");
+
+                    for (int i = 0; i < parentArrayItem_Switch.length(); i++) {
+                        JSONObject finalObject = parentArrayItem_Switch.getJSONObject(i);
+
+                        ItemSwitch item = new ItemSwitch();
+                        item.setItem_NAMEA(finalObject.getString("ITEMNAMEA"));
+                        item.setItem_OCODE(finalObject.getString("ITEMOCODE"));
+                        item.setItem_NCODE(finalObject.getString("ITEMNCODE"));
+
+                        listAllItemSwitch.add(item);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data", e.getMessage().toString());
+                }
+
+
+
+
+
+                Log.e("listAllItemSwitch",""+listAllItemSwitch.size());
+            } catch (MalformedURLException e) {
+                pdRepla3.dismiss();
+                e.printStackTrace();
+            } catch (IOException e) {
+
+                pdRepla3.dismiss();
+
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } finally {
+
+                pdRepla3.dismiss();
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        if (listAllItemSwitch.size() == 0) {
+                            new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("check Connection")
+                                    .show();
+                        }
+
+
+                    }
+                });
+
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    pdRepla3.dismiss();
+                }
+            }
+            return listAllItemSwitch;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<ItemSwitch> result) {
+            super.onPostExecute(result);
+            pdRepla3.dismiss();
+
+            if (result != null && result.size() != 0) {
+                Log.e("Customerr", "*****************" + listAllItemSwitch.size());
+                my_dataBase.itemSwitchDao().insertAll(result);
+            } else {
+
+                    }
+        }
     }
 
     private class JSONTask_getQTYOFZone extends AsyncTask<String, String, String> {

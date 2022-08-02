@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
     public static int serialsActive;
 
     static {
-        serialsActive = 0;
+        serialsActive =1;
     }
 
     @Override
@@ -280,8 +280,17 @@ public class Login extends AppCompatActivity {
         BottomSheetDialog dialog = new BottomSheetDialog(Login.this, R.style.SheetDialog);
         dialog.setContentView(R.layout.ip_setting_dialog);
 
-        dialog.setCancelable(false);
-
+//        {
+////            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+////            lp.copyFrom(dialog.getWindow().getAttributes());
+////
+////            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+////            dialog.getWindow().setAttributes(lp);
+//            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+//            int height = 50;
+//
+//            dialog.getWindow().setLayout(width, height);
+//        }
         dialog.show();
         loginBox.setVisibility(View.GONE);
 
@@ -313,6 +322,7 @@ public class Login extends AppCompatActivity {
         final LinearLayout printLinear = dialog.findViewById(R.id.printLinear);
 
         if (serialsActive == 1) {
+            Log.e("case1==","serialsActive");
             checkboxQtyCheck.setChecked(false);
             checkboxQtyCheck.setVisibility(View.GONE);
             rawahnehAddQty.setChecked(true);
@@ -320,6 +330,7 @@ public class Login extends AppCompatActivity {
             printLinear.setVisibility(View.GONE);
 
         } else {
+            Log.e("case2==","serials not Active");
             checkboxQtyCheck.setVisibility(View.VISIBLE);
             rawahnehAddQty.setVisibility(View.GONE);
             rawahnehAddQty.setChecked(false);
@@ -534,6 +545,7 @@ public class Login extends AppCompatActivity {
         my_dataBase.settingDao().deleteALL();
         my_dataBase.storeDao().deleteall();
         my_dataBase.itemDao().dELETEAll();
+        my_dataBase.itemSwitchDao().dELETEAll();
         my_dataBase.serialsDao().deleteAllSerials();
         my_dataBase.settingDao().insert(settings);
 

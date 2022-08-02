@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layoutDirection="locale"
         android:orientation="vertical"
-        android:paddingVertical="35dp"
+        android:paddingVertical="1dp"
         android:textDirection="locale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -227,8 +227,7 @@
             android:layout_marginTop="15dp"
             android:checked="true"
             android:text="@string/show_quantity_dialog_when_adding_an_item"
-            android:textColor="@color/black"
-            android:visibility="gone" />
+            android:textColor="@color/black" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
