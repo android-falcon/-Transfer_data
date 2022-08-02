@@ -76,7 +76,7 @@
             android:id="@+id/startBtn"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginTop="-13dp"
+            android:layout_marginTop="-50dp"
             android:background="@drawable/start_btn"
             android:drawableEnd="@drawable/ic_next"
             android:drawablePadding="10dp"

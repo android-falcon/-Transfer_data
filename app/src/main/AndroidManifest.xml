@@ -62,7 +62,7 @@
         <activity
             android:name=".Activities.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".Activities.bMITP"

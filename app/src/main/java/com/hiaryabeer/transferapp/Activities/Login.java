@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
     public static int serialsActive;
 
     static {
-        serialsActive = 1;
+        serialsActive =1;
     }
 
     @Override
@@ -280,8 +280,17 @@ public class Login extends AppCompatActivity {
         BottomSheetDialog dialog = new BottomSheetDialog(Login.this, R.style.SheetDialog);
         dialog.setContentView(R.layout.ip_setting_dialog);
 
-        dialog.setCancelable(false);
-
+//        {
+////            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+////            lp.copyFrom(dialog.getWindow().getAttributes());
+////
+////            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+////            dialog.getWindow().setAttributes(lp);
+//            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+//            int height = 50;
+//
+//            dialog.getWindow().setLayout(width, height);
+//        }
         dialog.show();
         loginBox.setVisibility(View.GONE);
 

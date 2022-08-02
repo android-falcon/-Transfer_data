@@ -8,11 +8,21 @@
     android:elevation="5dp"
     android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:padding="2dp">
+
 
         <TextView
             android:id="@+id/icClose"
@@ -242,4 +252,6 @@
 
     </LinearLayout>
 
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

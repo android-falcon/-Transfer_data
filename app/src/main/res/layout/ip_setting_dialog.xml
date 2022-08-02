@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layoutDirection="locale"
         android:orientation="vertical"
-        android:paddingVertical="35dp"
+        android:paddingVertical="1dp"
         android:textDirection="locale"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
