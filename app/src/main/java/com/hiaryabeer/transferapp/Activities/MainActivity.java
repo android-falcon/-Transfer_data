@@ -1371,8 +1371,8 @@ public class MainActivity extends AppCompatActivity {
                         my_dataBase.itemDao().insertAll(AllImportItemlist);
                         Toast.makeText(MainActivity.this, getString(R.string.getAllData), Toast.LENGTH_SHORT).show();
                         ImportData.pdRepla.dismissWithAnimation();
-                        my_dataBase.itemSwitchDao().dELETEAll();
-                       getitemswitch();
+//                        my_dataBase.itemSwitchDao().dELETEAll();
+//                       getitemswitch();
 
                     } else if (editable.toString().equals("nodata")) {
                         Toast.makeText(MainActivity.this, getString(R.string.netWorkError), Toast.LENGTH_SHORT).show();
