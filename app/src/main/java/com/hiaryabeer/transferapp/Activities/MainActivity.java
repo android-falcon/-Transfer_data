@@ -1479,6 +1479,8 @@ public class MainActivity extends AppCompatActivity {
 
                         // my_dataBase.itemSwitchDao().dELETEAll();
 
+//                        my_dataBase.itemSwitchDao().dELETEAll();
+//                       getitemswitch();
 
                     } else if (editable.toString().equals("nodata")) {
                         ImportData.pdRepla.dismissWithAnimation();
