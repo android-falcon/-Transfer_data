@@ -117,7 +117,7 @@ public class SerialsAdapter extends RecyclerView.Adapter<SerialsAdapter.SerialsV
                                     serialTransfers.get(getAdapterPosition()).getVoucherNo())
                             );
                             my_database.replacementDao().updateQTY(serialTransfers.get(getAdapterPosition()).getItemCode(),
-                                    String.valueOf(qty - 1),  serialTransfers.get(getAdapterPosition()).getVoucherNo());
+                                    String.valueOf(qty - 1),  serialTransfers.get(getAdapterPosition()).getVoucherNo(),        String.valueOf(qty - 1));
 
                             int pos = repPosition(serialTransfers.get(getAdapterPosition()).getItemCode());
                             Log.e("ReplacementPosition", pos + "");
@@ -127,7 +127,8 @@ public class SerialsAdapter extends RecyclerView.Adapter<SerialsAdapter.SerialsV
                             replacmentRecycler.setAdapter(adapter);
                             if ((qty - 1) == 0) {
                                 my_database.replacementDao().deleteReplacement(ReplacementAdapter.list.get(pos).getItemcode(),
-                                        ReplacementAdapter.list.get(pos).getFrom(), ReplacementAdapter.list.get(pos).getTo(),ReplacementAdapter.list.get(pos).getTransNumber());
+                                        ReplacementAdapter.list.get(pos).getFrom(), ReplacementAdapter.list.get(pos).getTo(),
+                                        ReplacementAdapter.list.get(pos).getTransNumber());
                                 ReplacementAdapter.list.remove(pos);
                             }
                             updateAdpapter();

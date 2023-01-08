@@ -10,22 +10,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hiaryabeer.transferapp.Activities.Login;
 import com.hiaryabeer.transferapp.R;
-import com.hiaryabeer.transferapp.ReplacementModel;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition;
@@ -81,6 +83,59 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 //        holder.tvRemove.setTag(position);
         //   holder.itemqty.setText(list.get(position).getQty());
         holder.itemqty.setEnabled(false);
+
+        List<String> itemUnits = new ArrayList<>();
+
+        itemUnits.add("One Unit");
+        itemUnits.addAll(my_dataBase.itemsUnitDao().getItemUnits(list.get(position).getItemcode()));
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, itemUnits);
+
+        holder.unitSpinner.setAdapter(arrayAdapter);
+try {
+    for(int i=0;i<itemUnits.size();i++)
+        if(itemUnits.get(i).equals(list.get(position).getUnitID()))
+            holder.unitSpinner.setSelection(i);
+
+}catch (Exception e){
+    Log.e("Exception",e.getMessage());
+}
+
+        holder. unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String CountOfItems=my_dataBase.itemsUnitDao().getConvRate(list.get(holder.getAdapterPosition()).getItemcode(), holder.unitSpinner.getSelectedItem().toString());
+               if(pos!=0)
+                   list.get(holder.getAdapterPosition()).setCal_Qty(String.valueOf( Double.parseDouble(list.get(holder.getAdapterPosition()).getRecQty())*Double.parseDouble(CountOfItems)));
+               else
+                   list.get(holder.getAdapterPosition()).setCal_Qty(list.get(holder.getAdapterPosition()).getRecQty());
+
+
+
+               list.get(holder.getAdapterPosition()).setUnitID(holder.unitSpinner.getSelectedItem().toString());
+                my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+                        list.get(holder.getAdapterPosition()).getRecQty(),
+                        list.get(holder.getAdapterPosition()).getTransNumber(),
+                        list.get(holder.getAdapterPosition()).getCal_Qty()    );
+
+
+
+                my_dataBase.replacementDao().UpdateUnitId(list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getTransNumber()
+                , list.get(holder.getAdapterPosition()).getUnitID());
+                Log.e("getSelectedItem",holder.unitSpinner.getSelectedItem().toString()+"");
+                Log.e("Itemcode",list.get(holder.getAdapterPosition()).getItemcode()+"");
+                Log.e("CountOfItems",CountOfItems+"");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
+
 
 //        holder.qty.setEnabled(Login.serialsActive == 0);
 
@@ -139,10 +194,20 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 
                                 if (!newqty.trim().equals("0")) {
+                                    String CountOfItems=my_dataBase.itemsUnitDao().getConvRate(list.get(holder.getAdapterPosition()).getItemcode(), holder.unitSpinner.getSelectedItem().toString());
+                                      if(!holder.unitSpinner.getSelectedItem().toString().equals("One Unit")) {
+                                          list.get(holder.getAdapterPosition()).setCal_Qty(String.valueOf(Double.parseDouble(newqty) * Double.parseDouble(CountOfItems)));
 
+                                      }
+
+                                    else {
+                                          list.get(holder.getAdapterPosition()).setCal_Qty(newqty);
+
+                                      }
                                     list.get(holder.getAdapterPosition()).setRecQty(newqty);
                                     my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber());
+                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
+                                            list.get(holder.getAdapterPosition()).getCal_Qty()    );
 
 //                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
 
@@ -206,10 +271,23 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
                                 if ((Integer.parseInt(newqty)) <= (totAvailableQty)) {
                                     if (!newqty.trim().equals("0")) {
+                                        String CountOfItems=my_dataBase.itemsUnitDao().getConvRate(list.get(holder.getAdapterPosition()).getItemcode(), holder.unitSpinner.getSelectedItem().toString());
+                                        if(!holder.unitSpinner.getSelectedItem().toString().equals("One Unit")) {
+                                            list.get(holder.getAdapterPosition()).setCal_Qty(String.valueOf(Double.parseDouble(newqty) * Double.parseDouble(CountOfItems)));
+
+                                        }
+
+                                        else {
+                                            list.get(holder.getAdapterPosition()).setCal_Qty(newqty);
+
+                                        }
 
                                         list.get(holder.getAdapterPosition()).setRecQty(newqty);
                                         my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                                list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber());
+                                                list.get(holder.getAdapterPosition()).getRecQty(),
+                                                list.get(holder.getAdapterPosition()).getTransNumber(),
+                                                list.get(holder.getAdapterPosition()).getCal_Qty()
+                                        );
                                         list.get(holder.getAdapterPosition()).setAvailableQty(String.valueOf(totAvailableQty - Integer.parseInt(newqty)));
                                         my_dataBase.replacementDao().updateAvailableQTY(list.get(holder.getAdapterPosition()).getTransNumber(),
                                                 list.get(holder.getAdapterPosition()).getItemcode(), list.get(holder.getAdapterPosition()).getAvailableQty());
@@ -255,9 +333,20 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
                                 if (!newqty.trim().equals("0")) {
 
+                                        String CountOfItems=my_dataBase.itemsUnitDao().getConvRate(list.get(holder.getAdapterPosition()).getItemcode(), holder.unitSpinner.getSelectedItem().toString());
+                                        if(!holder.unitSpinner.getSelectedItem().toString().equals("One Unit")) {
+                                            list.get(holder.getAdapterPosition()).setCal_Qty(String.valueOf(Double.parseDouble(newqty) * Double.parseDouble(CountOfItems)));
+
+                                        }
+
+                                        else {
+                                            list.get(holder.getAdapterPosition()).setCal_Qty(newqty);
+
+                                        }
                                     list.get(holder.getAdapterPosition()).setRecQty(newqty);
                                     my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber());
+                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
+                                            list.get(holder.getAdapterPosition()).getCal_Qty() );
 
 //                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
 
@@ -385,13 +474,14 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         Button btnAddSerial;
 
         RecyclerView rvEditSerials;
+        Spinner  unitSpinner;
 
         public replacementViewHolder(@NonNull View itemView) {
             super(itemView);
             linearLayoutColoring = itemView.findViewById(R.id.row);
 
 
-
+            unitSpinner= itemView.findViewById(R.id.unitspinner);
             TransferNo = itemView.findViewById(R.id.trsnferNo);
             itemname = itemView.findViewById(R.id.itemname);
             my_dataBase = RoomAllData.getInstanceDataBase(context);

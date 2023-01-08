@@ -19,4 +19,13 @@ public interface ItemSwitchDao {
     void dELETEAll();
     @Query("SELECT item_OCODE FROM ItemSwitch_TABLE where item_NCODE =:ncode")
     String getitemocode(String ncode);
+
+    @Query("DELETE FROM ItemSwitch_TABLE where item_NCODE =:ncode")
+    void deleteitemrecord(String ncode);
+    @Insert
+    void insert(ItemSwitch itemSwitch);
+
+    @Query("SELECT * FROM ItemSwitch_TABLE where item_NCODE =:ncode")
+    ItemSwitch getitemSwitchByNcocd(String ncode);
+
 }

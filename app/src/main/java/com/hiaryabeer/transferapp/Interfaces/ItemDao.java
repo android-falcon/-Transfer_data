@@ -1,11 +1,14 @@
 package com.hiaryabeer.transferapp.Interfaces;
 
+import android.content.ClipData;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 
 import com.hiaryabeer.transferapp.Models.AllItems;
+import com.hiaryabeer.transferapp.Models.ItemSwitch;
 
 import java.util.List;
 
@@ -28,5 +31,11 @@ public interface ItemDao {
 
     @Query("SELECT DISTINCT Item_Kind FROM ITEM_TABLE WHERE Item_Kind IS NOT NULL AND TRIM(Item_Kind) <> '' ")
     List<String> getAllKinds();
+    @Query("SELECT ITEMNAME FROM ITEM_TABLE WHERE ITEMOCODE = :itemcode")
+    String getitemname(String itemcode);
+
+
+    @Query("SELECT * FROM ITEM_TABLE where ITEMOCODE =:code")
+    AllItems getItem(String code);
 
 }

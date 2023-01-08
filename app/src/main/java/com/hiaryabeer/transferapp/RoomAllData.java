@@ -11,8 +11,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.hiaryabeer.transferapp.Interfaces.ItemDao;
 import com.hiaryabeer.transferapp.Interfaces.ItemSwitchDao;
+import com.hiaryabeer.transferapp.Interfaces.ItemsUnitDao;
 import com.hiaryabeer.transferapp.Interfaces.ReplacementDao;
-import com.hiaryabeer.transferapp.Interfaces.SerialTransfersDao;
 import com.hiaryabeer.transferapp.Interfaces.SerialTransfersDao;
 import com.hiaryabeer.transferapp.Interfaces.SerialsDao;
 import com.hiaryabeer.transferapp.Interfaces.SettingDao;
@@ -21,10 +21,12 @@ import com.hiaryabeer.transferapp.Interfaces.ZoneDao;
 import com.hiaryabeer.transferapp.Models.AllItems;
 import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
 import com.hiaryabeer.transferapp.Models.ItemSwitch;
+import com.hiaryabeer.transferapp.Models.ItemsUnit;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
 
 
-@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class}, version = 24, exportSchema = false)
+@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class}, version = 26, exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private static RoomAllData database;
     public static String dataBaseName = "DBRoomTransfer";
@@ -40,7 +42,7 @@ public abstract class RoomAllData extends RoomDatabase {
     public abstract StoreDao storeDao();
     public abstract ItemSwitchDao itemSwitchDao();
     public abstract SerialTransfersDao serialTransfersDao();
-
+    public abstract ItemsUnitDao itemsUnitDao();
     public abstract SerialsDao serialsDao();
 
     /////////////////
@@ -141,6 +143,57 @@ public abstract class RoomAllData extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_24_25 = new Migration(24, 25) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+//            CREATE TABLE Item_Unit_Details (
+//                    id INT  IDENTITY(1,1) PRIMARY KEY,
+//                    COMAPNYNO varchar(255),
+//                    ITEMNO varchar(255),
+//                    UNITID varchar(255),
+//                    CONVRATE double)
+
+//);INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+//            database.execSQL("            CREATE TABLE Item_Unit_Details (\n" +
+//                    "                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+//                    "                    COMAPNYNO TEXT,\n" +
+//                    "                    ITEMNO TEXT,\n" +
+//                    "                    UNITID TEXT,\n" +
+//                    "                    CONVRATE REAL NOT NULL)\n" +
+//                    "\t\t\t\t");
+
+
+        }
+    };
+    static final Migration MIGRATION_24_26 = new Migration(24, 26) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+            database.execSQL("            CREATE TABLE ItemsUnit_TABLE (\n" +
+                    "                    SERIAL INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                    "                    ITEMOCODE TEXT,\n" +
+                    "                    ITEMBARCODE TEXT,\n" +
+                            "              SALEPRICE TEXT,\n" +
+
+                    "                    ITEMU TEXT,\n" +
+                    "                    UQTY TEXT,\n" +
+                    "                    USERIAL TEXT,\n" +
+                    "                    CALCQTY TEXT,\n" +
+                    "                    WHOLESALEPRC TEXT,\n" +
+                    "                    PURCHASEPRICE TEXT,\n" +
+                            "                    UNIT_NAME TEXT,\n" +
+
+                    "                    ORG_SALEPRICE TEXT,\n" +
+                    "                    OLD_SALE_PRICE TEXT)\n" +
+
+
+                    "\t\t\t\t");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN Cal_Qty TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN UnitID TEXT");
+
+        }
+    };
 
     public static synchronized RoomAllData getInstanceDataBase(Context context) {
         if (database == null) {
@@ -152,7 +205,10 @@ public abstract class RoomAllData extends RoomDatabase {
                             MIGRATION_19_23,
                             MIGRATION_20_23,
                             MIGRATION_21_23,
-                            MIGRATION_22_23)
+                            MIGRATION_22_23,
+                            MIGRATION_24_25 ,
+                            MIGRATION_24_26
+                          )
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .build();

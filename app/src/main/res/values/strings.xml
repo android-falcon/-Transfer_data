@@ -40,7 +40,7 @@
     <string name="notvaildqty2">There is no enough quantity in </string>
     <string name="reqired_filled">*Reqired</string>
     <string name="savedSuccsesfule">Saved Successfully</string>
-
+    <string name="savednotSuccsesfule">Data not Saved </string>
     <string name="msg3">All data already posted</string>
     <string name="barcodeexists">invalid itemcode</string>
     <string name="boxnovalidate">boxNO does not exists in this PO</string>
@@ -242,6 +242,12 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="save_before_getting_new_data">Please save before getting new data !</string>
     
     <string name="cancel_dialog_msg">This will discard ALL replacements in the current transfer. Do you want to continue?</string>
+    <string name="todate">To Date</string>
+    <string name="fromdate">From Date</string>
+    <string name="getitemswitch">Get Item Switch</string>
+    <string name="updateitemswitch"> Item Switch Updated Successfully</string>
+    <string name="getitemunit">Get Item Units</string>
+    <string name="itemunit">ItemUnit</string>
 
 
 </resources>

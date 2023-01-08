@@ -1,4 +1,4 @@
-package com.hiaryabeer.transferapp;
+package com.hiaryabeer.transferapp.Models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -75,6 +75,28 @@ public class ReplacementModel implements Parcelable {
 
     @ColumnInfo(name = "availableQty")
     String availableQty;
+
+    @ColumnInfo(name = "Cal_Qty")
+    String Cal_Qty;
+
+    @ColumnInfo(name = "UnitID")
+    String UnitID;
+
+    public String getUnitID() {
+        return UnitID;
+    }
+
+    public void setUnitID(String unitID) {
+        UnitID = unitID;
+    }
+
+    public String getCal_Qty() {
+        return Cal_Qty;
+    }
+
+    public void setCal_Qty(String cal_Qty) {
+        Cal_Qty = cal_Qty;
+    }
 
     public String getAvailableQty() {
         return availableQty;

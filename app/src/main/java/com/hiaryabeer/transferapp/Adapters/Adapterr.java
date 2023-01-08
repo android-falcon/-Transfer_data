@@ -80,11 +80,12 @@ public class Adapterr extends BaseAdapter {
             });
         } else {
 //            icAddSerial.setVisibility(View.VISIBLE);
+            Log.e("items.get(position).getItemOcode()===", items.get(position).getItemOcode() + "");
             parentLinear.setOnClickListener(v -> itemcode.setText(items.get(position).getItemOcode()));
         }
 
         //sets the text for item name and item description from the current item object
-        textViewItemName.setText(currentItem.getItemName());
+        textViewItemName.setText(currentItem.getItemNameA());
         //linearLayout.setBackgroundColor(context.getResources().getColor(R.color.yelow));
 
         // returns the view for the current row

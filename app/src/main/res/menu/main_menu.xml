@@ -18,5 +18,10 @@
         android:id="@+id/menuExport"
         android:title="@string/export"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menugetitemswitch"
+
+        android:title="@string/getitemswitch"
+        app:showAsAction="never" />
 
 </menu>

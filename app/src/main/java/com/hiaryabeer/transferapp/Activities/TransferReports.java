@@ -6,7 +6,6 @@ import static com.itextpdf.text.Element.ALIGN_CENTER;
 
 import static org.apache.poi.ss.usermodel.CellStyle.VERTICAL_CENTER;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
@@ -53,7 +52,7 @@ import com.hiaryabeer.transferapp.BuildConfig;
 import com.hiaryabeer.transferapp.Models.GeneralMethod;
 
 import com.hiaryabeer.transferapp.R;
-import com.hiaryabeer.transferapp.ReplacementModel;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
@@ -85,10 +84,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 

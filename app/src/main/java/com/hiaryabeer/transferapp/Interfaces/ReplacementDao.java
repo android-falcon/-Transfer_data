@@ -7,7 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 
-import com.hiaryabeer.transferapp.ReplacementModel;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
 
 import java.util.List;
 
@@ -39,8 +39,12 @@ public interface ReplacementDao {
     @Query("UPDATE REPLACEMENT_TABLE SET  ISPOSTED='1' WHERE ISPOSTED='0' AND TransNumber = :voucherNo AND ITEMCODE = :itemCode")
     void postFor(String voucherNo, String itemCode);
 
-    @Query("UPDATE REPLACEMENT_TABLE SET RECQTY = :qty WHERE ITEMCODE= :barcode AND ISPOSTED='0' AND TransNumber= :tran" )
-    int updateQTY(String barcode, String qty,String tran);
+    @Query("UPDATE REPLACEMENT_TABLE SET RECQTY = :qty, Cal_Qty= :calqty WHERE ITEMCODE= :barcode AND ISPOSTED='0' AND TransNumber= :tran" )
+    int updateQTY(String barcode, String qty,String tran,String calqty);
+    @Query("UPDATE REPLACEMENT_TABLE SET UnitID = :unitid WHERE ITEMCODE= :barcode AND ISPOSTED='0' AND TransNumber= :tran" )
+
+    int   UpdateUnitId(String barcode, String tran,String unitid);
+
 
     @Query("DELETE FROM REPLACEMENT_TABLE WHERE ITEMCODE= :barcode AND FROMSTORE= :FrSt AND TOSTORE= :ToSt AND ISPOSTED='0' AND TransNumber= :TNo")
     int  deleteReplacement(String barcode, String FrSt, String ToSt,String TNo);

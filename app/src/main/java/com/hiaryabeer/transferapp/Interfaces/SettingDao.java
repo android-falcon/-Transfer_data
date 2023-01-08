@@ -45,4 +45,9 @@ public interface SettingDao {
     @Query ("select PORT from SETTINGS_TABLE")
     String getPort();
 
+    @Query ("update SETTINGS_TABLE set  Check_Qty=:check ")
+    int  updateQtyCheck(String check);
+    @Query ("update SETTINGS_TABLE set  Rawahneh_Add_Item=:check ")
+    int  updateRawahneh_Add_ItemCheck(String check);
+
 }

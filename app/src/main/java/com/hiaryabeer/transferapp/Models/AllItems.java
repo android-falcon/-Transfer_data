@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity(tableName = "ITEM_TABLE")
 public class AllItems {
     @PrimaryKey(autoGenerate = true)
@@ -18,57 +20,11 @@ public class AllItems {
     }
 
     @ColumnInfo(name = "ITEMNAME")
-    String ItemName;
+    String ItemNameA;
+
+    @SerializedName("ItemOCode")
     @ColumnInfo(name = "ITEMOCODE")
     String ItemOcode;
-    @ColumnInfo(name = "BARCODE")
-    String barCode;
-    @ColumnInfo(name = "Has_Serial")
-    String hasSerial;
-    @ColumnInfo(name = "Item_Category")
-    String category;
-    @ColumnInfo(name = "Item_Kind")
-    String kind;
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getHasSerial() {
-        return hasSerial;
-    }
-
-    public void setHasSerial(String hasSerial) {
-        this.hasSerial = hasSerial;
-    }
-
-    public String getBarCode() {
-        return barCode;
-    }
-
-    public void setBarCode(String barCode) {
-        this.barCode = barCode;
-    }
-
-    public String getItemName() {
-        return ItemName;
-    }
-
-    public void setItemName(String itemName) {
-        ItemName = itemName;
-    }
 
     public String getItemOcode() {
         return ItemOcode;
@@ -77,4 +33,55 @@ public class AllItems {
     public void setItemOcode(String itemOcode) {
         ItemOcode = itemOcode;
     }
+
+    @ColumnInfo(name = "BARCODE")
+    String ItemNCode;
+    @ColumnInfo(name = "Has_Serial")
+    String ITEMHASSERIAL;
+    @ColumnInfo(name = "Item_Category")
+    String ItemG;
+    @ColumnInfo(name = "Item_Kind")
+    String ItemK;
+
+    public String getItemG() {
+        return ItemG;
+    }
+
+    public void setItemG(String itemG) {
+        this.ItemG = itemG;
+    }
+
+    public String getItemK() {
+        return ItemK;
+    }
+
+    public void setItemK(String itemK) {
+        this.ItemK = itemK;
+    }
+
+    public String getITEMHASSERIAL() {
+        return ITEMHASSERIAL;
+    }
+
+    public void setITEMHASSERIAL(String ITEMHASSERIAL) {
+        this.ITEMHASSERIAL = ITEMHASSERIAL;
+    }
+
+    public String getItemNCode() {
+        return ItemNCode;
+    }
+
+    public void setItemNCode(String itemNCode) {
+        this.ItemNCode = itemNCode;
+    }
+
+    public String getItemNameA() {
+        return ItemNameA;
+    }
+
+    public void setItemNameA(String itemNameA) {
+        ItemNameA = itemNameA;
+    }
+
+
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,18 @@
     android:orientation="vertical"
     tools:context=".Activities.MainActivity">
 
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:fillViewport="true"-->
+<!--        android:orientation="vertical">-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/exportAllState"
         android:layout_width="match_parent"
@@ -66,7 +77,13 @@
         android:layout_marginTop="10dp"
         android:src="@drawable/transfer_logo" />
 
-
+    <TextView
+        android:id="@+id/iraqswitch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text=""
+        android:visibility="gone" />
     <ImageButton
         android:id="@+id/btnShow"
         android:layout_width="24dp"
@@ -177,15 +194,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="0.2"
+                android:layout_weight="0.4"
                 android:background="@drawable/back_border_edit"
                 android:elevation="2dp"
                 android:gravity="center"
                 android:inputType="text"
                 android:padding="3dp"
+                android:layout_toLeftOf="@+id/ic_clear"
                 android:textColor="@color/black"
                 android:textCursorDrawable="@color/red"
                 android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/ic_clear"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/ic_notification_clear_all"
+                app:layout_constraintBottom_toBottomOf="@id/itemcodeedt"
+                app:layout_constraintEnd_toEndOf="@+id/itemcodeedt"
+                app:layout_constraintTop_toTopOf="@id/itemcodeedt"
+                android:layout_weight="1"
+                app:tint="@color/gray" />
 
 
             <TextView
@@ -396,6 +425,21 @@
 
 
     </LinearLayout>
+            <ScrollView
+                android:id="@+id/horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/part3"
+                android:layout_above="@id/lin"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="2dp"
+                android:fillViewport="true"
+
+                android:layout_marginBottom="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
     <HorizontalScrollView
         android:id="@+id/horizontal"
@@ -407,7 +451,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="2dp"
         android:fillViewport="true"
-        android:orientation="vertical"
+
         android:layout_marginBottom="2dp">
 
 
@@ -486,7 +530,15 @@
                     android:text="@string/recQty"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
 
+                    android:text="@string/itemunit"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
@@ -547,6 +599,8 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+                </LinearLayout>
+            </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -716,6 +770,8 @@ android:id="@+id/lin"
 
 
     </LinearLayout>
-</RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>
 
 

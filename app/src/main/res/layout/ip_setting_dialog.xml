@@ -4,6 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/white_bg_top_radius">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/mainLinearAdapter"
@@ -657,4 +665,6 @@
 
 
     </RelativeLayout>
+</LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

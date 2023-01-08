@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import android.widget.LinearLayout;
@@ -54,14 +56,14 @@ public class Login extends AppCompatActivity {
     private String cono, coYear;
     ListView listCompany;
     EditText unameEdt,passEdt;
-
+    public static int iraqFlage=1;
     public static EditText itemKintText1;
 
     ///B
     public static int serialsActive;
 
     static {
-        serialsActive =1;
+        serialsActive =0;
     }
 
     @Override
@@ -279,7 +281,7 @@ public class Login extends AppCompatActivity {
 
         BottomSheetDialog dialog = new BottomSheetDialog(Login.this, R.style.SheetDialog);
         dialog.setContentView(R.layout.ip_setting_dialog);
-
+        dialog.setCancelable(true);
 //        {
 ////            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 ////            lp.copyFrom(dialog.getWindow().getAttributes());
@@ -293,7 +295,12 @@ public class Login extends AppCompatActivity {
 //        }
         dialog.show();
         loginBox.setVisibility(View.GONE);
-
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                startActivity(new Intent(Login.this,Login.class));
+            }
+        });
 
 
 //        final Dialog dialog = new Dialog(Login.this);
@@ -318,22 +325,51 @@ public class Login extends AppCompatActivity {
         final CheckBox checkboxQtyCheck = dialog.findViewById(R.id.checkboxQtyCheck);
         final CheckBox rawahnehAddQty = dialog.findViewById(R.id.rawahnehAddQty);
 
+
+        checkboxQtyCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                                                      @Override
+                                                      public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                                                          if (isChecked) {
+                                                              int x = my_dataBase.settingDao().updateQtyCheck("1");
+                                                              Log.e("x==",x+"");
+                                                          }
+                                                          else
+                                                          {  int x = my_dataBase.settingDao().updateQtyCheck("0");
+                                                              Log.e("x==",x+"");
+                                                          }
+                                                      }
+                                                  }
+        );
+        rawahnehAddQty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                                               @Override
+                                               public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                                                   if (isChecked)
+
+                                                       my_dataBase.settingDao().updateRawahneh_Add_ItemCheck("1");
+                                                   else
+                                                       my_dataBase.settingDao().updateRawahneh_Add_ItemCheck("0");
+                                               }
+                                           }
+        );
+
         final RadioGroup printRG = dialog.findViewById(R.id.printRG);
         final LinearLayout printLinear = dialog.findViewById(R.id.printLinear);
 
         if (serialsActive == 1) {
             Log.e("case1==","serialsActive");
-            checkboxQtyCheck.setChecked(false);
-            checkboxQtyCheck.setVisibility(View.GONE);
-            rawahnehAddQty.setChecked(true);
+          //  checkboxQtyCheck.setChecked(false);
+      //   checkboxQtyCheck.setVisibility(View.GONE);
+         //   rawahnehAddQty.setChecked(true);
             rawahnehAddQty.setVisibility(View.VISIBLE);
-            printLinear.setVisibility(View.GONE);
+       //  printLinear.setVisibility(View.GONE);
 
         } else {
             Log.e("case2==","serials not Active");
             checkboxQtyCheck.setVisibility(View.VISIBLE);
-            rawahnehAddQty.setVisibility(View.GONE);
-            rawahnehAddQty.setChecked(false);
+    //   rawahnehAddQty.setVisibility(View.GONE);
+     //   rawahnehAddQty.setChecked(false);
             printLinear.setVisibility(View.VISIBLE);
         }
 
@@ -413,7 +449,7 @@ public class Login extends AppCompatActivity {
                     checkboxQtyCheck.setChecked(false);
                 }
                 if (serialsActive == 1){
-                    checkboxQtyCheck.setChecked(false);
+                    //checkboxQtyCheck.setChecked(false);
                 }
             }
 
@@ -425,7 +461,7 @@ public class Login extends AppCompatActivity {
                     rawahnehAddQty.setChecked(false);
                 }
                 if (serialsActive == 0){
-                    rawahnehAddQty.setChecked(false);
+                  //  rawahnehAddQty.setChecked(false);
                 }
             }
 

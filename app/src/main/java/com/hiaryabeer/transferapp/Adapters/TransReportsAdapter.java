@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hiaryabeer.transferapp.Models.ExportData;
 import com.hiaryabeer.transferapp.R;
-import com.hiaryabeer.transferapp.ReplacementModel;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 
 import java.util.ArrayList;
@@ -95,11 +95,11 @@ public class TransReportsAdapter extends RecyclerView.Adapter<TransReportsAdapte
             holder.downArrow.setVisibility(View.GONE);
         }
 
-        if (serialsActive == 1)
-            holder.reExport.setVisibility(View.GONE);
-        else {
-            holder.reExport.setVisibility(View.VISIBLE);
-            holder.reExport.setOnClickListener(new View.OnClickListener() {
+//        if (serialsActive == 1)
+//            holder.reExport.setVisibility(View.GONE);
+//        else {
+//            holder.reExport.setVisibility(View.VISIBLE);
+        {  holder.reExport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
