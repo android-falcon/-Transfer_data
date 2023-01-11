@@ -55,6 +55,7 @@ import com.hiaryabeer.transferapp.Models.GeneralMethod;
 import com.hiaryabeer.transferapp.Models.ImportData;
 import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
 import com.hiaryabeer.transferapp.Models.ItemSwitch;
+import com.hiaryabeer.transferapp.Models.ItemsUnit;
 import com.hiaryabeer.transferapp.Models.KeyboardUtil;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
 import com.hiaryabeer.transferapp.R;
@@ -1099,6 +1100,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 ||
                                 convertToEnglish(replacementlist.get(i).getItemcode()).equals(convertToEnglish(my_dataBase.itemSwitchDao().getitemocode(replacement.getItemcode())))
+
                 ) {
 
                     position = i;
@@ -1787,6 +1789,12 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                             replacementModel.setZone("");
                             replacementModel.setReplacementDate(generalMethod.getCurentTimeDate(1));
                             replacementModel.setItemcode(itemcode.getText().toString());
+                            ItemsUnit itemsUnit=my_dataBase.itemsUnitDao().getItemUnit2(itemcode.getText().toString());
+                            if(itemsUnit!=null){
+                                replacementModel.setItemcode(itemsUnit.getITEMOCODE());
+                                replacementModel.setUNITBARCODE(itemsUnit.getITEMBARCODE());
+
+                            }
 
 //                        ReplacementModel replacementModel1 = null;
 //                        List<ReplacementModel> replacementModels1 = my_dataBase.replacementDao().isItemExist(itemcode.getText().toString());
@@ -1844,7 +1852,14 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
 //                            }
 
                             } else {
-                                if (ExsitsInItemlist(itemcode.getText().toString())) {
+                                replacementModel.setItemcode(itemcode.getText().toString());
+                                ItemsUnit itemsUnit1=my_dataBase.itemsUnitDao().getItemUnit2(itemcode.getText().toString());
+                                if(itemsUnit1!=null){
+                                    replacementModel.setItemcode(itemsUnit1.getITEMOCODE());
+                                    replacementModel.setUNITBARCODE(itemsUnit1.getITEMBARCODE());
+
+                                }
+                                if (ExsitsInItemlist(replacementModel.getItemcode())) {
 
                                     itemcode.setError(null);
                                     Log.e(" Case3 ", "Not in local but in ItemList");
@@ -1917,6 +1932,12 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                                   //      qty = "50";
                                                 replacementModel.setAvailableQty(qty);
                                                 replacementModel.setItemcode(  itemSwitch.getItemOCode());
+                                                ItemsUnit itemsUnit=my_dataBase.itemsUnitDao().getItemUnit2(itemcode.getText().toString());
+                                                if(itemsUnit!=null){
+                                                    replacementModel.setItemcode(itemsUnit.getITEMOCODE());
+                                                    replacementModel.setUNITBARCODE(itemsUnit.getITEMBARCODE());
+
+                                                }
                                                 double qtyInt=1;
                                                 try {
                                                     qtyInt=Double.parseDouble(qty);
@@ -2008,6 +2029,12 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                                 replacementModel.setZone("");
                                 replacementModel.setReplacementDate(generalMethod.getCurentTimeDate(1));
                                 replacementModel.setItemcode(itemcode.getText().toString());
+                                ItemsUnit itemsUnit=my_dataBase.itemsUnitDao().getItemUnit2(itemcode.getText().toString());
+                                if(itemsUnit!=null){
+                                    replacementModel.setItemcode(itemsUnit.getITEMOCODE());
+                                    replacementModel.setUNITBARCODE(itemsUnit.getITEMBARCODE());
+
+                                }
 
 //                        ReplacementModel replacementModel1 = null;
 //                        List<ReplacementModel> replacementModels1 = my_dataBase.replacementDao().isItemExist(itemcode.getText().toString());
@@ -2099,7 +2126,15 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                                     }
 
                                 } else {
-                                    if (ExsitsInItemlist(itemcode.getText().toString())) {
+                                    replacementModel.setItemcode(itemcode.getText().toString());
+                                    ItemsUnit itemsUnit1=my_dataBase.itemsUnitDao().getItemUnit2(itemcode.getText().toString());
+                                    if(itemsUnit1!=null){
+                                        replacementModel.setItemcode(itemsUnit1.getITEMOCODE());
+                                        replacementModel.setUNITBARCODE(itemsUnit1.getITEMBARCODE());
+
+                                    }
+
+                                    if (ExsitsInItemlist(replacementModel.getItemcode())) {
                                          //new edit by ayah 4/8/2022
                                         itemcode.setError(null);
                                         Log.e(" Case7 ", "Exists in item List");
@@ -2187,11 +2222,17 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                                     } else {
 
                                         //new edit by aya
-                                        if (Exsitsin_itemswitchlist(itemcode.getText().toString()))
+                                        if (Exsitsin_itemswitchlist(replacementModel.getItemcode()))
                                         {            Log.e(" Case8", " Exists in itemswitch List");
                                             itemcode.setError(null);
 
                                             replacementModel.setItemcode(itemSwitch.getItemOCode());
+                                            ItemsUnit itemsUnit2=my_dataBase.itemsUnitDao().getItemUnit2(itemcode.getText().toString());
+                                            if(itemsUnit2!=null){
+                                                replacementModel.setItemcode(itemsUnit2.getITEMOCODE());
+                                                replacementModel.setUNITBARCODE(itemsUnit2.getITEMBARCODE());
+
+                                            }
                                             String itemname=  my_dataBase.itemDao().getitemname( itemSwitch.getItemOCode());
 
                                             if(itemname!=null)   replacementModel.setItemname(itemname);

@@ -1633,7 +1633,7 @@ public void getStore() {
         myData.enqueue(new Callback<List<AllItems>>() {
             @Override
             public void onResponse(Call<List<AllItems>> call, retrofit2.Response<List<AllItems>> response) {
-                Log.e("fetchItemDetailData=", "onResponse" );
+                Log.e("fetchItemDetailData=", "onResponse"+ call.request());
                 pdRepla.dismiss();
                 if (!response.isSuccessful()) {
                     pdRepla.dismiss();
@@ -1651,7 +1651,7 @@ public void getStore() {
 
             @Override
             public void onFailure(Call<List<AllItems>> call, Throwable throwable) {
-                Log.e("onFailure", "=" + throwable.getMessage());
+                Log.e("onFailure", "=" + throwable.getMessage()+call.request());
                 itemrespons.setText("nodata");
                 pdRepla.dismiss();
                           }
@@ -1670,7 +1670,7 @@ public void getStore() {
 
 
                 } else {
-                    Log.e("fetchItemsUnitData", "onResponse=" + response.message());
+                    Log.e("fetchItemsUnitData", "onResponse=" + response.message()+"call="+call.request());
 
                     listAllItemsUnit.addAll(response.body());
                     showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");

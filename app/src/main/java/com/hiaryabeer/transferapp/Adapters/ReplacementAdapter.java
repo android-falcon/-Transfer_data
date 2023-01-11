@@ -20,9 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompatSideChannelService;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hiaryabeer.transferapp.Activities.Login;
+import com.hiaryabeer.transferapp.Models.ItemsUnit;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
@@ -79,12 +81,14 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
           holder.itemcode.setText(list.get(position).getItemcode());
         //    Log.e("onBindViewHolder202020",""+list.get(position).getRecQty());
         holder.qty.setText(list.get(position).getRecQty());
+
 //        holder.itemcode.setTag(position);
 //        holder.tvRemove.setTag(position);
         //   holder.itemqty.setText(list.get(position).getQty());
         holder.itemqty.setEnabled(false);
-
-        List<String> itemUnits = new ArrayList<>();
+        if(list.get(position).getUNITBARCODE()!=null)
+        {if(list.get(position).getUNITBARCODE().equals(""))
+        { List<String> itemUnits = new ArrayList<>();
 
         itemUnits.add("One Unit");
         itemUnits.addAll(my_dataBase.itemsUnitDao().getItemUnits(list.get(position).getItemcode()));
@@ -92,19 +96,55 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, itemUnits);
 
         holder.unitSpinner.setAdapter(arrayAdapter);
-try {
-    for(int i=0;i<itemUnits.size();i++)
-        if(itemUnits.get(i).equals(list.get(position).getUnitID()))
-            holder.unitSpinner.setSelection(i);
+            try {
+                for(int i=0;i<itemUnits.size();i++)
+                    if(itemUnits.get(i).equals(list.get(position).getUnitID()))
+                        holder.unitSpinner.setSelection(i);
 
-}catch (Exception e){
-    Log.e("Exception",e.getMessage());
-}
+            }catch (Exception e){
+                Log.e("Exception",e.getMessage());
+            }
+        }
+        else {
+
+            List<String> itemUnits = new ArrayList<>();
+
+           // itemUnits.add("One Unit");
+            ItemsUnit itemsUnit=my_dataBase.itemsUnitDao().getItemUnit2(list.get(position).getUNITBARCODE());
+            itemUnits.add(itemsUnit.getITEMU());
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, itemUnits);
+
+            holder.unitSpinner.setAdapter(arrayAdapter);
+
+        }}else
+        {
+            List<String> itemUnits = new ArrayList<>();
+
+            itemUnits.add("One Unit");
+            itemUnits.addAll(my_dataBase.itemsUnitDao().getItemUnits(list.get(position).getItemcode()));
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, itemUnits);
+
+            holder.unitSpinner.setAdapter(arrayAdapter);
+            try {
+                for(int i=0;i<itemUnits.size();i++)
+                    if(itemUnits.get(i).equals(list.get(position).getUnitID()))
+                        holder.unitSpinner.setSelection(i);
+
+            }catch (Exception e){
+                Log.e("Exception",e.getMessage());
+            }
+        }
+       // if(!list.get(position).getUNITBARCODE().equals(""))  holder.unitSpinner.setSelection(1);
+
 
         holder. unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 String CountOfItems=my_dataBase.itemsUnitDao().getConvRate(list.get(holder.getAdapterPosition()).getItemcode(), holder.unitSpinner.getSelectedItem().toString());
+                Log.e("CountOfItems",CountOfItems+"");
+                ItemsUnit itemsUnit= my_dataBase.itemsUnitDao(). getItemUnit(list.get(holder.getAdapterPosition()).getItemcode(), holder.unitSpinner.getSelectedItem().toString());
                if(pos!=0)
                    list.get(holder.getAdapterPosition()).setCal_Qty(String.valueOf( Double.parseDouble(list.get(holder.getAdapterPosition()).getRecQty())*Double.parseDouble(CountOfItems)));
                else
@@ -120,8 +160,12 @@ try {
 
 
 
-                my_dataBase.replacementDao().UpdateUnitId(list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getTransNumber()
+             int y=   my_dataBase.replacementDao().UpdateUnitId(list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getTransNumber()
                 , list.get(holder.getAdapterPosition()).getUnitID());
+                Log.e("y==",y+"");
+
+                if(!holder.unitSpinner.getSelectedItem().toString().equals("One Unit"))
+                    my_dataBase.replacementDao().updateUnitSetting(list.get(holder.getAdapterPosition()).getTransNumber(),list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getRecQty(),CountOfItems,itemsUnit.getSALEPRICE(),itemsUnit.getITEMBARCODE(),itemsUnit.getUSERIAL(),itemsUnit.getITEMU());
                 Log.e("getSelectedItem",holder.unitSpinner.getSelectedItem().toString()+"");
                 Log.e("Itemcode",list.get(holder.getAdapterPosition()).getItemcode()+"");
                 Log.e("CountOfItems",CountOfItems+"");

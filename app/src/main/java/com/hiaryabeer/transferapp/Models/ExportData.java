@@ -227,10 +227,11 @@ headerDll = "/Falcons/VAN.Dll/";
         protected void onPostExecute(final String result) {
             super.onPostExecute(result);
 //            progressDialog.dismiss();
-//            Log.e("JSONTaskAddReplacment", "" + result);
+           Log.e("JSONTaskAddReplacment", "" + result);
             pdRepla.dismissWithAnimation();
 
             if (result != null && !result.equals("")) {
+                Log.e("IrTransFer,result===", result+"");
                 if (result.contains("Internal server error")) {
                     exportAllState.setText("server error");
                     exportTrans();
@@ -679,7 +680,7 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
         super.onPostExecute(array);
         savingDialog3.dismiss();
         if (array != null) {
-            Log.e("array4===",array+"");
+            Log.e("EXPORTTRANSresult===",array+"");
             if (array.toString().trim().contains("Successfully")) {
                 showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
                 savingDialog3.dismiss();

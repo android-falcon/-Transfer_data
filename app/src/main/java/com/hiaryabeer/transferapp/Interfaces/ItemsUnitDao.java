@@ -15,6 +15,14 @@ public interface ItemsUnitDao {
 
  @Query("SELECT DISTINCT ITEMU FROM ItemsUnit_TABLE WHERE ITEMOCODE = :itemNo AND ITEMU <> ''")
  List<String> getItemUnits(String itemNo);
+
+
+ @Query("SELECT * FROM ItemsUnit_TABLE WHERE ITEMOCODE = :itemNo AND ITEMU= :ITEMU")
+ ItemsUnit getItemUnit(String itemNo,String ITEMU);
+
+ @Query("SELECT * FROM ItemsUnit_TABLE WHERE ITEMBARCODE= :unitbarcode")
+ ItemsUnit getItemUnit2(String unitbarcode);
+
  @Query("SELECT UQTY FROM ItemsUnit_TABLE WHERE ITEMOCODE = :itemNo AND ITEMU = :unitId")
  String getConvRate(String itemNo, String unitId);
  @Query("DELETE FROM ItemsUnit_TABLE")

@@ -3,6 +3,7 @@ package com.hiaryabeer.transferapp;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -26,7 +27,7 @@ import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
 
 
-@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class}, version = 26, exportSchema = false)
+@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class}, version = 27, exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private static RoomAllData database;
     public static String dataBaseName = "DBRoomTransfer";
@@ -195,6 +196,38 @@ public abstract class RoomAllData extends RoomDatabase {
         }
     };
 
+    @ColumnInfo(name = "WHICHUNIT")
+    String WHICHUNIT;
+    @ColumnInfo(name = "WHICHUNITSTR")
+    String  WHICHUNITSTR;
+    @ColumnInfo(name = "WHICHUQTY")
+    String WHICHUQTY;
+    @ColumnInfo(name = "UNITBARCODE")
+    String      UNITBARCODE;
+
+    @ColumnInfo(name = "CALCQTY")
+    String CALCQTY;
+    @ColumnInfo(name = "ENTERQTY")
+    String  ENTERQTY;
+
+    ///
+    static final Migration MIGRATION_26_27 = new Migration(26, 27) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN WHICHUNIT TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN WHICHUNITSTR TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN WHICHUQTY TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN UNITBARCODE TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN ENTERPRICE TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN CALCQTY TEXT");
+            database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN ENTERQTY TEXT");
+
+
+
+        }
+    };
     public static synchronized RoomAllData getInstanceDataBase(Context context) {
         if (database == null) {
             database = Room.databaseBuilder(context.getApplicationContext(),
@@ -208,6 +241,7 @@ public abstract class RoomAllData extends RoomDatabase {
                             MIGRATION_22_23,
                             MIGRATION_24_25 ,
                             MIGRATION_24_26
+                            , MIGRATION_26_27
                           )
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()

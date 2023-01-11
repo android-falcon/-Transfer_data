@@ -147,6 +147,80 @@ public class ReplacementModel implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     int SERIALZONE;
 
+    ////
+    @ColumnInfo(name = "WHICHUNIT")
+   String WHICHUNIT;
+            @ColumnInfo(name = "WHICHUNITSTR")
+            String  WHICHUNITSTR;
+    @ColumnInfo(name = "WHICHUQTY")
+    String WHICHUQTY;
+    @ColumnInfo(name = "UNITBARCODE")
+    String      UNITBARCODE;
+
+    @ColumnInfo(name = "CALCQTY")
+    String CALCQTY;
+    @ColumnInfo(name = "ENTERQTY")
+    String  ENTERQTY;
+
+    @ColumnInfo(name = "ENTERPRICE")
+    String  ENTERPRICE;
+
+    public String getWHICHUNIT() {
+        return WHICHUNIT;
+    }
+
+    public void setWHICHUNIT(String WHICHUNIT) {
+        this.WHICHUNIT = WHICHUNIT;
+    }
+
+    public String getWHICHUNITSTR() {
+        return WHICHUNITSTR;
+    }
+
+    public void setWHICHUNITSTR(String WHICHUNITSTR) {
+        this.WHICHUNITSTR = WHICHUNITSTR;
+    }
+
+    public String getWHICHUQTY() {
+        return WHICHUQTY;
+    }
+
+    public void setWHICHUQTY(String WHICHUQTY) {
+        this.WHICHUQTY = WHICHUQTY;
+    }
+
+    public String getUNITBARCODE() {
+        return UNITBARCODE;
+    }
+
+    public void setUNITBARCODE(String UNITBARCODE) {
+        this.UNITBARCODE = UNITBARCODE;
+    }
+
+    public String getCALCQTY() {
+        return CALCQTY;
+    }
+
+    public void setCALCQTY(String CALCQTY) {
+        this.CALCQTY = CALCQTY;
+    }
+
+    public String getENTERQTY() {
+        return ENTERQTY;
+    }
+
+    public void setENTERQTY(String ENTERQTY) {
+        this.ENTERQTY = ENTERQTY;
+    }
+
+    public String getENTERPRICE() {
+        return ENTERPRICE;
+    }
+
+    public void setENTERPRICE(String ENTERPRICE) {
+        this.ENTERPRICE = ENTERPRICE;
+    }
+
     public ReplacementModel(String from, String to, String zone, String itemcode, String availableQty) {
         From = from;
         To = to;
@@ -251,6 +325,29 @@ public class ReplacementModel implements Parcelable {
             obj.put("QTY", recQty);
             obj.put("DEVICEID", deviceId);
             obj.put("VHFNO", transNumber);
+
+
+          if(WHICHUNIT!=null)  obj.put("WHICHUNIT", WHICHUNIT);
+          else
+              obj.put("WHICHUNIT", "");
+
+            if(WHICHUNITSTR!=null)   obj.put("WHICHUNITSTR", WHICHUNITSTR);
+            else   obj.put("WHICHUNITSTR", "");
+
+            if(WHICHUQTY!=null)   obj.put("WHICHUQTY", WHICHUQTY);
+            else obj.put("WHICHUQTY", "");
+
+            if(UNITBARCODE!=null)    obj.put("UNITBARCODE", UNITBARCODE);
+            else  obj.put("UNITBARCODE", "");
+
+            if(ENTERPRICE!=null)      obj.put("ENTERPRICE", ENTERPRICE);
+            else  obj.put("ENTERPRICE", "");
+
+            if(CALCQTY!=null)    obj.put("CALCQTY", CALCQTY);
+            else   obj.put("CALCQTY", "");
+            if(ENTERQTY!=null)      obj.put("ENTERQTY", ENTERQTY);
+            else  obj.put("ENTERQTY", "");
+
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");
