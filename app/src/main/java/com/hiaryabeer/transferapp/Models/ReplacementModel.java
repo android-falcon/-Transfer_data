@@ -322,7 +322,11 @@ public class ReplacementModel implements Parcelable {
             obj.put("TOSTR", To);
             obj.put("ZONE", Zone);
             obj.put("ITEMCODE", Itemcode);
-            obj.put("QTY", recQty);
+            if(CALCQTY!=null)
+                if(!CALCQTY.equals(""))
+                    obj.put("QTY", Double.parseDouble(recQty)*Double.parseDouble(CALCQTY));
+                else    obj.put("QTY", recQty);
+          else  obj.put("QTY", recQty);
             obj.put("DEVICEID", deviceId);
             obj.put("VHFNO", transNumber);
 
@@ -345,7 +349,7 @@ public class ReplacementModel implements Parcelable {
 
             if(CALCQTY!=null)    obj.put("CALCQTY", CALCQTY);
             else   obj.put("CALCQTY", "");
-            if(ENTERQTY!=null)      obj.put("ENTERQTY", ENTERQTY);
+            if(ENTERQTY!=null)      obj.put("ENTERQTY", recQty);
             else  obj.put("ENTERQTY", "");
 
 

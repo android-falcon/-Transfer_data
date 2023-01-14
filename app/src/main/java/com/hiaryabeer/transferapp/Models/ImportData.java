@@ -1664,7 +1664,7 @@ public void getStore() {
             public void onResponse(Call<List<ItemsUnit>> call, retrofit2.Response<List<ItemsUnit>> response) {
                 if (!response.isSuccessful()) {
 
-                    Log.e("fetchItemsUnitData", "not=" + response.message());
+                    Log.e("fetchItemsUnitData", "not=" + response.message()+call.request());
 
                     pdRepla5.dismiss();
 
@@ -1682,7 +1682,7 @@ public void getStore() {
 
             @Override
             public void onFailure(Call<List<ItemsUnit>> call, Throwable t) {
-                Log.e("fetchItemsUnitDataFailure", "=" + t.getMessage());
+                Log.e("fetchItemsUnitDataFailure", "=" + t.getMessage()+call.request());
                 showSweetDialog(context, 0, context.getResources().getString(R.string.netWorkError), "");
 
 

@@ -1878,10 +1878,10 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                                                 {
                                                     Log.e("case3+++", "qtyInt>0");
                                                     replacementModel.setAvailableQty(((int)qtyInt - 1)+"");
-                                                    Log.e("getItemName", Item.getItemNameA()+"");
-                                                    Log.e("getItemName", Item.getItemOcode()+"");
-                                                    Log.e("getItemName", Item.getItemNCode()+"");
-                                                    Log.e("getItemName", Item.getItemOcode()+"");
+                                                    Log.e("getItemNameA", Item.getItemNameA()+"");
+                                                    Log.e("getItemOcode", Item.getItemOcode()+"");
+                                                    Log.e("getItemNCode", Item.getItemNCode()+"");
+
                                                     replacementModel.setItemname(Item.getItemNameA());
                                                     replacementModel.setRecQty("1");
                                                     replacementModel.setCal_Qty("1");
