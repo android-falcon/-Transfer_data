@@ -24,6 +24,7 @@ import androidx.core.app.NotificationCompatSideChannelService;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hiaryabeer.transferapp.Activities.Login;
+import com.hiaryabeer.transferapp.Activities.MainActivity;
 import com.hiaryabeer.transferapp.Models.ItemsUnit;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.Models.ReplacementModel;
@@ -87,7 +88,8 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 //        holder.tvRemove.setTag(position);
         //   holder.itemqty.setText(list.get(position).getQty());
         holder.itemqty.setEnabled(false);
-        if(list.get(position).getUNITBARCODE()!=null)
+        if(Login.serialsActive == 0)
+        {   if(list.get(position).getUNITBARCODE()!=null)
         {if(list.get(position).getUNITBARCODE().equals(""))
         { List<String> itemUnits = new ArrayList<>();
 
@@ -136,10 +138,10 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             }catch (Exception e){
                 Log.e("Exception",e.getMessage());
             }
-        }
+        }}
        // if(!list.get(position).getUNITBARCODE().equals(""))  holder.unitSpinner.setSelection(1);
 
-
+        if(Login.serialsActive == 0)
         holder. unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -184,10 +186,10 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 //        holder.qty.setEnabled(Login.serialsActive == 0);
 
-        if (serialsActive == 1) {
-
-            List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
-
+        if (Login.serialsActive == 1) {
+            List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(MainActivity.item_num);
+           // List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
+Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size());
             if (hasSerial.get(0).equals("1")) {
                 holder.qty.setEnabled(false);
                 holder.qty.addTextChangedListener(new TextWatcher() {
@@ -421,14 +423,16 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             });
         }
 
-        if (serialsActive == 0) {
+        if (Login.serialsActive == 0) {
             Log.e("ca1", "CCCC");
             holder.tvEdit.setVisibility(View.INVISIBLE);
         }
         else {
             Log.e("ca2", "CCCC");
-            List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
+      //      List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
+            List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(MainActivity.item_num);
 
+            Log.e("ca2", "CCCC");
             if (hasSerial.get(0).equals("1")) {
                 Log.e("ca3", "CCCC");
                 holder.tvEdit.setVisibility(View.VISIBLE);
@@ -448,7 +452,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         Log.e("pos===", position + "highligtedItemPosition=== " + highligtedItemPosition + "highligtedItemPosition2==" + highligtedItemPosition2);
         if (position == highligtedItemPosition2) {
             Log.e("AAAAA", "AAAAAA");
-        if (serialsActive == 0) {
+        if (Login.serialsActive == 0) {
                 Log.e("CCCCC", "CCCC");
                 holder.qty.setEnabled(true);
                 holder.qty.requestFocus();
@@ -481,7 +485,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
     public void removeItem(int position) {
         if (position < list.size()) {
-            if (serialsActive == 0) {
+            if (Login.serialsActive == 0) {
                 Log.e("position===", position + "");
                 int f = my_dataBase.replacementDao().deleteReplacement(list.get(position).getItemcode(),
                         list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());

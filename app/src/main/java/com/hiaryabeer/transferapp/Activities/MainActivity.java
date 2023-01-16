@@ -90,6 +90,7 @@ import org.json.JSONException;
 public class MainActivity extends AppCompatActivity {
     int saved = 4;
     int position;
+    public static  String item_num="";
     public static  TextView iraqswitch;
     public static int actvityflage = 1;
     public String UserNo;
@@ -2293,6 +2294,7 @@ public class MainActivity extends AppCompatActivity {
                     if (s.toString().trim().length() != 0) {
 
                         {
+                          item_num=itemcode.getText().toString().trim();
                             Log.e("itemcode===", "aaaaaa");
                             Log.e("itemcode===", s.toString());
 
@@ -2309,7 +2311,7 @@ public class MainActivity extends AppCompatActivity {
                                     Dialog dialog = new Dialog(MainActivity.this);
                                     dialog.setContentView(R.layout.item_serials_layout);
                                     dialog.setCancelable(true);
-                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                                     DisplayMetrics dm = new DisplayMetrics();
                                     MainActivity.this.getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -2382,7 +2384,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Log.e("SerialScanned", code);
                                                 if (!isRepeated(code)) {
 
-                                                    int serialValidation = existInItemSerialList(itemcode.getText().toString().trim(), code);
+                                                    int serialValidation = existInItemSerialList(item_num, code);
 
                                                     if (serialValidation == 1) {
                                                         Log.e("case1--", "case1");
@@ -2412,70 +2414,77 @@ public class MainActivity extends AppCompatActivity {
                                                         my_dataBase.serialTransfersDao().insert(serialTransfer);
                                                         updateAdapter();
 
-                                                        if (ExistsInRepList(itemcode.getText().toString())) {
-                                                            Log.e("case4--", "case4");
-                                                            int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + 1;
-                                                            replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
 
-                                                            String numifitem=   getCountOfItems( replacementlist.get(repPosition).getItemcode(), replacementlist.get(repPosition).getUnitID());
-                                                            replacementlist.get(repPosition).setCal_Qty("" +Double.parseDouble(replacementlist.get(repPosition).getRecQty())*Double.parseDouble(numifitem));
-
-
-                                                            my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo),replacementlist.get(repPosition).getCal_Qty());
-
-                                                            fillAdapter();
-
-                                                            replacmentRecycler.smoothScrollToPosition(repPosition);
-                                                            colorlastrow.setText(repPosition + "");
-
-//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
-//                                                        serialTransfers.get(i).setAdded("1");
-//                                                    }
-
-
-                                                        } else {
-                                                            Log.e("case5--", "case5");
-                                                            ReplacementModel replacementModel = new ReplacementModel();
-
-                                                            replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
-                                                            replacementModel.setTo(toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" "))));
-                                                            replacementModel.setItemcode(itemcode.getText().toString());
-                                                            replacementModel.setIsPosted("0");
-                                                            replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
-                                                            replacementModel.setItemname(Item.getItemNameA());
-                                                            replacementModel.setTransNumber(transNo + "");
-                                                            replacementModel.setDeviceId(deviceId);
-                                                            replacementModel.setRecQty(1 + "");
-                                                            replacementModel.setUnitID("One Unit");
-                                                            String numifitem=   getCountOfItems( replacementModel.getItemcode(), replacementModel.getUnitID());
-                                                            replacementModel.setCal_Qty("" +Double.parseDouble( replacementModel.getRecQty())*Double.parseDouble(numifitem));
-
-                                                            replacementModel.setFromName(fromSpinner.getSelectedItem().toString());
-                                                            replacementModel.setToName(toSpinner.getSelectedItem().toString());
-                                                            replacementModel.setZone("");
-
-                                                            replacementlist.add(0, replacementModel);
-                                                            my_dataBase.replacementDao().insert(replacementModel);
-
-                                                            fillAdapter();
-
-                                                            //    replacmentRecycler.smoothScrollToPosition(0);
-                                                            colorlastrow.setText("0");
-
-                                                            save.setEnabled(true);
-
-                                                            fromSpinner.setEnabled(false);
-                                                            toSpinner.setEnabled(false);
-
-//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
-//                                                        serialTransfers.get(i).setAdded("1");
-//                                                    }
-
-                                                        }
 //                                                my_dataBase.serialsDao().addToRep(transNo + "", deviceId, s.toString().trim());
+                                                        final Handler handler = new Handler();
+                                                        handler.postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                if (ExistsInRepList(itemcode.getText().toString())) {
+                                                                    Log.e("case4--", "case4");
+                                                                    int sumQty = Integer.parseInt(replacementlist.get(repPosition).getRecQty()) + 1;
+                                                                    replacementlist.get(repPosition).setRecQty(String.valueOf(sumQty));
+
+                                                                    String numifitem=   getCountOfItems( replacementlist.get(repPosition).getItemcode(), replacementlist.get(repPosition).getUnitID());
+                                                                    replacementlist.get(repPosition).setCal_Qty("" +Double.parseDouble(replacementlist.get(repPosition).getRecQty())*Double.parseDouble(numifitem));
 
 
-                                                        openSmallCapture(6);
+                                                                    my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo),replacementlist.get(repPosition).getCal_Qty());
+
+                                                                    fillAdapter();
+
+                                                                    replacmentRecycler.smoothScrollToPosition(repPosition);
+                                                                    colorlastrow.setText(repPosition + "");
+
+//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                        serialTransfers.get(i).setAdded("1");
+//                                                    }
+
+
+                                                                } else {
+                                                                    Log.e("case5--", "case5");
+                                                                    ReplacementModel replacementModel = new ReplacementModel();
+
+                                                                    replacementModel.setFrom(fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))));
+                                                                    replacementModel.setTo(toSpinner.getSelectedItem().toString().substring(0, (toSpinner.getSelectedItem().toString().indexOf(" "))));
+                                                                    replacementModel.setItemcode(itemcode.getText().toString());
+                                                                    replacementModel.setIsPosted("0");
+                                                                    replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
+                                                                    replacementModel.setItemname(Item.getItemNameA());
+                                                                    replacementModel.setTransNumber(transNo + "");
+                                                                    replacementModel.setDeviceId(deviceId);
+                                                                    replacementModel.setRecQty(1 + "");
+                                                                    replacementModel.setUnitID("One Unit");
+                                                                    String numifitem=   getCountOfItems( replacementModel.getItemcode(), replacementModel.getUnitID());
+                                                                    replacementModel.setCal_Qty("" +Double.parseDouble( replacementModel.getRecQty())*Double.parseDouble(numifitem));
+
+                                                                    replacementModel.setFromName(fromSpinner.getSelectedItem().toString());
+                                                                    replacementModel.setToName(toSpinner.getSelectedItem().toString());
+                                                                    replacementModel.setZone("");
+
+                                                                    replacementlist.add(0, replacementModel);
+                                                                    my_dataBase.replacementDao().insert(replacementModel);
+
+                                                                    fillAdapter();
+
+                                                                    //    replacmentRecycler.smoothScrollToPosition(0);
+                                                                    colorlastrow.setText("0");
+
+                                                                    save.setEnabled(true);
+
+                                                                    fromSpinner.setEnabled(false);
+                                                                    toSpinner.setEnabled(false);
+
+//                                                    for (int i = 0; i < serialTransfers.size(); i++) {
+//                                                        serialTransfers.get(i).setAdded("1");
+//                                                    }
+
+                                                                }
+                                                                openSmallCapture(6);
+                                                            }
+
+                                                        }, 100);
+
                                                     } else if (serialValidation == 0) {
 
                                                         showSweetDialog(MainActivity.this, 3, getString(R.string.invalid_serial), getString(R.string.serialNotFound));
@@ -3418,10 +3427,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if (allSerials.get(i).getSerialNo().replaceAll("\\s+", "").trim().equals(serialNo)) {
 
-                    if (!allSerials.get(i).getStore().equals(fromNo) ||
+                    if (!allSerials.get(i).getStore().trim().equals(fromNo.trim()) ||
                             !allSerials.get(i).getItemNo().replaceAll("\\s+", "").trim().equals(itemNo)) {
 
                         result = 2;
+                        Log.e("allSerials.get(i)",allSerials.get(i).getSerialNo()+"  "+serialNo+"  "+fromNo+"  "+allSerials.get(i).getStore()+"  "+allSerials.get(i).getItemNo()+"  "+itemNo);
                         showSweetDialog(MainActivity.this, 3, getString(R.string.serial_another_item), "(" + getString(R.string.store_no_) + " " + allSerials.get(i).getStore()
                                 + ")\n(" + getString(R.string.itemCode_) + " " + allSerials.get(i).getItemNo() + ")");
 

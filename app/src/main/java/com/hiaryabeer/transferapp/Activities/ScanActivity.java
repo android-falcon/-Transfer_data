@@ -77,12 +77,12 @@ public class ScanActivity extends AppCompatActivity
                 break;
             case "6":
 
-                etSerial.setText(valueBarcode.replaceAll("\\s+", "").trim());
+               etSerial.setText(valueBarcode.replaceAll("\\s+", "").trim());
 
                 break;
         }
 
-        onBackPressed();
+       onBackPressed();
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
