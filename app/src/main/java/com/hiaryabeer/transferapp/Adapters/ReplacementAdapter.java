@@ -32,6 +32,7 @@ import com.hiaryabeer.transferapp.RoomAllData;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hiaryabeer.transferapp.Activities.Login.serialsActive;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition2;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
@@ -183,7 +184,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 //        holder.qty.setEnabled(Login.serialsActive == 0);
 
-        if (Login.serialsActive == 1) {
+        if (serialsActive == 1) {
 
             List<String> hasSerial = my_dataBase.itemDao().itemHasSerial(list.get(position).getItemcode());
 
@@ -420,7 +421,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             });
         }
 
-        if (Login.serialsActive == 0) {
+        if (serialsActive == 0) {
             Log.e("ca1", "CCCC");
             holder.tvEdit.setVisibility(View.INVISIBLE);
         }
@@ -447,7 +448,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         Log.e("pos===", position + "highligtedItemPosition=== " + highligtedItemPosition + "highligtedItemPosition2==" + highligtedItemPosition2);
         if (position == highligtedItemPosition2) {
             Log.e("AAAAA", "AAAAAA");
-        if (Login.serialsActive == 0) {
+        if (serialsActive == 0) {
                 Log.e("CCCCC", "CCCC");
                 holder.qty.setEnabled(true);
                 holder.qty.requestFocus();
@@ -480,7 +481,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
     public void removeItem(int position) {
         if (position < list.size()) {
-            if (Login.serialsActive == 0) {
+            if (serialsActive == 0) {
                 Log.e("position===", position + "");
                 int f = my_dataBase.replacementDao().deleteReplacement(list.get(position).getItemcode(),
                         list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());
@@ -526,6 +527,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 
             unitSpinner= itemView.findViewById(R.id.unitspinner);
+            if(serialsActive==1)unitSpinner.setVisibility(View.GONE);
             TransferNo = itemView.findViewById(R.id.trsnferNo);
             itemname = itemView.findViewById(R.id.itemname);
             my_dataBase = RoomAllData.getInstanceDataBase(context);

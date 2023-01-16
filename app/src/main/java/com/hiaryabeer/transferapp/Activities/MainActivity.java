@@ -74,6 +74,7 @@ import android.widget.PopupMenu;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static com.hiaryabeer.transferapp.Activities.Login.serialsActive;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.convertToEnglish;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 import static com.hiaryabeer.transferapp.Models.ImportData.AllImportItemlist;
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnRefresh;
     ItemSwitch itemSwitch;
     AllItems Item;
+    TextView itemUnit_text;
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.main_menu, popup.getMenu());
 
-        popup.getMenu().findItem(R.id.menuImport).setVisible(Login.serialsActive == 1);
+        popup.getMenu().findItem(R.id.menuImport).setVisible(serialsActive == 1);
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -259,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                     case R.id.menuImport: {
-                        if (Login.serialsActive == 1) {
+                        if (serialsActive == 1) {
                             int d = my_dataBase.serialsDao().deleteAllSerials();
                             Log.e("DeleteSERIALS", d + "");
                             importData.getAllSerials(new ImportData.GetSerialsCallBack() {
@@ -360,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
         Storelist.clear();
         Storelist = my_dataBase.storeDao().getall();
 
-        if (Login.serialsActive == 1) {
+        if (serialsActive == 1) {
             List<SerialsModel> allSerialsList = my_dataBase.serialsDao().getAllSerials();
             if (allSerialsList.size() == 0) {
                 importData.getAllSerials(new ImportData.GetSerialsCallBack() {
@@ -632,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
 
                             my_dataBase.replacementDao().deleteAllinTransfer(replacementlist.get(0).getTransNumber());
 
-                            if (Login.serialsActive == 1)
+                            if (serialsActive == 1)
                                 my_dataBase.serialTransfersDao().deleteAllinTransfer(replacementlist.get(0).getTransNumber());
 
                         }
@@ -734,7 +736,7 @@ public class MainActivity extends AppCompatActivity {
 
         my_dataBase.storeDao().deleteall();
 
-        if (Login.serialsActive == 1) {
+        if (serialsActive == 1) {
 
             importData.getAllSerials(new ImportData.GetSerialsCallBack() {
                 @Override
@@ -1702,7 +1704,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         itemcode.setText("");
@@ -1750,7 +1752,7 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
 //                }
 //          return false;  }
 //        });
-        if (Login.serialsActive == 0) {
+        if (serialsActive == 0) {
             itemcode.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -2815,6 +2817,10 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
 
         }
 
+        itemUnit_text=findViewById(R.id.itemUnit_text);
+        if(serialsActive==1){
+            itemUnit_text.setVisibility(View.GONE);
+        }
     }
 
     private boolean item_has_serial(String itemCode) {
