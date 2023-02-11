@@ -1,5 +1,6 @@
 package com.hiaryabeer.transferapp.Models;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.util.Log;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.hiaryabeer.transferapp.RoomAllData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -165,6 +168,17 @@ public class ReplacementModel implements Parcelable {
     @ColumnInfo(name = "ENTERPRICE")
     String  ENTERPRICE;
 
+    @ColumnInfo(name = "UpdatedQty")
+    String  UpdatedQty;
+
+    public String getUpdatedQty() {
+        return UpdatedQty;
+    }
+
+    public void setUpdatedQty(String updatedQty) {
+        UpdatedQty = updatedQty;
+    }
+
     public String getWHICHUNIT() {
         return WHICHUNIT;
     }
@@ -317,6 +331,7 @@ public class ReplacementModel implements Parcelable {
 
     public JSONObject getJSONObjectDelphi() {
         JSONObject obj = new JSONObject();
+        //CONO=295&VHFNO=1&ITEMCODE=SP0101019&FROMSTR=1&TOSTR=2&QTY=6
         try {
             obj.put("FROMSTR", From);
             obj.put("TOSTR", To);
@@ -358,7 +373,24 @@ public class ReplacementModel implements Parcelable {
         }
         return obj;
     }
-
+    public JSONObject New_getJSONObjectDelphi(Context context) {
+        JSONObject obj = new JSONObject();
+        //CONO=295&VHFNO=1&ITEMCODE=SP0101019&FROMSTR=1&TOSTR=2&QTY=6
+        try {
+             RoomAllData my_dataBase=RoomAllData.getInstanceDataBase(context);
+         String   CONO = my_dataBase.settingDao().getCono().trim();
+            obj.put("CONO", CONO);
+            obj.put("VHFNO",transNumber );
+            obj.put("ITEMCODE", Itemcode);
+            obj.put("FROMSTR", From);
+            obj.put("TOSTR", To);
+            obj.put("QTY", UpdatedQty);
+            obj.put("ORGQTY", recQty);
+        } catch (JSONException e) {
+            Log.e("Tag", "JSONException");
+        }
+        return obj;
+    }
     @Override
     public int describeContents() {
         return 0;

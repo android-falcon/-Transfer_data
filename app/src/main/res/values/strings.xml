@@ -17,6 +17,9 @@
     <string name="CONO">CoNo</string>
     <string name="year">Year</string>
     <string name="save">Save</string>
+    <string name="UPDATEQty">UpdatedQty</string>
+
+    <string name="update">Update</string>
     <string name="cancel">Cancel</string>
     <string name="searchhere">Search her</string>
     <string name="itemqty">item qty</string>
@@ -40,6 +43,8 @@
     <string name="notvaildqty2">There is no enough quantity in </string>
     <string name="reqired_filled">*Reqired</string>
     <string name="savedSuccsesfule">Saved Successfully</string>
+    <string name="Failedexported">Failed exported</string>
+
     <string name="savednotSuccsesfule">Data not Saved </string>
     <string name="msg3">All data already posted</string>
     <string name="barcodeexists">invalid itemcode</string>

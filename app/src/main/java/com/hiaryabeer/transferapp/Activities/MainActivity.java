@@ -4,6 +4,7 @@ import static android.view.View.LAYOUT_DIRECTION_RTL;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
     int saved = 4;
     int position;
     public static  String item_num="";
-    public static  TextView iraqswitch;
+
+    public static  TextView iraqswitch,New_saverespone;
     public static int actvityflage = 1;
     public String UserNo;
     public static TextView respon, qtyrespons, exportAllState;
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
     public static TextView itemrespons;
     public static Spinner spinner, spinner2;
     public static ArrayList<ReplacementModel> replacementlist = new ArrayList<>();
+    public static ArrayList<ReplacementModel> New_replacementlist = new ArrayList<>();
     public List<ReplacementModel> UnPostedreplacementlist = new ArrayList<>();
     public List<ReplacementModel> Allreplacementlist1 = new ArrayList<>();
     public List<ReplacementModel> Allreplacementlist2 = new ArrayList<>();
@@ -176,8 +179,10 @@ public class MainActivity extends AppCompatActivity {
     List<SerialsModel> allItemSerials = new ArrayList<>();
     private Button saveBtn, cancelBtn;
     private ImageButton btnRefresh;
+ AppCompatButton UpdateBtn;
     ItemSwitch itemSwitch;
     AllItems Item;
+ TextView   UPDATEQtyTextView;
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
@@ -336,7 +341,12 @@ public class MainActivity extends AppCompatActivity {
 
         my_dataBase = RoomAllData.getInstanceDataBase(MainActivity.this);
          init();
+//
 
+
+
+
+        ///
         if (TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == LAYOUT_DIRECTION_RTL)
             btnShow.setRotationY(180);
         itemcode.setText("");
@@ -346,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
         maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
 
         if (maxVochNum != null) {
-            Log.e(" maxVochNum", maxVochNum);
+            Log.e("maxVochNum", maxVochNum);
             max = Integer.parseInt(maxVochNum) + 1;
         } else
             max = 1;
@@ -478,17 +488,6 @@ public class MainActivity extends AppCompatActivity {
             zone.setEnabled(false);
 
         }*/
-        //testcode
-/*ReplacementModel replacementModel=new ReplacementModel();
-        replacementModel.setRecQty("1");
-        replacementModel.setFrom("1234");
-        replacementModel.setTo("122222222222");
-        replacementModel.setItemcode("tttttttttt");
-        replacementModel.setQty("1");
-        replacementModel.setZone("fffff");
-        for (int i=0;i<50;i++)
-      replacementlist.add(replacementModel);
-        fillAdapter();*/
 
 
         findViewById(R.id.nextZone).setOnClickListener(new View.OnClickListener() {
@@ -615,7 +614,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        UpdateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("UpdateBtn","onClick");
+               New_exportAllData();
+                UPDATEQtyTextView.setVisibility(View.GONE);
+                New_replacementlist.clear();
+            }
+        });
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1333,6 +1340,48 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         replacementlist.clear();
+        UPDATEQtyTextView=findViewById(R.id.UPDATEQtyTextView);
+      //  UPDATEQtyTextView.setVisibility(View.GONE);
+        New_saverespone=findViewById(R.id.New_saverespone);
+        New_saverespone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().equals("")) {
+
+                    if (editable.toString().equals("save")) {
+                        fillAdapter();
+                    }
+                    }else if(editable.toString().equals("Internal server error"))
+                    {
+                        showSweetDialog(MainActivity.this, 0, "Internal server error", "");
+
+                    }else if(editable.toString().equals("table or view does not exist"))
+                {
+                    showSweetDialog(MainActivity.this, 0, "table or view does not exist", "");
+
+                }
+                else if(editable.toString().equals("unique constraint"))
+                {
+                    showSweetDialog(MainActivity.this, 0,"unique constraint", "");
+
+                } else
+                {
+                    showSweetDialog(MainActivity.this, 0, getResources().getString(R.string.savednotSuccsesfule), "");
+
+                }
+
+            }
+        });
         iraqswitch=findViewById(R.id.iraqswitch);
         iraqswitch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1444,6 +1493,8 @@ public class MainActivity extends AppCompatActivity {
         generalMethod = new GeneralMethod(MainActivity.this);
 
         saveBtn = findViewById(R.id.saveBtn);
+        UpdateBtn = findViewById(R.id.UpdateBtn);
+
         cancelBtn = findViewById(R.id.cancelBtn);
 
         btnRefresh = findViewById(R.id.btnRefresh);
@@ -2382,7 +2433,7 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
                                                 Log.e("SerialScanned", code);
                                                 if (!isRepeated(code)) {
 
-                                                    int serialValidation = existInItemSerialList(item_num, code);
+                                                    int serialValidation = existInItemSerialList(itemcode.getText().toString().trim(), code);
 
                                                     if (serialValidation == 1) {
                                                         Log.e("case1--", "case1");
@@ -2594,7 +2645,7 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
 //
 //                                        }
 //                                        my_dataBase.serialsDao().addToRep(transNo + "", deviceId, s.toString().trim());
-
+                                        itemcode.setText("");
                                         dialog.dismiss();
 //                                    dialog1.dismiss();
                                         save.setEnabled(true);
@@ -3237,8 +3288,20 @@ findViewById(R.id.ic_clear).setOnClickListener(new View.OnClickListener() {
         replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         adapter = new ReplacementAdapter(replacementlist, MainActivity.this);
         replacmentRecycler.setAdapter(adapter);
-        itemcode.setText("");
+     if(Login.serialsActive==0)
+     {
+         itemcode.setText("");
+
+     }else {
+         if    ( replacementlist.size()!=0)
+         if(my_dataBase.itemDao().getItemHas_Serial(replacementlist.get(0).getItemcode()).equals("0"))
+
+                 itemcode.setText("");
+     }
+
         itemcode.requestFocus();
+
+
         //  colorlastrow.setText(position + "");
         //    colorlastrow.setText((0)+"");
 //        if (replacementlist.size() > 1) {
@@ -3693,5 +3756,33 @@ String getCountOfItems(String itemcode,String unitid ){
 }
 
 
+public void New_filldata(){
+    replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+    adapter = new ReplacementAdapter(New_replacementlist, MainActivity.this);
+    replacmentRecycler.setAdapter(adapter);
+    saveBtn.setVisibility(View.GONE);
+    UpdateBtn.setVisibility(View.VISIBLE);
+}
+    public void New_exportAllData() {
+        Log.e("New_replacementlist11=",New_replacementlist.size()+"");
+        for (int i = 0; i < New_replacementlist.size(); i++) {
 
+       if(!New_replacementlist.get(i).getUpdatedQty().equals(""))
+       {
+           Log.e("CASE=",New_replacementlist.get(i).getUpdatedQty()+"  "+New_replacementlist.get(i).getRecQty());
+           if(New_replacementlist.get(i).getUpdatedQty().equals(New_replacementlist.get(i).getRecQty()))
+           {
+               New_replacementlist.remove(i);
+           i--;
+
+           }
+       }else
+       {
+           New_replacementlist.remove(i);
+           i--;
+       }
+        }
+        Log.e("New_replacementlist=",New_replacementlist.size()+"");
+        exportData.NEW_exportReplacementList(New_replacementlist);
+    }
 }

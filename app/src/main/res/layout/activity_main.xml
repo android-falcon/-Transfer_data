@@ -77,6 +77,13 @@
         android:layout_marginTop="10dp"
         android:src="@drawable/transfer_logo" />
 
+        <TextView
+            android:id="@+id/New_saverespone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text=""
+            android:visibility="gone" />
     <TextView
         android:id="@+id/iraqswitch"
         android:layout_width="match_parent"
@@ -195,6 +202,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginEnd="5dp"
+
                 android:layout_weight="0.4"
                 android:background="@drawable/back_border_edit"
                 android:elevation="2dp"
@@ -522,7 +530,15 @@
                     android:text="@string/itemCode"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
-
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:gravity="center"
+                    android:id="@+id/UPDATEQtyTextView"
+                    android:text="@string/UPDATEQty"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
                 <TextView
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
@@ -603,7 +619,7 @@
                 </LinearLayout>
             </ScrollView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 android:id="@+id/lin"
@@ -614,40 +630,64 @@ android:id="@+id/lin"
         android:layout_marginBottom="1dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/saveBtn"
-            android:layout_width="0dp"
+            android:id="@+id/UpdateBtn"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/loginbtn"
             android:fontFamily="@font/poppins_semibold_600"
             android:gravity="center"
-            android:text="@string/save"
+            android:text="@string/update"
+            android:visibility="gone"
+            android:layout_weight="1"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.4" />
+
+          />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveBtn"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loginbtn"
+            android:fontFamily="@font/poppins_semibold_600"
+            android:gravity="center"
+            android:text="@string/save"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
+
+            />
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent"/>
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancelBtn"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold_600"
             android:gravity="center"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:layout_weight="1"
             android:text="@string/cancel"
             android:textAllCaps="false"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.4"
-            app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/cancel_button"
             app:layout_constraintStart_toEndOf="@+id/saveBtn"
             />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 
     <LinearLayout

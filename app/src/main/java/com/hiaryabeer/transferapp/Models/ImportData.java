@@ -141,7 +141,7 @@ public class ImportData {
     public ImportData(Context context) {
         this.context = context;
         my_dataBase = RoomAllData.getInstanceDataBase(context);
-headerDll = "/Falcons/VAN.Dll/";
+//headerDll = "/Falcons/VAN.Dll/";
             getIpAddress();
           link = "http://" + ipAddress.trim() + headerDll.trim();
         //link = "http://" +"10.0.0.22:8085" + headerDll.trim();

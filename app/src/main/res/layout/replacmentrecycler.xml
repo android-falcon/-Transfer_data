@@ -71,6 +71,21 @@
             android:text="@string/itemCode"
             android:textColor="@color/black"
             android:textSize="13sp" />
+        <EditText
+            android:id="@+id/updatedQTY"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textFontWeight="10"
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/tblqty"
