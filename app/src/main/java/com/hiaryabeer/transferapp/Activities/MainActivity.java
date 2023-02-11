@@ -588,6 +588,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 fromSpinner.setEnabled(true);
                 toSpinner.setEnabled(true);
+                search.setEnabled(true);
+                scanItemCode.setEnabled(true);
 
                 exportAllData();
 
@@ -627,6 +629,10 @@ public class MainActivity extends AppCompatActivity {
         UpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fromSpinner.setEnabled(true);
+                toSpinner.setEnabled(true);
+                search.setEnabled(true);
+                scanItemCode.setEnabled(true);
                 Log.e("UpdateBtn","onClick");
                New_exportAllData();
                 UPDATEQtyTextView.setVisibility(View.GONE);
@@ -1487,6 +1493,8 @@ public class MainActivity extends AppCompatActivity {
                 UpdateBtn.setVisibility(View.VISIBLE);
                 search.setEnabled(false);
                 scanItemCode.setEnabled(false);
+                fromSpinner.setEnabled(false);
+                toSpinner.setEnabled(false);
                 openOrderDialog();
             }
         });
