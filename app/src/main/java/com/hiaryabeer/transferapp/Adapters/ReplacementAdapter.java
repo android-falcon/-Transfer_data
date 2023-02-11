@@ -107,6 +107,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         if(MainActivity.internalOrderFalge==1)
         {   holder.unitSpinner.setEnabled(false);
         holder.qty.setEnabled(false);
+            holder.tvRemove.setVisibility(View.GONE);
         holder.updatedQTY.setText(list.get(position).getUpdatedQty());
         holder.updatedQTY.addTextChangedListener(new TextWatcher() {
             @Override

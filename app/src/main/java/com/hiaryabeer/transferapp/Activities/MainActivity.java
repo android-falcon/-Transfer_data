@@ -630,7 +630,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("UpdateBtn","onClick");
                New_exportAllData();
                 UPDATEQtyTextView.setVisibility(View.GONE);
+                UpdateBtn.setVisibility(View.GONE);
+                saveBtn.setVisibility(View.VISIBLE);
                 New_replacementlist.clear();
+                internalOrderFalge=0;
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -1479,7 +1482,7 @@ public class MainActivity extends AppCompatActivity {
         internalOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                internalOrderFalge=1;
+
                 saveBtn.setVisibility(View.GONE);
                 UpdateBtn.setVisibility(View.VISIBLE);
                 search.setEnabled(false);
@@ -3025,6 +3028,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+        internalOrderFalge=1;
         New_replacementlist.clear();
         New_replacementlist.addAll(replacinmentlist);
 
