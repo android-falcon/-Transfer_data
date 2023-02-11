@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<ReplacementModel> reducedqtyitemlist = new ArrayList<>();
     public static Dialog Re_searchdialog;
         TextView recqty,fromdate,todate;
-    TextView search;
+    TextView search,scanItemCode;
     public static Button save;
     public int indexZone = -1;
     public int indexDBZone = 0, indexDBitem = 0, indexOfReduceditem = 0;
@@ -1482,6 +1482,8 @@ public class MainActivity extends AppCompatActivity {
                 internalOrderFalge=1;
                 saveBtn.setVisibility(View.GONE);
                 UpdateBtn.setVisibility(View.VISIBLE);
+                search.setEnabled(false);
+                scanItemCode.setEnabled(false);
                 openOrderDialog();
             }
         });
@@ -1522,6 +1524,7 @@ public class MainActivity extends AppCompatActivity {
       // zone.setOnKeyListener(onKeyListener);
        itemcode.setOnKeyListener(onKeyListener);
         search = findViewById(R.id.searchitemCode);
+        scanItemCode= findViewById(R.id.scanItemCode);
         maxTrans = my_dataBase.replacementDao().getMaxReplacementNo();
         Log.e("maxTrans", "" + maxTrans);
 
@@ -2916,7 +2919,7 @@ public class MainActivity extends AppCompatActivity {
         Set<String> setVoucher=new HashSet<>();
         List<String >listVoucherNo=new ArrayList<>();
         adapter_voucher = new ArrayAdapter<String>(getBaseContext(),
-                android.R.layout.simple_list_item_single_choice,listVoucherNo);
+                R.layout.text_custom,listVoucherNo);
 
         listview_area.setAdapter(adapter_voucher);
 
