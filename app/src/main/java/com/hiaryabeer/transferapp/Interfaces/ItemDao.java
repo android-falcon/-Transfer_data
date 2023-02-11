@@ -37,5 +37,6 @@ public interface ItemDao {
 
     @Query("SELECT * FROM ITEM_TABLE where ITEMOCODE =:code")
     AllItems getItem(String code);
-
+    @Query("SELECT Has_Serial FROM ITEM_TABLE where ITEMOCODE =:code")
+    String getItemHas_Serial(String code);
 }

@@ -45,6 +45,8 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static com.hiaryabeer.transferapp.Activities.MainActivity.New_replacementlist;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.New_saverespone;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.exportAllState;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
@@ -76,8 +78,8 @@ public class ExportData {
         } catch (Exception e) {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
         }
-//headerDll = "/Falcons/VAN.Dll/";
-headerDll = "";
+headerDll = "/Falcons/VAN.Dll/";
+//headerDll = "";
 
     }
 
@@ -104,6 +106,17 @@ headerDll = "";
 
         new JSONTask_AddReplacment(replacementlist).execute();
     }
+    public void NEW_exportReplacementList(List<ReplacementModel> replacementlist) {
+        NEW_getReplacmentObject(replacementlist);
+        pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+        pdRepla.setTitleText(context.getString(R.string.exportRep));
+        pdRepla.setCancelable(false);
+        pdRepla.show();
+
+        new JSONTask_UPdateReplacment(replacementlist).execute();
+    }
+
     public void exportTrans() {
 
          savingDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
@@ -114,6 +127,21 @@ headerDll = "";
         new JSONTask_savetrans().execute();
     }
 
+    private void NEW_getReplacmentObject(List<ReplacementModel> replacementlist) {
+        jsonArrayReplacement = new JSONArray();
+        for (int i = 0; i < replacementlist.size(); i++) {
+
+            jsonArrayReplacement.put(replacementlist.get(i).New_getJSONObjectDelphi(context));
+
+        }
+        try {
+            ReplacmentObject = new JSONObject();
+            ReplacmentObject.put("JSN", jsonArrayReplacement);
+//            Log.e("vouchersObject",""+ReplacmentObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     private void getReplacmentObject(List<ReplacementModel> replacementlist) {
         jsonArrayReplacement = new JSONArray();
         for (int i = 0; i < replacementlist.size(); i++) {
@@ -305,7 +333,267 @@ headerDll = "";
         }
 
     }
+    public class JSONTask_UPdateReplacment extends AsyncTask<String, String, String> {
+        private String JsonResponse = null;
 
+        List<ReplacementModel> replacementList;
+
+        public JSONTask_UPdateReplacment(List<ReplacementModel> replacementList) {
+            this.replacementList = replacementList;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                if (!ipAddress.equals("")) {
+
+                    http:
+
+                    link = "http://" + ipAddress.trim() + headerDll.trim() + "/UpdateTransfer";
+
+
+                    Log.e("URL_TO_HIT", "" + link);
+                }
+            } catch (Exception e) {
+                //progressDialog.dismiss();
+                pdRepla.dismissWithAnimation();
+
+            }
+
+            try {
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                try {
+                    request.setURI(new URI(link));
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("CONO", CONO.trim()));
+                nameValuePairs.add(new BasicNameValuePair("JSONSTR", ReplacmentObject.toString().trim()));
+
+                Log.e("JSONSTR", ReplacmentObject.toString());
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+
+                JsonResponse = sb.toString();
+                Log.e("JsonResponse", "Export Replacement" + JsonResponse);
+
+
+            } catch (Exception e) {
+            }
+            return JsonResponse;
+        }
+
+        @Override
+        protected void onPostExecute(final String result) {
+            super.onPostExecute(result);
+
+            Log.e("JSONTaskAddReplacment", "" + result);
+            pdRepla.dismissWithAnimation();
+
+            if (result != null && !result.equals("")) {
+                Log.e("IrTransFer,result===", result+"");
+                if (result.contains("Internal server error")) {
+                    New_saverespone.setText("Internal server error");
+
+                } else if (result.contains("unique constraint")) {
+                    New_saverespone.setText("unique constraint");
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        String res = jsonObject.getString("ErrorDesc");
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else if (result.contains("table or view does not exist")) {
+                    New_saverespone.setText("table or view does not exist");
+
+                } else {
+                    if (result.contains("Saved Successfully")) {
+                        exportTrans();
+                        New_saverespone.setText("saved");
+
+
+
+                    } else {
+
+                        New_saverespone.setText("not");
+                    }
+                }
+
+
+            } else {
+                New_saverespone.setText("not");
+
+
+            }
+
+
+        }
+
+    }
+
+//    public class JSONTask_UPdateReplacment extends AsyncTask<String, String, String> {
+//        private String JsonResponse = null;
+//
+//        List<ReplacementModel> replacementList;
+//
+//        public JSONTask_AddReplacment(List<ReplacementModel> replacementList) {
+//            this.replacementList = replacementList;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//
+//
+//            URLConnection connection = null;
+//            BufferedReader reader = null;
+//
+//            try {
+//                if (!ipAddress.equals("")) {
+//
+//                    http:
+//
+//                    link = "http://" + ipAddress.trim() + headerDll.trim() + "/UpdateTransfer";
+//
+//
+//                    Log.e("URL_TO_HIT", "" + link);
+//                }
+//            } catch (Exception e) {
+//                //progressDialog.dismiss();
+//                pdRepla.dismissWithAnimation();
+//
+//            }
+//
+//            try {
+//                HttpClient client = new DefaultHttpClient();
+//                HttpPost request = new HttpPost();
+//                try {
+//                    request.setURI(new URI(link));
+//                } catch (URISyntaxException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+//                nameValuePairs.add(new BasicNameValuePair("CONO", CONO.trim()));
+//                nameValuePairs.add(new BasicNameValuePair("VHFNO", New_replacementlist.get(0)));
+//                nameValuePairs.add(new BasicNameValuePair("ITEMCODE", CONO.trim()));
+//                nameValuePairs.add(new BasicNameValuePair("FROMSTR", CONO.trim()));
+//                nameValuePairs.add(new BasicNameValuePair("TOSTR", CONO.trim()));
+//                nameValuePairs.add(new BasicNameValuePair("QTY", CONO.trim()));
+//                nameValuePairs.add(new BasicNameValuePair("ORJQTY", CONO.trim()));
+////                nameValuePairs.add(new BasicNameValuePair("JSONSTR", ReplacmentObject.toString().trim()));
+//                Log.e("JSONSTR", ReplacmentObject.toString());
+//                request.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+//                HttpResponse response = client.execute(request);
+//
+//                BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+//
+//                StringBuffer sb = new StringBuffer("");
+//                String line = "";
+//
+//                while ((line = in.readLine()) != null) {
+//                    sb.append(line);
+//                }
+//
+//                in.close();
+//
+//
+//                JsonResponse = sb.toString();
+//                Log.e("JsonResponse", "Export Replacement" + JsonResponse);
+//
+//
+//            } catch (Exception e) {
+//            }
+//            return JsonResponse;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(final String result) {
+//            super.onPostExecute(result);
+//
+//            Log.e("JSONTaskAddReplacment", "" + result);
+//            pdRepla.dismissWithAnimation();
+//            exportTrans();
+//            if (result != null && !result.equals("")) {
+//                Log.e("IrTransFer,result===", result+"");
+//                if (result.contains("Internal server error")) {
+//
+//
+//                } else if (result.contains("unique constraint")) {
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(result);
+//                        String res = jsonObject.getString("ErrorDesc");
+//
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                } else if (result.contains("table or view does not exist")) {
+//
+//
+//                } else {
+//                    if (result.contains("Saved Successfully")) {
+//
+//
+//
+//
+//
+//                    } else {
+//
+//
+//                    }
+//                }
+//
+//
+//            } else {
+//
+//
+//
+//            }
+//
+//
+//        }
+//
+//    }
     ////////B
     public void JSONTask_ExportSerials(SweetAlertDialog savingDialog, List<ReplacementModel> replacements) {
         String url = "http://" + ipAddress.trim() + headerDll.trim() + "/SaveSerialTransfer";
@@ -690,7 +978,7 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
             }else {
                 Log.e("not ssaved1","not ssaved1");
                 savingDialog3.dismiss();
-                showSweetDialog(context, 0, "Unique Constraint", "");
+                showSweetDialog(context, 0, context.getResources().getString(R.string.Failedexported), "");
 
 
 

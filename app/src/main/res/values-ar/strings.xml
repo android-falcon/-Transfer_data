@@ -15,13 +15,16 @@
     <string name="to_">إلى:</string>
     <string name="pono">رقم الطلبية</string>
     <string name="savedSuccsesfule">تم الحفظ بنجاح</string>
-    <string name="savednotSuccsesfule">لم يتم الحفظ بنجاح</string>
+    <string name="Failedexported">لم يتم الحفظ بنجاح</string>
+    <string name="savednotSuccsesfule">لم يتم الحفظ</string>
     <string name="msg3"> لا يوجد سندات غير مرحلة</string>
     <string name="Poqty">الكمية الأصلية</string>
     <string name="notvaildqty">لا توجد كمية كافية</string>
     <string name="action_sign_in_short">تسجيل دخول</string>
     <string name="login_failed">فشل تسجيل الدخول</string>
     <string name="save">حفظ</string>
+    <string name="update">تعديل</string>
+    <string name="UPDATEQty">الكمية المعدلة</string>
     <string name="year">السنة</string>
     <string name="server_ip">رقم السيرفر</string>
     <string name="settings_ip">الإعدادات</string>
