@@ -253,6 +253,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="updateitemswitch"> Item Switch Updated Successfully</string>
     <string name="getitemunit">Get Item Units</string>
     <string name="itemunit">ItemUnit</string>
+    <string name="selectVoucher">Select Voucher No</string>
 
 
 </resources>

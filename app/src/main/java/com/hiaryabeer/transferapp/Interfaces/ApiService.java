@@ -4,6 +4,7 @@ package com.hiaryabeer.transferapp.Interfaces;
 import com.hiaryabeer.transferapp.Models.AllItems;
 import com.hiaryabeer.transferapp.Models.ItemSwitch;
 import com.hiaryabeer.transferapp.Models.ItemsUnit;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.Models.Switch;
 import com.hiaryabeer.transferapp.Store;
 
@@ -16,6 +17,8 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
+ @GET("GetTransFerList")
+ retrofit2.Call<List<ReplacementModel>> gatVoucherApi(@Query("CONO") String ComNo);
 
  @GET("Getsore")
  retrofit2.Call<List<Store>> gatStorsDetail(@Query("CONO") String ComNo);

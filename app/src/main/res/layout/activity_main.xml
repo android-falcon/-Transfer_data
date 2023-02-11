@@ -102,7 +102,17 @@
         android:background="@drawable/menupopup"
         android:onClick="showPopup" />
 
-    <LinearLayout
+        <ImageButton
+            android:id="@+id/internalOrder"
+            android:layout_width="24dp"
+            android:layout_height="18dp"
+            android:layout_alignTop="@+id/btnShow"
+            android:layout_marginRight="10dp"
+            android:layout_toStartOf="@+id/btnShow"
+            android:background="@drawable/ic_baseline_transit_enterexit_24"
+            />
+
+        <LinearLayout
         android:id="@+id/part1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -548,6 +558,7 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
                 <TextView
+                    android:id="@+id/itemUnit_text"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"

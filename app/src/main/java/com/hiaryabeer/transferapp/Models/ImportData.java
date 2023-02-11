@@ -72,6 +72,8 @@ public class ImportData {
     public RoomAllData my_dataBase;
     public static String zonetype;
     public static List<Store> Storelist = new ArrayList<>();
+    public static List<ReplacementModel> voucherlist = new ArrayList<>();
+
     public static ArrayList<String> BoxNolist = new ArrayList<>();
     public static ArrayList<String> PoNolist = new ArrayList<>();
     public static List<AllItems> AllImportItemlist = new ArrayList<>();
@@ -236,6 +238,15 @@ public void getStore() {
 
 
 
+    }
+    public void getVouchers() {
+        Log.e("importgetVouchers", "" + "getVouchers");
+        pdRepla2 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pdRepla2.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+        pdRepla2.setTitleText(context.getString(R.string.getStore));
+        pdRepla2.setCancelable(false);
+        pdRepla2.show();
+        fetchVoucherData();
     }
     public void getUnitData(String from,String to) {
         listAllItemsUnit.clear();
@@ -1584,7 +1595,49 @@ public void getStore() {
     }
 
     /*************/
+    public void fetchVoucherData() {
+        Log.e("myAPI", "fetchVoucherData=" + myAPI+"\tco="+CONO);
+        Call<List<ReplacementModel>> myData = myAPI.gatVoucherApi(CONO);
+        Log.e("fetchStoreData", "myData=" + myData.isExecuted());
+        myData.enqueue(new Callback<List<ReplacementModel>>() {
+            @Override
+            public void onResponse(Call<List<ReplacementModel>> call, retrofit2.Response<List<ReplacementModel>> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("fetchSto", "not=" + response.message());
+                    pdRepla2.dismiss();
+                } else {
+                    voucherlist.clear();
 
+                    voucherlist.addAll(response.body());
+
+                    Log.e("fetchSto", "voucherlist=" +voucherlist.size());
+                    MainActivity.getResponce.setText("fill");
+                    pdRepla2.dismiss();
+                    Log.e("fetchStoreD", "fetchStoreData=" + response.body().size());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ReplacementModel>> call, Throwable throwable) {
+                try {
+                    Log.e("fetchStoreDataonFailure", "=" + throwable.getMessage());
+
+//                    MainActivity.respon.setText("no data");
+                    if (throwable.getMessage() != null) {
+                        if (throwable.getMessage().toString().contains("Failed to connect to"))
+                            showSweetDialog(context, 3, "Not Internet Connection", "");
+                    } else showSweetDialog(context, 3, "Not Connected To DB", "");
+                    pdRepla2.dismiss();
+                    //  Toast.makeText(context, "throwable"+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                catch(Exception exception){
+
+                }
+            }
+
+        });
+    }
     public void fetchStoreData() {
         Log.e("myAPI", "myAPI=" + myAPI+"\tco="+CONO);
         Call<List<Store>> myData = myAPI.gatStorsDetail(CONO);

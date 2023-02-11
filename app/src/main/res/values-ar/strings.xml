@@ -242,4 +242,5 @@
 
     <string name="itemunit">الوحدة</string>
     <string name="getitemunit">Get Items Units</string>
+    <string name="selectVoucher">Select Voucher No</string>
 </resources>

@@ -78,7 +78,7 @@ public class ExportData {
         } catch (Exception e) {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
         }
-//headerDll = "/Falcons/VAN.Dll/";
+headerDll = "/Falcons/VAN.Dll/";
 //headerDll = "";
 
     }
@@ -89,7 +89,7 @@ public class ExportData {
         CONO = my_dataBase.settingDao().getCono().trim();
         portIp = my_dataBase.settingDao().getPort().trim();
         ipAddress = ipAddress + ":" + portIp;
-        Log.e("getIpAddress", "1" + ipAddress + "port=" + portIp);
+//        Log.e("getIpAddress", "1" + ipAddress + "port=" + portIp);
 //        Log.e("getIpAddress",""+ipAddress);
 
     }

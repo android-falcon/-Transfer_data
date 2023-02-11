@@ -35,6 +35,7 @@ import java.util.List;
 
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_replacementlist;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.adapter;
+import static com.hiaryabeer.transferapp.Activities.Login.serialsActive;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.highligtedItemPosition2;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
@@ -684,6 +685,7 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
 
             updatedQTY= itemView.findViewById(R.id.updatedQTY);
             unitSpinner= itemView.findViewById(R.id.unitspinner);
+            if(serialsActive==1)unitSpinner.setVisibility(View.GONE);
             TransferNo = itemView.findViewById(R.id.trsnferNo);
             itemname = itemView.findViewById(R.id.itemname);
             my_dataBase = RoomAllData.getInstanceDataBase(context);

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp">
+        <TextView
+            android:id="@+id/getResponce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:padding="5dp"
+            android:textColor="@color/colorblue_dark"
+            android:drawablePadding="5dp"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="@string/selectVoucher"
+            android:textColor="@color/colorblue_dark"
+            android:drawablePadding="5dp"
+            android:textSize="16sp"
+           />
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:padding="5dp"
+
+            android:drawableStart="@drawable/ic_baseline_clear_24"
+            android:textColor="@color/colorblue_dark"
+            android:drawablePadding="5dp"
+            android:textSize="16sp"
+            android:drawableLeft="@drawable/ic_baseline_clear_24" />
+    </TableRow>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="150dp">
+        <ProgressBar
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:visibility="gone"
+            android:id="@+id/progressVoucher"
+            android:layout_gravity="center"
+            android:outlineSpotShadowColor="@color/orange"
+            />
+        <ListView
+            android:id="@+id/listview_area"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:dividerHeight="1dp"
+            android:visibility="visible"
+            android:listSelector="@color/layer6"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="5dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_margin="15dp">
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/back_without_border"
+            android:elevation="5dp"
+            android:text="Save"
+            android:textColor="@color/dark_blue_3"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+</LinearLayout>
