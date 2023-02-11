@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     List<SerialsModel> allItemSerials = new ArrayList<>();
     private Button saveBtn, cancelBtn;
     private ImageButton btnRefresh,internalOrder;
-    private ImageButton btnRefresh;
+
  AppCompatButton UpdateBtn;
     ItemSwitch itemSwitch;
     AllItems Item;
@@ -588,6 +588,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 fromSpinner.setEnabled(true);
                 toSpinner.setEnabled(true);
+                search.setEnabled(true);
+                scanItemCode.setEnabled(true);
 
                 exportAllData();
 
@@ -627,6 +629,10 @@ public class MainActivity extends AppCompatActivity {
         UpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fromSpinner.setEnabled(true);
+                toSpinner.setEnabled(true);
+                search.setEnabled(true);
+                scanItemCode.setEnabled(true);
                 Log.e("UpdateBtn","onClick");
                New_exportAllData();
                 UPDATEQtyTextView.setVisibility(View.GONE);
@@ -1481,6 +1487,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 search.setEnabled(false);
                 scanItemCode.setEnabled(false);
+                fromSpinner.setEnabled(false);
+                toSpinner.setEnabled(false);
                 openOrderDialog();
             }
         });
