@@ -1603,7 +1603,7 @@ public void getStore() {
             @Override
             public void onResponse(Call<List<ReplacementModel>> call, retrofit2.Response<List<ReplacementModel>> response) {
                 if (!response.isSuccessful()) {
-                    Log.e("fetchSto", "not=" + response.message());
+                    Log.e("fetchSto", "not=" + response.message()+" "+call.request());
                     pdRepla2.dismiss();
                 } else {
                     voucherlist.clear();
@@ -1613,7 +1613,7 @@ public void getStore() {
                     Log.e("fetchSto", "voucherlist=" +voucherlist.size());
                     MainActivity.getResponce.setText("fill");
                     pdRepla2.dismiss();
-                    Log.e("fetchStoreD", "fetchStoreData=" + response.body().size());
+                    Log.e("fetchStoreD", "fetchStoreData=" + response.body().size()+" "+call.request());
 
                 }
             }
@@ -1621,7 +1621,7 @@ public void getStore() {
             @Override
             public void onFailure(Call<List<ReplacementModel>> call, Throwable throwable) {
                 try {
-                    Log.e("fetchStoreDataonFailure", "=" + throwable.getMessage());
+                    Log.e("fetchStoreDataonFailure", "=" + throwable.getMessage()+" "+call.request());
 
 //                    MainActivity.respon.setText("no data");
                     if (throwable.getMessage() != null) {
@@ -1790,12 +1790,12 @@ public void getStore() {
         myData.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                Log.e("fetchItemDetailDataonResponse", "not=" + response.message());
+                Log.e("fetchItemDetailDataonResponse", "not=" + response.message()+"  "+call.request());
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.e("fetchItemDetailDataonResponse", "" + t.getMessage());
+                Log.e("fetchItemDetailDataonResponse", "" + t.getMessage()+"  "+call.request());
             }
         });
 

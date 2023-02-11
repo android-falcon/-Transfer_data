@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     int saved = 4;
     int position;
     public static  String item_num="";
-
+    public static int internalOrderFalge=0;
     public static  TextView iraqswitch,New_saverespone;
     public static int actvityflage = 1;
     public String UserNo;
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     List<SerialsModel> allItemSerials = new ArrayList<>();
     private Button saveBtn, cancelBtn;
     private ImageButton btnRefresh,internalOrder;
-    private ImageButton btnRefresh;
+
  AppCompatButton UpdateBtn;
     ItemSwitch itemSwitch;
     AllItems Item;
@@ -1479,6 +1479,9 @@ public class MainActivity extends AppCompatActivity {
         internalOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                internalOrderFalge=1;
+                saveBtn.setVisibility(View.GONE);
+                UpdateBtn.setVisibility(View.VISIBLE);
                 openOrderDialog();
             }
         });
@@ -2949,6 +2952,7 @@ public class MainActivity extends AppCompatActivity {
                             listVoucherNo.add(value);
                             System.out.println(value);
                         }
+                        Log.e("listVoucherNo","listVoucherNo="+listVoucherNo.size());
                         adapter_voucher = new ArrayAdapter<String>(getBaseContext(),
                                 android.R.layout.simple_list_item_single_choice,listVoucherNo);
 
@@ -2972,6 +2976,7 @@ public class MainActivity extends AppCompatActivity {
                     String voucherNo = (String) (listview_area.getItemAtPosition(position));
                     Log.e("onItemClick",""+voucherNo);
                     fillTransferModel(voucherNo);
+
                     dialog.dismiss();
 
                 }
@@ -3012,9 +3017,15 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<voucherlist.size();i++){
             if(voucherlist.get(i).getTransNumber().equals(voucherNo))
             {
+                voucherlist.get(i).setUpdatedQty( voucherlist.get(i).getRecQty());
                 replacinmentlist.add(voucherlist.get(i));
+
             }
         }
+        New_replacementlist.clear();
+        New_replacementlist.addAll(replacinmentlist);
+
+        New_filldata();
         Log.e("fillTransferModel",""+replacinmentlist.size());
     }
 
@@ -3899,11 +3910,12 @@ String getCountOfItems(String itemcode,String unitid ){
 
 
 public void New_filldata(){
+    Log.e("New_replacementlist",""+New_replacementlist.size());
     replacmentRecycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     adapter = new ReplacementAdapter(New_replacementlist, MainActivity.this);
     replacmentRecycler.setAdapter(adapter);
-    saveBtn.setVisibility(View.GONE);
-    UpdateBtn.setVisibility(View.VISIBLE);
+
+
 }
     public void New_exportAllData() {
         Log.e("New_replacementlist11=",New_replacementlist.size()+"");

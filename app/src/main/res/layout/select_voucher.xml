@@ -56,13 +56,14 @@
             android:layout_gravity="center"
             android:outlineSpotShadowColor="@color/orange"
             />
+
         <ListView
             android:id="@+id/listview_area"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:dividerHeight="1dp"
-            android:visibility="visible"
             android:listSelector="@color/layer6"
+            android:visibility="visible"
 
             />
     </LinearLayout>

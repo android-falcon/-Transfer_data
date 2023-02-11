@@ -104,8 +104,8 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 
         }
-        //if()
-        holder.unitSpinner.setEnabled(false);
+        if(MainActivity.internalOrderFalge==1)
+        {   holder.unitSpinner.setEnabled(false);
         holder.qty.setEnabled(false);
         holder.updatedQTY.setText(list.get(position).getUpdatedQty());
         holder.updatedQTY.addTextChangedListener(new TextWatcher() {
@@ -130,7 +130,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
                     }  }
             }
-        });
+        });}
 //        holder.itemcode.setTag(position);
 //        holder.tvRemove.setTag(position);
         //   holder.itemqty.setText(list.get(position).getQty());

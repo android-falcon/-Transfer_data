@@ -59,13 +59,16 @@ public class ReplacementModel implements Parcelable {
     public void setUserNO(String userNO) {
         UserNO = userNO;
     }
-
+    @SerializedName("FROMSTR")
     @ColumnInfo(name = "FROMSTORE")
     String From;
+    @SerializedName("TOSTR")
     @ColumnInfo(name = "TOSTORE")
     String To;
     @ColumnInfo(name = "ZONECODE")
     String Zone;
+
+    @SerializedName("ITEMCODE")
     @ColumnInfo(name = "ITEMCODE")
     String Itemcode;
     @ColumnInfo(name = "ISPOSTED")
@@ -147,7 +150,7 @@ public class ReplacementModel implements Parcelable {
     public void setRecQty(String recQty) {
         this.recQty = recQty;
     }
-
+@SerializedName("QTY")
     @ColumnInfo(name = "RECQTY")
     private String recQty;
     @PrimaryKey(autoGenerate = true)
