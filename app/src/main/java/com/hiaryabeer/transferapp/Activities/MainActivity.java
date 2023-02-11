@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,6 +41,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,8 +69,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import android.widget.PopupMenu;
 
@@ -83,6 +88,7 @@ import static com.hiaryabeer.transferapp.Models.ImportData.listAllItemSwitch;
 import static com.hiaryabeer.transferapp.Models.ImportData.listAllZone;
 import static com.hiaryabeer.transferapp.Models.ImportData.listQtyZone;
 import static com.hiaryabeer.transferapp.Models.ImportData.pdRepla2;
+import static com.hiaryabeer.transferapp.Models.ImportData.voucherlist;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -159,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     String maxVochNum;
     private String minVo;
     private String MaxVo;
-    public static TextView colorlastrow, colorData;
+    public static TextView colorlastrow, colorData, getResponce;
     Calendar myCalendar;
 
     public static int highligtedItemPosition = -1;
@@ -176,10 +182,11 @@ public class MainActivity extends AppCompatActivity {
     String codeScanned;
     List<SerialsModel> allItemSerials = new ArrayList<>();
     private Button saveBtn, cancelBtn;
-    private ImageButton btnRefresh;
+    private ImageButton btnRefresh,internalOrder;
     ItemSwitch itemSwitch;
     AllItems Item;
     TextView itemUnit_text;
+    public static List<String> voucher_no_list= new ArrayList<>();
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
@@ -1418,6 +1425,13 @@ public class MainActivity extends AppCompatActivity {
         poststateRE = findViewById(R.id.poststatRE);
         exportAllState = findViewById(R.id.exportAllState);
         itemrespons = findViewById(R.id.itemrespons);
+        internalOrder= findViewById(R.id.internalOrder);
+        internalOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openOrderDialog();
+            }
+        });
         exportData = new ExportData(MainActivity.this);
         importData = new ImportData(MainActivity.this);
         listAllZone.clear();
@@ -2483,7 +2497,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 openSmallCapture(6);
                                                             }
 
-                                                        }, 100);
+                                                        }, 500);
 
                                                     } else if (serialValidation == 0) {
 
@@ -2831,6 +2845,127 @@ public class MainActivity extends AppCompatActivity {
             itemUnit_text.setVisibility(View.GONE);
         }
     }
+    ArrayAdapter<String> adapter_voucher;
+    private void openOrderDialog() {
+
+            final Dialog dialog = new Dialog(this, R.style.Theme_Dialog);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.select_voucher);
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+
+        ProgressBar progressVoucher=dialog.findViewById(R.id.progressVoucher);
+        ListView listview_area = dialog.findViewById(R.id.listview_area);
+         getResponce=dialog.findViewById(R.id.getResponce);
+        Set<String> setVoucher=new HashSet<>();
+        List<String >listVoucherNo=new ArrayList<>();
+        adapter_voucher = new ArrayAdapter<String>(getBaseContext(),
+                android.R.layout.simple_list_item_single_choice,listVoucherNo);
+
+        listview_area.setAdapter(adapter_voucher);
+
+        getResponce.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+                if(editable.toString().length()!=0){
+                    if(editable.toString().equals("fill")){
+                        listVoucherNo.clear();
+                        setVoucher.clear();
+                        Log.e("setVoucher","fill_getResponce="+setVoucher.size()+"\t"+voucherlist.size());
+                        for (int i=0;i< voucherlist.size();i++){
+
+                           setVoucher.add(voucherlist.get(i).getTransNumber());
+
+//                            voucher_no_list.add(setVoucher);
+                        }
+                        Iterator<String> it = setVoucher.iterator();
+                        while(it.hasNext()) {
+                            String value = it.next();
+                            listVoucherNo.add(value);
+                            System.out.println(value);
+                        }
+                        adapter_voucher = new ArrayAdapter<String>(getBaseContext(),
+                                android.R.layout.simple_list_item_single_choice,listVoucherNo);
+
+                        listview_area.setAdapter(adapter_voucher);
+                        listview_area.setVisibility(View.VISIBLE);
+                        progressVoucher.setVisibility(View.GONE);
+
+                    }
+                }
+            }
+        });
+        listview_area.setVisibility(View.GONE);
+        progressVoucher.setVisibility(View.VISIBLE);
+
+        ImportData importData=new ImportData(MainActivity.this);
+        importData.getVouchers();
+            listview_area.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Log.e("onItemClick","="+position);
+                    String voucherNo = (String) (listview_area.getItemAtPosition(position));
+                    Log.e("onItemClick",""+voucherNo);
+                    fillTransferModel(voucherNo);
+                    dialog.dismiss();
+
+                }
+            });
+
+
+            lp.gravity = Gravity.CENTER;
+            dialog.getWindow().setAttributes(lp);
+            Button saveButton = (Button) dialog.findViewById(R.id.saveButton);
+            TextView cancelButton = (TextView) dialog.findViewById(R.id.cancel);
+
+
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                    filterListLocation();
+
+                    dialog.dismiss();
+
+
+                }
+            });
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
+
+        }
+
+    private void fillTransferModel(String voucherNo) {
+       List<ReplacementModel> replacinmentlist = new ArrayList<>();
+        for(int i=0;i<voucherlist.size();i++){
+            if(voucherlist.get(i).getTransNumber().equals(voucherNo))
+            {
+                replacinmentlist.add(voucherlist.get(i));
+            }
+        }
+        Log.e("fillTransferModel",""+replacinmentlist.size());
+    }
+
 
     private boolean item_has_serial(String itemCode) {
         List<String> hasSerials = my_dataBase.itemDao().itemHasSerial(itemCode);

@@ -8,6 +8,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,6 +72,7 @@ public class ReplacementModel implements Parcelable {
 
     @ColumnInfo(name = "ITEMNAME")
     String itemname;
+    @SerializedName("VHFNO")
     @ColumnInfo(name = "TransNumber")
     String transNumber;
 

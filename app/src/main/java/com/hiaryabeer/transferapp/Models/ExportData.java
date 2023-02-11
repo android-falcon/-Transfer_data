@@ -87,7 +87,7 @@ headerDll = "";
         CONO = my_dataBase.settingDao().getCono().trim();
         portIp = my_dataBase.settingDao().getPort().trim();
         ipAddress = ipAddress + ":" + portIp;
-        Log.e("getIpAddress", "1" + ipAddress + "port=" + portIp);
+//        Log.e("getIpAddress", "1" + ipAddress + "port=" + portIp);
 //        Log.e("getIpAddress",""+ipAddress);
 
     }
