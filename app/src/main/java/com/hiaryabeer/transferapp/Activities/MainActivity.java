@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     int saved = 4;
     int position;
     public static  String item_num="";
+    public static    String VHFNO="";
     public static int internalOrderFalge=0;
     public static  TextView iraqswitch,New_saverespone;
     public static int actvityflage = 1;
@@ -634,11 +635,13 @@ public class MainActivity extends AppCompatActivity {
                 search.setEnabled(true);
                 scanItemCode.setEnabled(true);
                 Log.e("UpdateBtn","onClick");
+                VHFNO=New_replacementlist.get(0).getTransNumber();
                New_exportAllData();
                 UPDATEQtyTextView.setVisibility(View.GONE);
                 UpdateBtn.setVisibility(View.GONE);
                 saveBtn.setVisibility(View.VISIBLE);
                 New_replacementlist.clear();
+                fillAdapter();
                 internalOrderFalge=0;
             }
         });

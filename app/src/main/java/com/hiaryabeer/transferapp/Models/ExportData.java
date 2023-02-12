@@ -17,6 +17,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.hiaryabeer.transferapp.Activities.Login;
+import com.hiaryabeer.transferapp.Activities.MainActivity;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.RoomAllData;
 
@@ -48,6 +49,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_replacementlist;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_saverespone;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.exportAllState;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.replacementlist;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
 public class ExportData {
@@ -78,8 +80,8 @@ public class ExportData {
         } catch (Exception e) {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
         }
-//headerDll = "/Falcons/VAN.Dll/";
-headerDll = "";
+headerDll = "/Falcons/VAN.Dll/";
+//headerDll = "";
 
     }
 
@@ -876,9 +878,10 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
         try {
             if (!ipAddress.equals("")) {
 
-
-
-                link = "http://" + ipAddress.trim() + headerDll.trim() + "/EXPORTTRANS?CONO=" + CONO.trim();
+//
+//                if(replacementlist.size()!=0)
+//                    VHFNO=replacementlist.get(0).getTransNumber();
+                link = "http://" + ipAddress.trim() + headerDll.trim() + "/EXPORTTRANS?CONO=" + CONO.trim()+"&VHFNO=" + MainActivity.VHFNO;
 
                 Log.e("link===", "" + link);
             }
