@@ -8,12 +8,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -29,17 +32,28 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.hiaryabeer.transferapp.Models.ExportData;
 import com.hiaryabeer.transferapp.Models.GeneralMethod;
 import com.hiaryabeer.transferapp.Models.ImportData;
+import com.hiaryabeer.transferapp.Models.ReplacementModel;
+import com.hiaryabeer.transferapp.Models.User;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.RoomAllData;
 import com.hiaryabeer.transferapp.appSettings;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+
+import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
 public class Login extends AppCompatActivity {
     private Button login;
@@ -51,17 +65,17 @@ public class Login extends AppCompatActivity {
     public String SET_qtyup;
     GeneralMethod generalMethod;
     public RoomAllData my_dataBase;
-    public static TextView getListCom, selectedCompany;
+    public static TextView getListCom, selectedCompany,username;
     private String selectedCom;
     private String cono, coYear;
     ListView listCompany;
     EditText unameEdt,passEdt;
     public static int iraqFlage=1;
     public static EditText itemKintText1;
-
+    public static List<User> allUsers= new ArrayList<>();
     ///B
     public static int serialsActive;
-
+ ImportData   importData ;
     static {
         serialsActive =0;
     }
@@ -70,10 +84,59 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        init();
         my_dataBase = RoomAllData.getInstanceDataBase(Login.this);
+        init();
+     List<appSettings>   appSettings= appSettings = new ArrayList();
+
+            appSettings = my_dataBase.settingDao().getallsetting();
+        if (appSettings.size() != 0) {
+            allUsers = my_dataBase.usersDao().getAllUsers();
+            if (allUsers.size() == 0)
+                getusers();
+        }
+
     }
+
+   void getusers(){
+       my_dataBase.usersDao().deleteAll();
+       allUsers.clear();
+       importData=new ImportData(Login.this);
+       importData.getAllUsers(new ImportData.GetUsersCallBack() {
+           @Override
+           public void onResponse(JSONArray response) {
+
+
+               for (int i = 0; i < response.length(); i++) {
+
+                   try {
+                       //[{"USERNO":"11","USERNAME":"HISHAM - ZENTIC","USERPASS":"hshmhggiz"}
+
+                           allUsers.add(new User(
+                                   response.getJSONObject(i).getString("USERNO"),
+                                   response.getJSONObject(i).getString("USERNAME").toLowerCase(Locale.ROOT),
+                                   response.getJSONObject(i).getString("USERPASS") ));
+
+
+                   } catch (JSONException e) {
+                       e.printStackTrace();
+                   }
+
+               }
+               my_dataBase.usersDao().addAll(allUsers);
+//               allUsers = my_dataBase.usersDao().getAllUsers();
+
+           }
+
+           @Override
+           public void onError(String error) {
+
+
+           }
+       });
+
+   }
+
+
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -83,20 +146,20 @@ public class Login extends AppCompatActivity {
                 case R.id.login: {
                     getDataZone();
                     if (appSettings.size() != 0) {
-                        if(unameEdt.getText().toString().trim().toLowerCase().equals("admin"))
-                        {
-                            if( passEdt.getText().toString().trim().equals("100"))
-                            {
-                                Intent intent = new Intent(Login.this, MainActivity.class);
-                                startActivity(intent);
-                            }else{
-                                passEdt.setError("Invalid");
-                        }
-                        }else {
-                            unameEdt.setError("Invalid");
-                        }
+//                        if(unameEdt.getText().toString().trim().toLowerCase().equals("admin"))
+//                        {
+//                            if( passEdt.getText().toString().trim().equals("100"))
+//                            {
+//                                Intent intent = new Intent(Login.this, MainActivity.class);
+//                                startActivity(intent);
+//                            }else{
+//                                passEdt.setError("Invalid");
+//                        }
+//                        }else {
+//                            unameEdt.setError("Invalid");
+//                        }
 
-
+                        checkUnameAndPass();
 
                     } else {
                         openSettingDialog();
@@ -104,7 +167,8 @@ public class Login extends AppCompatActivity {
                     break;
                 }
                 case R.id.request_ip_:
-                    openSettingDialog();
+                    showpassworddailog();
+
                     break;
 
             }
@@ -262,10 +326,62 @@ public class Login extends AppCompatActivity {
 //
 //        //Log.e("updateCono",""+up);
 //    }
+public void showpassworddailog(){
+Log.e("showpassworddailog","showpassworddailog");
+     Dialog passwordDialog = new Dialog(Login.this);
+    passwordDialog.setCancelable(false);
+    passwordDialog.setContentView(R.layout.passworddailog);
+    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+    TextView closeBtn = passwordDialog.findViewById(R.id.cancel);
+    EditText passwordEt = passwordDialog.findViewById(R.id.passwordd);
+    Button okBtn = passwordDialog.findViewById(R.id.done);
+    passwordDialog.show();
+    closeBtn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            passwordDialog.dismiss();
+        }
+    });
+
+    okBtn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            if (passwordEt.getText().toString().trim().equals("")) {
+
+                passwordEt.requestFocus();
+                passwordEt.setError(getString(R.string.required));
+
+            } else {
+
+                if (passwordEt.getText().toString().trim().equals("2023000")) {
+                  openSettingDialog();
+                    passwordDialog.dismiss();
+
+                } else {
+
+                    showSweetDialog(Login.this, 3, getString(R.string.wrong_password), getResources().getString(R.string.wrong_password_msg));
+
+                }
+
+
+            }
+
+        }
+    });
+
+
+
+
+}
     public void init() {
 //        selectedCompany = findViewById(R.id.selectedCompany);
         //  itemKintText1 = findViewById(R.id.itemKintTextRE);
+
+        username= findViewById(R.id.username);
+
+        importData=new ImportData(Login.this);
         login = findViewById(R.id.login);
         loginBox = findViewById(R.id.loginBox);
         login.setOnClickListener(onClickListener);
@@ -273,6 +389,25 @@ public class Login extends AppCompatActivity {
         request_ip_.setOnClickListener(onClickListener);
         generalMethod=new GeneralMethod(this);
         unameEdt= findViewById(R.id.unameEdt);
+        unameEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+ if(s.length()!=0){
+    String usernam= my_dataBase.usersDao().getUserName(unameEdt.getText().toString().trim());
+     username.setText(usernam);
+ }
+            }
+        });
         passEdt = findViewById(R.id.passEdt);
 
     }
@@ -324,8 +459,20 @@ public class Login extends AppCompatActivity {
         ///////B
         final CheckBox checkboxQtyCheck = dialog.findViewById(R.id.checkboxQtyCheck);
         final CheckBox rawahnehAddQty = dialog.findViewById(R.id.rawahnehAddQty);
-
-
+        final CheckBox  internal_repl = dialog.findViewById(R.id.internal_repl);
+        internal_repl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    int x = my_dataBase.settingDao().updateinternal_repl("1");
+                    Log.e("x==",x+"");
+                }
+                else
+                {  int x = my_dataBase.settingDao().updateinternal_repl("0");
+                    Log.e("x==",x+"");
+                }
+            }
+        });
         checkboxQtyCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                                                       @Override
@@ -429,6 +576,7 @@ public class Login extends AppCompatActivity {
             conNO.setText(appSettings.get(0).getCompanyNum());
             COMPANYNO = appSettings.get(0).getCompanyNum();
             portSetting.setText(appSettings.get(0).getPort().trim());
+
             //    usernum.setText(appSettings.get(0).getUserNumber());
             //  years.setText(appSettings.get(0).getYears());
             try {
@@ -440,7 +588,11 @@ public class Login extends AppCompatActivity {
 
 //            if (appSettings.get(0).getUpdateQTY().equals("1"))
 //                qtyUP.setChecked(true);
-
+            if (appSettings.get(0).getInternal_replanshment() .equals("0")) {
+                internal_repl.setChecked(false);
+            }else{
+                internal_repl.setChecked(true);
+            }
             if (appSettings.get(0).getCheckQty() != null) {
 
                 if (appSettings.get(0).getCheckQty().equals("1")) {
@@ -502,7 +654,7 @@ public class Login extends AppCompatActivity {
                 String checkQty = checkboxQtyCheck.isChecked() ? "1" : "0";
 
                 String rawahneh_add_item = rawahnehAddQty.isChecked() ? "1" : "0";
-
+                String internal_rep = internal_repl.isChecked() ? "1" : "0";
                 int print = printRG.getCheckedRadioButtonId() == R.id.wifi ? 0 : 1;
 
                 setting = new appSettings();
@@ -516,7 +668,7 @@ public class Login extends AppCompatActivity {
                 setting.setCheckQty(checkQty);
 
                 setting.setRawahneh_add_item(rawahneh_add_item);
-
+                setting.  setInternal_replanshment(internal_rep);
                 setting.setPrint_option(print);
 
                 if (deviceId.getText().toString().trim().length() != 0) {
@@ -524,6 +676,7 @@ public class Login extends AppCompatActivity {
                         if (conNO.getText().toString().trim().length() != 0) {
 
                             saveData(setting);
+                            getusers();
                             dialog.dismiss();
                             loginBox.setVisibility(View.VISIBLE);
 
@@ -555,11 +708,11 @@ public class Login extends AppCompatActivity {
         Random rand = new Random();
         String id = generalMethod.convertToEnglish( String.format("%04d", rand.nextInt(10000)));
         String dat=generalMethod.getCurentTimeDate(2);
-        Log.e("randomNo","id="+id+"\t"+dat);
+      //  Log.e("randomNo","id="+id+"\t"+dat);
         dat=dat.substring(6);
         id=id+dat;
 
-        Log.e("randomNo","id="+id+"\t"+dat);
+       // Log.e("randomNo","id="+id+"\t"+dat);
         return  id;
     }
 
@@ -578,7 +731,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void saveData(appSettings settings) {
-        my_dataBase.settingDao().deleteALL();
+
         my_dataBase.storeDao().deleteall();
         my_dataBase.itemDao().dELETEAll();
         my_dataBase.itemSwitchDao().dELETEAll();
@@ -588,4 +741,74 @@ public class Login extends AppCompatActivity {
         generalMethod.showSweetDialog(this, 1, this.getResources().getString(R.string.savedSuccsesfule), "");
 
     }
+    void checkUnameAndPass() {
+
+        String uname = unameEdt.getText().toString().trim().toLowerCase(Locale.ROOT) + "";
+        String pass = passEdt.getText().toString().trim() + "";
+
+        allUsers = my_dataBase.usersDao().getAllUsers();
+        Log.e("allUsers=",allUsers.size()+"");
+        boolean valid = false;
+        int i;
+
+        if (allUsers.size() != 0) {
+
+            if (!uname.equals("")) {
+
+                if (!pass.equals("")) {
+
+                    for (i = 0; i < allUsers.size(); i++) {
+
+                        if ((uname.equals(allUsers.get(i).getUserId())||Integer.parseInt(uname)==Integer.parseInt(allUsers.get(i).getUserId())) &&
+                                pass.equals(allUsers.get(i).getUserPassword()))  {
+
+                            valid = true;
+                            break;
+
+                        }
+                    }
+
+                    if (valid) {
+
+
+                        Toast.makeText(Login.this, "SUCCESS LOGIN!", Toast.LENGTH_SHORT).show();
+
+
+
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        startActivity(intent);
+
+                    } else {
+
+                        Toast.makeText(Login.this, "username or password not correct", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+                } else {
+
+
+                    passEdt.setError(getString(R.string.required));
+//                passEdt.setError("");
+
+                }
+
+            } else {
+
+
+                unameEdt.setError(getString(R.string.required));
+
+            }
+
+        } else {
+
+            Toast.makeText(this, "No Saved Users Found !", Toast.LENGTH_SHORT).show();
+
+
+        }
+
+
+    }
+
 }

@@ -19,7 +19,7 @@ public class RetrofitInstance {
 //    static String BASEURL="http://46.185.161.254:8085/Falcons/VAN.dll/";
 
     public static Retrofit getInstance(String BASE_URL) {
-
+      //  if(!BASE_URL.endsWith("/"))BASE_URL=BASE_URL+"/";
         if (ourInstance == null)
             ourInstance = new Retrofit.Builder()
                     .baseUrl(BASE_URL)

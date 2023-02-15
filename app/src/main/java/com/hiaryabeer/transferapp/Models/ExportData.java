@@ -8,7 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
-
+import com.hiaryabeer.transferapp.appSettings;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
@@ -41,11 +41,15 @@ import java.net.URISyntaxException;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static android.content.Context.TELECOM_SERVICE;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_replacementlist;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_saverespone;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.exportAllState;
@@ -71,7 +75,8 @@ public class ExportData {
     int typeExportShipment = 0;
     int typeExportReplacement = 0;
     boolean reExport = false;
-
+    Set<String> setVoucher=new HashSet<>();
+    List<appSettings>   appSettings=new ArrayList<>();
     public ExportData(Context context) {
         this.context = context;
         my_dataBase = RoomAllData.getInstanceDataBase(context);
@@ -81,8 +86,9 @@ public class ExportData {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
         }
 headerDll = "/Falcons/VAN.Dll/";
-//headerDll = "";
 
+
+      appSettings=my_dataBase.settingDao().getallsetting();
     }
 
     private void getIpAddress() {
@@ -119,14 +125,55 @@ headerDll = "/Falcons/VAN.Dll/";
         new JSONTask_UPdateReplacment(replacementlist).execute();
     }
 
-    public void exportTrans() {
+    public void exportTrans(int flage) {
 
-         savingDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        savingDialog3.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
-        savingDialog3.setTitleText(context.getString(R.string.saving));
-        savingDialog3.setCancelable(false);
-        savingDialog3.show();
-        new JSONTask_savetrans().execute();
+
+       if( appSettings.size()!=0)
+           if( appSettings.get(0).getInternal_replanshment().equals("0")) {
+Log.e("cas1,==","1");
+                   savingDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+                   savingDialog3.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+                   savingDialog3.setTitleText(context.getString(R.string.saving));
+                   savingDialog3.setCancelable(false);
+                   savingDialog3.show();
+               //new JSONTask_savetrans().execute();
+
+               setVoucher.clear();
+               for (int i = 0; i < MainActivity.Allreplacementlist1.size(); i++)
+                   setVoucher.add(MainActivity.Allreplacementlist1.get(i).getTransNumber());
+
+
+
+               Iterator<String> it = setVoucher.iterator();
+               while(it.hasNext()) {
+                   String value = it.next();
+                   System.out.println(value);
+                   Log.e("ithasNext?=",it.hasNext()+"");
+                   if(it.hasNext())
+                       new JSONTask_savetrans2(1,value).execute();
+                  else new JSONTask_savetrans2(0,value).execute();
+               }
+
+               }
+               else {
+                   if(flage ==0)
+                   {
+
+                       Log.e("cas2,==","2");
+                   }
+                   else if(flage ==1)
+                   {Log.e("cas3,==","3");
+                       savingDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+                       savingDialog3.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+                       savingDialog3.setTitleText(context.getString(R.string.saving));
+                       savingDialog3.setCancelable(false);
+                       savingDialog3.show();
+
+                       new JSONTask_savetrans().execute();
+                   }
+
+           }
+
     }
 
     private void NEW_getReplacmentObject(List<ReplacementModel> replacementlist) {
@@ -181,8 +228,10 @@ headerDll = "/Falcons/VAN.Dll/";
 
         List<ReplacementModel> replacementList;
 
+
         public JSONTask_AddReplacment(List<ReplacementModel> replacementList) {
             this.replacementList = replacementList;
+
         }
 
         @Override
@@ -264,20 +313,29 @@ headerDll = "/Falcons/VAN.Dll/";
                 Log.e("IrTransFer,result===", result+"");
                 if (result.contains("Internal server error")) {
                     exportAllState.setText("server error");
-                    exportTrans();
+
+                    if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                        showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+
+                    exportTrans(0);
                 } else if (result.contains("unique constraint")) {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         String res = jsonObject.getString("ErrorDesc");
                         exportAllState.setText("unique constraint" + res);
-                        exportTrans();
+                        if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                            showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+                        exportTrans(0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                 } else if (result.contains("table or view does not exist")) {
                     exportAllState.setText("server error");
-                    exportTrans();
+                    if( appSettings.size()!=0)
+                        if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                            showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+                    exportTrans(0);
                 } else {
                     if (result.contains("Saved Successfully")) {
                         //  poststateRE.setText("exported");
@@ -290,7 +348,12 @@ headerDll = "/Falcons/VAN.Dll/";
                         }
 
 //                        my_dataBase.replacementDao().updateReplashmentPosted();
+
+                        if( appSettings.size()!=0)
+                            if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                                showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
                         exportAllState.setText("exported");
+
 
                         if (Login.serialsActive == 1) {
 
@@ -309,7 +372,8 @@ headerDll = "/Falcons/VAN.Dll/";
 //                            savingDialog.setCancelable(false);
 //                            savingDialog.show();
                          //   JSONTask_ExportTrans(savingDialog);
-                            exportTrans();
+
+                            exportTrans(0);
 
                         }
 
@@ -318,7 +382,11 @@ headerDll = "/Falcons/VAN.Dll/";
 
                         Log.e("aaaaaaa1===", "aaaaaaa");
                         exportAllState.setText("err");
-                        exportTrans();
+
+                        if( appSettings.size()!=0)
+                            if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                                showSweetDialog(context, 0, context.getResources().getString(R.string.checkConnection), "");
+                        exportTrans(0);
                     }
                 }
 
@@ -328,7 +396,9 @@ headerDll = "/Falcons/VAN.Dll/";
                 Log.e("aaaaaaa2===", "aaaaaaa");
 //                Log.e("aaaaaaa2===","aaaaaaa");
                 exportAllState.setText("not");
-                exportTrans();
+                if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                    showSweetDialog(context, 0, context.getResources().getString(R.string.checkConnection), "");
+                exportTrans(0);
             }
 
 
@@ -419,18 +489,17 @@ headerDll = "/Falcons/VAN.Dll/";
 
             Log.e("JSONTaskAddReplacment", "" + result);
             pdRepla.dismissWithAnimation();
-
             if (result != null && !result.equals("")) {
                 Log.e("IrTransFer,result===", result+"");
                 if (result.contains("Internal server error")) {
                     New_saverespone.setText("Internal server error");
-
+                    showSweetDialog(context, 0, "Internal server error", "");
                 } else if (result.contains("unique constraint")) {
                     New_saverespone.setText("unique constraint");
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         String res = jsonObject.getString("ErrorDesc");
-
+                        showSweetDialog(context, 0, "unique constraint", "");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -438,16 +507,16 @@ headerDll = "/Falcons/VAN.Dll/";
 
                 } else if (result.contains("table or view does not exist")) {
                     New_saverespone.setText("table or view does not exist");
-
+                    showSweetDialog(context, 0, "table or view does not exist", "");
                 } else {
                     if (result.contains("Saved Successfully")) {
-                        exportTrans();
+                        exportTrans(1);
                         New_saverespone.setText("saved");
 
 
 
                     } else {
-
+                        showSweetDialog(context, 0, context.getString(R.string.serverError), "");
                         New_saverespone.setText("not");
                     }
                 }
@@ -455,7 +524,7 @@ headerDll = "/Falcons/VAN.Dll/";
 
             } else {
                 New_saverespone.setText("not");
-
+                showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
 
             }
 
@@ -619,15 +688,15 @@ headerDll = "/Falcons/VAN.Dll/";
 //                    savingDialog2.setCancelable(false);
 //                    savingDialog2.show();
                   //  JSONTask_ExportTrans(savingDialog2);
-                    exportTrans();
+                    exportTrans(0);
                 } else if (response.contains("server error")) {
                     savingDialog.dismissWithAnimation();
-                    exportTrans();
+                    exportTrans(0);
                     showSweetDialog(context, 0, "Internal server error", "");
                 } else if (response.contains("unique constraint")) {
                     savingDialog.dismissWithAnimation();
                     Log.e("unique response", response.toString() + "");
-                    exportTrans();
+                    exportTrans(0);
                     try {
                         showSweetDialog(context, 0, "Unique Constraint", "");
                     } catch (Exception e) {
@@ -641,7 +710,7 @@ headerDll = "/Falcons/VAN.Dll/";
             public void onErrorResponse(VolleyError error) {
                 savingDialog.dismissWithAnimation();
                 showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
-                exportTrans();
+                exportTrans(0);
                 VolleyLog.e("Error: ", error.getMessage());
             }
         }) {
@@ -862,7 +931,7 @@ headerDll = "/Falcons/VAN.Dll/";
 //
 //    }
 private class JSONTask_savetrans extends AsyncTask<String, String, String> {
-
+    String  VHFNO="";
 
 
     @Override
@@ -999,4 +1068,149 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
 
 
 }
+    private class JSONTask_savetrans2 extends AsyncTask<String, String, String> {
+
+       String VHFNO="";
+        int flage;
+        public JSONTask_savetrans2(int flage,String VHFNO) {
+            this.flage= flage;
+            this.VHFNO = VHFNO;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            String do_ = "my";
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                if (!ipAddress.equals("")) {
+
+//
+//                if(replacementlist.size()!=0)
+//                    VHFNO=replacementlist.get(0).getTransNumber();
+                    link = "http://" + ipAddress.trim() + headerDll.trim() + "/EXPORTTRANS?CONO=" + CONO.trim()+"&VHFNO=" +VHFNO;
+
+                    Log.e("link===", "" + link);
+                }
+            } catch (Exception e) {
+                Log.e("getAllSto", e.getMessage());
+                savingDialog3 .dismiss();
+            }
+
+            try {
+
+                //*************************************
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                request.setURI(new URI(link));
+
+//
+
+                HttpResponse response = client.execute(request);
+
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+                Log.e("finalJson***Import", sb.toString());
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+
+                // JsonResponse = sb.toString();
+
+                String finalJson = sb.toString();
+
+
+                //JSONArray parentObject = new JSONArray(finalJson);
+
+                return finalJson;
+
+
+            }//org.apache.http.conn.HttpHostConnectException: Connection to http://10.0.0.115 refused
+            catch (HttpHostConnectException ex) {
+                ex.printStackTrace();
+//                progressDialog.dismiss();
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        savingDialog3.dismiss();
+                        Toast.makeText(context, context.getString(R.string.ipConnectionFailed), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Exception", "" + e.getMessage());
+                savingDialog3.dismiss();
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        try {
+                            Toast.makeText(context, "The target server failed to respond", Toast.LENGTH_SHORT).show();
+                        } catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                });
+//                progressDialog.dismiss();
+                return null;
+            }
+
+
+            //***************************
+
+        }
+
+        @Override
+        protected void onPostExecute(String array) {
+            super.onPostExecute(array);
+            savingDialog3.dismiss();
+            if (array != null) {
+                Log.e("EXPORTTRANSresult===",array+""+flage);
+                if (array.toString().trim().contains("Successfully")) {
+                  if(flage==0) {
+                      showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
+                      savingDialog3.dismiss();
+                  }
+
+
+                }else {
+                    Log.e("not ssaved1","not ssaved1");
+
+                    if(flage==0) {
+                        showSweetDialog(context, 0, context.getResources().getString(R.string.Failedexported), "");
+
+                        savingDialog3.dismiss();
+
+                    }
+
+                }
+            } else {
+
+                Log.e("not ssaved","not ssaved");
+                if(flage==0)    { showSweetDialog(context, 0, "Server Error!", "");
+
+                savingDialog3.dismiss();}
+            }
+        }
+
+
+    }
 }

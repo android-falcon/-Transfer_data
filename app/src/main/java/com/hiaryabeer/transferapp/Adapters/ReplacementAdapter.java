@@ -105,7 +105,9 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
         }
         if(MainActivity.internalOrderFalge==1)
-        {   holder.unitSpinner.setEnabled(false);
+        {      holder.updatedQTY.setVisibility(View.VISIBLE);
+            MainActivity.UPDATEQtyTextView.setVisibility(View.VISIBLE);
+            holder.unitSpinner.setEnabled(false);
         holder.qty.setEnabled(false);
             holder.tvRemove.setVisibility(View.GONE);
         holder.updatedQTY.setText(list.get(position).getUpdatedQty());
@@ -685,6 +687,7 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
             linearLayoutColoring = itemView.findViewById(R.id.row);
 
             updatedQTY= itemView.findViewById(R.id.updatedQTY);
+            updatedQTY.setVisibility(View.GONE);
             unitSpinner= itemView.findViewById(R.id.unitspinner);
             if(serialsActive==1)unitSpinner.setVisibility(View.GONE);
             TransferNo = itemView.findViewById(R.id.trsnferNo);

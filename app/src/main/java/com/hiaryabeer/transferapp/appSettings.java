@@ -28,12 +28,29 @@ public class appSettings {
     //////B
     @ColumnInfo(name = "Check_Qty")
     private String checkQty;
-
+    @ColumnInfo(name = "internal_replanshment",defaultValue = "1")
+    private String internal_replanshment;
     @ColumnInfo(name = "Rawahneh_Add_Item")
     private String rawahneh_add_item;
 
     @ColumnInfo(name = "Print_Option") // 0 -- Wi-Fi _ 1 -- Bluetooth
     private Integer print_option;
+
+    public int getSERIALZONE() {
+        return SERIALZONE;
+    }
+
+    public void setSERIALZONE(int SERIALZONE) {
+        this.SERIALZONE = SERIALZONE;
+    }
+
+    public String getInternal_replanshment() {
+        return internal_replanshment;
+    }
+
+    public void setInternal_replanshment(String internal_replanshment) {
+        this.internal_replanshment = internal_replanshment;
+    }
 
     public Integer getPrint_option() {
         return print_option;
