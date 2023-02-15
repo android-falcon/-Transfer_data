@@ -65,6 +65,19 @@ public class ReplacementModel implements Parcelable {
     @SerializedName("TOSTR")
     @ColumnInfo(name = "TOSTORE")
     String To;
+
+
+    @SerializedName("STORENAME")
+    String STORENAME;
+
+    public String getSTORENAME() {
+        return STORENAME;
+    }
+
+    public void setSTORENAME(String STORENAME) {
+        this.STORENAME = STORENAME;
+    }
+
     @ColumnInfo(name = "ZONECODE")
     String Zone;
 
@@ -76,6 +89,7 @@ public class ReplacementModel implements Parcelable {
     @ColumnInfo(name = "REPLACEMENTDATE")
     String ReplacementDate;
 
+    @SerializedName("ITEMNAME")
     @ColumnInfo(name = "ITEMNAME")
     String itemname;
     @SerializedName("VHFNO")

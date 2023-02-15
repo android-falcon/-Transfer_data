@@ -2999,13 +2999,14 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                         Log.e("setVoucher","fill_getResponce="+setVoucher.size()+"\t"+voucherlist.size());
                         for (int i=0;i< voucherlist.size();i++){
 
-                           setVoucher.add(voucherlist.get(i).getTransNumber());
-
+                           setVoucher.add(voucherlist.get(i).getTransNumber()+","+voucherlist.get(i).getSTORENAME());
+                            Log.e("getSTORENAME","listVoucherNo="+voucherlist.get(i).getSTORENAME()+"\t");
 //                            voucher_no_list.add(setVoucher);
                         }
                         Iterator<String> it = setVoucher.iterator();
                         while(it.hasNext()) {
                             String value = it.next();
+                            Log.e("getSTORENAME","2listVoucherNo="+value);
                             listVoucherNo.add(value);
                             System.out.println(value);
                         }
@@ -3028,11 +3029,10 @@ else   internalOrder.setVisibility(View.INVISIBLE);
             listview_area.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    Log.e("onItemClick","="+position);
                     String voucherNo = (String) (listview_area.getItemAtPosition(position));
-                    Log.e("onItemClick",""+voucherNo);
-                    fillTransferModel(voucherNo);
 
+                    voucherNo= voucherNo.substring(0,voucherNo.indexOf(","));
+                    fillTransferModel(voucherNo);
                     dialog.dismiss();
 
                 }
