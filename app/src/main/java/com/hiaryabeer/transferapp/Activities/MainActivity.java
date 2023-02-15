@@ -79,6 +79,13 @@ import java.util.Set;
 import android.widget.PopupMenu;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.hiaryabeer.transferapp.Activities.Login.serialsActive;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.convertToEnglish;
@@ -91,8 +98,12 @@ import static com.hiaryabeer.transferapp.Models.ImportData.listQtyZone;
 import static com.hiaryabeer.transferapp.Models.ImportData.pdRepla2;
 import static com.hiaryabeer.transferapp.Models.ImportData.voucherlist;
 
+import static java.sql.DriverManager.println;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 public class MainActivity extends AppCompatActivity {
     int saved = 4;
@@ -1604,7 +1615,7 @@ public class MainActivity extends AppCompatActivity {
                     if (editable.toString().equals("no data")) {
 
                         respon.setText("");
-                    pdRepla2.dismiss();
+
                     } else {
                         if (editable.toString().equals("fill")) {
                             for (int i = 0; i < Storelist.size(); i++) {
@@ -2926,7 +2937,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.setContentView(R.layout.select_voucher);
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
             lp.copyFrom(dialog.getWindow().getAttributes());
-
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
         ProgressBar progressVoucher=dialog.findViewById(R.id.progressVoucher);
         ListView listview_area = dialog.findViewById(R.id.listview_area);
          getResponce=dialog.findViewById(R.id.getResponce);
@@ -2936,6 +2947,11 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.text_custom,listVoucherNo);
 
         listview_area.setAdapter(adapter_voucher);
+        ImportData importData=new ImportData(MainActivity.this);
+        importData.getVouchers();
+
+
+
 
         getResponce.addTextChangedListener(new TextWatcher() {
             @Override
@@ -2984,8 +3000,7 @@ public class MainActivity extends AppCompatActivity {
         listview_area.setVisibility(View.GONE);
         progressVoucher.setVisibility(View.VISIBLE);
 
-        ImportData importData=new ImportData(MainActivity.this);
-        importData.getVouchers();
+
             listview_area.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

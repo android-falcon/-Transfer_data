@@ -11,6 +11,7 @@ import com.hiaryabeer.transferapp.Store;
 import java.util.List;
 
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -18,7 +19,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
  @GET("GetTransFerList")
- retrofit2.Call<List<ReplacementModel>> gatVoucherApi(@Query("CONO") String ComNo);
+ Observable<List<ReplacementModel>> gatVoucherApi(@Query("CONO") String ComNo);
 
  @GET("Getsore")
  retrofit2.Call<List<Store>> gatStorsDetail(@Query("CONO") String ComNo);
