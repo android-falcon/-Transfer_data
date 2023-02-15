@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<ReplacementModel> replacementlist = new ArrayList<>();
     public static ArrayList<ReplacementModel> New_replacementlist = new ArrayList<>();
     public List<ReplacementModel> UnPostedreplacementlist = new ArrayList<>();
-    public List<ReplacementModel> Allreplacementlist1 = new ArrayList<>();
+    public static List<ReplacementModel> Allreplacementlist1 = new ArrayList<>();
     public List<ReplacementModel> Allreplacementlist2 = new ArrayList<>();
     public static ArrayList<Store> Storelistt = new ArrayList<>();
     public static Button DZRE_delete;
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     AllItems Item;
     TextView itemUnit_text;
     public static List<String> voucher_no_list= new ArrayList<>();
- TextView   UPDATEQtyTextView;
+    public static  TextView   UPDATEQtyTextView;
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
@@ -611,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //MainActivity.VHFNO=replacementlist.get(0).getTransNumber();
                 exportAllData();
                 maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
                 if (maxVochNum != null) {
@@ -668,12 +668,18 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         replacementlist.clear();
-
+New_replacementlist.clear();
                         fillAdapter();
 
                         itemcode.setText("");
                         fromSpinner.setEnabled(true);
                         toSpinner.setEnabled(true);
+scanItemCode.setEnabled(true);
+                        UPDATEQtyTextView.setVisibility(View.GONE);
+                        UpdateBtn.setVisibility(View.GONE);
+                        saveBtn.setVisibility(View.VISIBLE);
+                        internalOrderFalge=0;
+                        search.setEnabled(true);
 
                         dialog.cancel();
 
@@ -1363,8 +1369,14 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         replacementlist.clear();
         UPDATEQtyTextView=findViewById(R.id.UPDATEQtyTextView);
-      //  UPDATEQtyTextView.setVisibility(View.GONE);
+      UPDATEQtyTextView.setVisibility(View.GONE);
+        appSettings = new ArrayList();
+        try {
+            appSettings = my_dataBase.settingDao().getallsetting();
+        } catch (Exception e) {
+        }
         New_saverespone=findViewById(R.id.New_saverespone);
+
         New_saverespone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1488,17 +1500,23 @@ public class MainActivity extends AppCompatActivity {
         exportAllState = findViewById(R.id.exportAllState);
         itemrespons = findViewById(R.id.itemrespons);
         internalOrder= findViewById(R.id.internalOrder);
+if(appSettings.size()!=0)
+    if(appSettings.get(0).getInternal_replanshment().equals("0"))
+        internalOrder.setVisibility(View.INVISIBLE);
+        else   internalOrder.setVisibility(View.VISIBLE);
+else   internalOrder.setVisibility(View.INVISIBLE);
         internalOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               if(replacementlist.size()==0) {
+                   saveBtn.setVisibility(View.GONE);
+                   UpdateBtn.setVisibility(View.VISIBLE);
 
-                saveBtn.setVisibility(View.GONE);
-                UpdateBtn.setVisibility(View.VISIBLE);
-                search.setEnabled(false);
-                scanItemCode.setEnabled(false);
-                fromSpinner.setEnabled(false);
-                toSpinner.setEnabled(false);
-                openOrderDialog();
+                   openOrderDialog();
+               }else
+               {
+                   showSweetDialog(MainActivity.this,0,"",getString(R.string.msg5));
+               }
             }
         });
         exportData = new ExportData(MainActivity.this);
@@ -1506,11 +1524,7 @@ public class MainActivity extends AppCompatActivity {
         listAllZone.clear();
 //        importData.getAllZones();
         listQtyZone.clear();
-        appSettings = new ArrayList();
-        try {
-            appSettings = my_dataBase.settingDao().getallsetting();
-        } catch (Exception e) {
-        }
+
         fromSpinner = findViewById(R.id.fromspinner);
         toSpinner = findViewById(R.id.tospinner);
         zone = findViewById(R.id.zoneedt);
@@ -1641,9 +1655,16 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
                 if (editable.toString().length() != 0) {
+
                     Log.e("editable.toString()+++", editable.toString() + "");
                     if (editable.toString().trim().equals("exported")) {
                         {
+
+
+//                            if(appSettings.get(0).getInternal_replanshment().equals(1))
+//                                if(ExportData.exportflage==100)
+//                                showSweetDialog(MainActivity.this, 1, getResources().getString(R.string.savedSuccsesfule), "");
+
                             saveData(1);
                             //  for(int i=0;i<replacementlist.size();i++)
                             saved = 1;
@@ -1681,6 +1702,7 @@ public class MainActivity extends AppCompatActivity {
                         fromSpinner.setEnabled(true);
                         toSpinner.setEnabled(true);
                         Log.e("editable.to", editable.toString() + "");
+                        if(appSettings.get(0).getInternal_replanshment().equals(1))
                         showSweetDialog(MainActivity.this, 0, getString(R.string.checkConnection), "");
                     } else if (editable.toString().trim().equals("server error")) {
                         saved = 5;
@@ -1694,6 +1716,7 @@ public class MainActivity extends AppCompatActivity {
                         save.setEnabled(false);
                         fromSpinner.setEnabled(true);
                         toSpinner.setEnabled(true);
+                        if(appSettings.get(0).getInternal_replanshment().equals(1))
                         showSweetDialog(MainActivity.this, 0, "", "Internal server error");
 
 
@@ -1708,6 +1731,7 @@ public class MainActivity extends AppCompatActivity {
                         save.setEnabled(false);
                         fromSpinner.setEnabled(true);
                         toSpinner.setEnabled(true);
+                        if(appSettings.get(0).getInternal_replanshment().equals(1))
                         showSweetDialog(MainActivity.this, 0, "Unique Constraint", editable.toString().trim().substring(17));
 
                     } else {
@@ -3042,7 +3066,10 @@ public class MainActivity extends AppCompatActivity {
         internalOrderFalge=1;
         New_replacementlist.clear();
         New_replacementlist.addAll(replacinmentlist);
-
+        scanItemCode.setEnabled(false);
+        search.setEnabled(false);
+        fromSpinner.setEnabled(false);
+        toSpinner.setEnabled(false);
         New_filldata();
         Log.e("fillTransferModel",""+replacinmentlist.size());
     }
@@ -3193,6 +3220,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.scanItemCode:
+
                 readBarcode(5);
 
 

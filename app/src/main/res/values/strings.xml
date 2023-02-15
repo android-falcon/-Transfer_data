@@ -18,6 +18,8 @@
     <string name="year">Year</string>
     <string name="save">Save</string>
     <string name="UPDATEQty">UpdatedQty</string>
+    <string name="internalreplanshment">سند تحويل داخلي</string>
+
 
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
@@ -160,6 +162,7 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="AddTransferTitle">Add Transfer</string>
     <string name="password">Password</string>
     <string name="user_name">Username</string>
+    <string name="user_id">User ID</string>
     <string name="device_id">Device ID</string>
     <string name="posted_items">Posted Items</string>
     <string name="not_posted_items">not posted Items</string>
@@ -254,6 +257,6 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="getitemunit">Get Item Units</string>
     <string name="itemunit">ItemUnit</string>
     <string name="selectVoucher">Select Voucher No</string>
-
+    <string name="msg5">Save or delete current Transfer data first</string>
 
 </resources>

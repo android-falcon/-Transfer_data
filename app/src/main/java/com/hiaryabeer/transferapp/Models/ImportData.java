@@ -23,6 +23,7 @@ import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.RoomAllData;
 import com.hiaryabeer.transferapp.Store;
 import com.hiaryabeer.transferapp.ZoneModel;
+import com.hiaryabeer.transferapp.appSettings;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -80,7 +81,7 @@ public class ImportData {
     public static List<ZoneModel> listQtyZone = new ArrayList<>();
     public static ArrayList<CompanyInfo> companyInList = new ArrayList<>();
     public static String barcode = "";
-    public static SweetAlertDialog pdRepla, pdRepla2,pdRepla3,pdRepla4,pdRepla5;
+    public static SweetAlertDialog pdRepla, pdRepla2,pdRepla3,pdRepla4,pdRepla5, pDialog3;
     public JSONArray jsonArrayPo;
     public JSONObject stringNoObject;
     public  ApiService myAPI;
@@ -144,14 +145,19 @@ public class ImportData {
         this.context = context;
         my_dataBase = RoomAllData.getInstanceDataBase(context);
 headerDll = "/Falcons/VAN.Dll/";
-            getIpAddress();
-          link = "http://" + ipAddress.trim() + headerDll.trim();
-        //link = "http://" +"10.0.0.22:8085" + headerDll.trim();
-            Log.e("Link====",""+link.toString());
-            Retrofit retrofit = RetrofitInstance.getInstance(link);
-            Log.e("retrofit====",""+retrofit.toString());
-            myAPI = retrofit.create(ApiService.class);
+try {
 
+
+    getIpAddress();
+    link = "http://" + ipAddress.trim() + headerDll.trim();
+    //link = "http://" +"10.0.0.22:8085" + headerDll.trim();
+    Log.e("Link====", "" + link.toString());
+    Retrofit retrofit = RetrofitInstance.getInstance(link);
+    Log.e("retrofit====", "" + retrofit.toString());
+    myAPI = retrofit.create(ApiService.class);
+}catch (Exception e){
+
+}
     }
 
 //    public void getAllItems() {
@@ -188,10 +194,13 @@ public void getAllItems() {
 
     private void getIpAddress() {
 //        headerDll="";
-        ipAddress = my_dataBase.settingDao().getIpAddress().trim();
-        CONO = my_dataBase.settingDao().getCono().trim();
-        portIp = my_dataBase.settingDao().getPort().trim();
-        ipAddress = ipAddress + ":" + portIp;
+      List<appSettings>  appSettings = my_dataBase.settingDao().getallsetting();
+        if (appSettings.size() != 0) {
+                ipAddress = my_dataBase.settingDao().getIpAddress().trim();
+            CONO = my_dataBase.settingDao().getCono().trim();
+            portIp = my_dataBase.settingDao().getPort().trim();
+            ipAddress = ipAddress + ":" + portIp;
+        }
 //        Log.e("getIpAddress","1"+ipAddress+"port="+portIp);
 
 
@@ -1873,5 +1882,67 @@ public void getStore() {
         RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 
     }
+    public interface GetUsersCallBack {
 
+        void onResponse(JSONArray response);
+
+        void onError(String error);
+
+    }
+    public void getAllUsers(GetUsersCallBack getUsersCallBack) {
+
+        pDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+
+        pDialog3.getProgressHelper().setBarColor(Color.parseColor("#115571"));
+        pDialog3.setTitleText("getting Users");
+        pDialog3.setCancelable(false);
+        pDialog3.show();
+        if (!ipAddress.equals("")  || !CONO.equals(""))
+            link = "http://" + ipAddress + headerDll.trim() + "/GetUSERS?CONO=" + CONO;
+
+        Log.e("getUsers_Link", link);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(link, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                getUsersCallBack.onResponse(response);
+                pDialog3.dismissWithAnimation();
+                //  GeneralMethod.showSweetDialog(context, 1, "Data Saved", null);
+                Log.e("getUsers_Response", response + "");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                getUsersCallBack.onError(error.getMessage() + "");
+                pDialog3.dismissWithAnimation();
+                if ((error.getMessage() + "").contains("SSLHandshakeException") || (error.getMessage() + "").equals("null")) {
+
+                    GeneralMethod.showSweetDialog(context, 0, null, "Connection to server failed");
+
+                } else if ((error.getMessage() + "").contains("ConnectException")) {
+
+                    GeneralMethod.showSweetDialog(context, 0, "Connection Failed", null);
+
+                } else if ((error.getMessage() + "").contains("NoRouteToHostException")) {
+
+                    GeneralMethod.showSweetDialog(context, 3, "", "Please check the entered IP info");
+
+                } else if ((error.getMessage() + "").contains("No Data Found")) {
+
+                    GeneralMethod.showSweetDialog(context, 3, "", "No Users Found");
+                    my_dataBase.usersDao().insertUser(new User("010101", "admin", "2022"));
+
+                }
+                Log.e("getUsers_Error", error.getMessage() + "");
+
+            }
+        });
+
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+
+    }
 }

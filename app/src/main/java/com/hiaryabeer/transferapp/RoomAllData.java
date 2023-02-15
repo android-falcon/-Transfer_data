@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Database;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
@@ -18,6 +20,7 @@ import com.hiaryabeer.transferapp.Interfaces.SerialTransfersDao;
 import com.hiaryabeer.transferapp.Interfaces.SerialsDao;
 import com.hiaryabeer.transferapp.Interfaces.SettingDao;
 import com.hiaryabeer.transferapp.Interfaces.StoreDao;
+import com.hiaryabeer.transferapp.Interfaces.Users_Dao;
 import com.hiaryabeer.transferapp.Interfaces.ZoneDao;
 import com.hiaryabeer.transferapp.Models.AllItems;
 import com.hiaryabeer.transferapp.Models.ItemSerialTransfer;
@@ -25,9 +28,10 @@ import com.hiaryabeer.transferapp.Models.ItemSwitch;
 import com.hiaryabeer.transferapp.Models.ItemsUnit;
 import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.Models.SerialsModel;
+import com.hiaryabeer.transferapp.Models.User;
 
 
-@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class}, version = 28, exportSchema = false)
+@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class, User.class}, version = 30, exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private static RoomAllData database;
     public static String dataBaseName = "DBRoomTransfer";
@@ -39,7 +43,7 @@ public abstract class RoomAllData extends RoomDatabase {
     public abstract SettingDao settingDao();
 
     public abstract ItemDao itemDao();
-
+    public abstract Users_Dao usersDao();
     public abstract StoreDao storeDao();
     public abstract ItemSwitchDao itemSwitchDao();
     public abstract SerialTransfersDao serialTransfersDao();
@@ -226,6 +230,36 @@ public abstract class RoomAllData extends RoomDatabase {
 
         }
     };
+    static final Migration MIGRATION_28_29= new Migration(28, 29) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+
+
+            database.execSQL("ALTER TABLE Users_Table ADD COLUMN internal_replanshment TEXT DEFAULT '1'");
+
+
+        }
+    };
+    static final Migration MIGRATION_29_30= new Migration(29, 30) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+
+            database.execSQL("            CREATE TABLE Users_Table (\n" +
+                    "                    SERIAL INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                    "                    User_ID TEXT,\n" +
+                    "                    User_Name TEXT,\n" +
+                    "              User_Password TEXT)\n" +
+
+
+                    "\t\t\t\t");
+
+        }
+    };
+
+
+
 
     public static synchronized RoomAllData getInstanceDataBase(Context context) {
         if (database == null) {
@@ -242,6 +276,8 @@ public abstract class RoomAllData extends RoomDatabase {
                             MIGRATION_24_26
                             , MIGRATION_26_27
                             ,MIGRATION_27_28
+                            ,MIGRATION_28_29
+                            , MIGRATION_29_30
                           )
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()

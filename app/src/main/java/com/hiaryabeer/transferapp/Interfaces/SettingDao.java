@@ -49,5 +49,6 @@ public interface SettingDao {
     int  updateQtyCheck(String check);
     @Query ("update SETTINGS_TABLE set  Rawahneh_Add_Item=:check ")
     int  updateRawahneh_Add_ItemCheck(String check);
-
+    @Query ("update SETTINGS_TABLE set  internal_replanshment=:check ")
+    int  updateinternal_repl(String check);
 }

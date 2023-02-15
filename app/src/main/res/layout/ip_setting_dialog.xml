@@ -211,10 +211,22 @@
 
 
         <CheckBox
-            android:id="@+id/checkboxQtyCheck"
+            android:id="@+id/internal_repl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/printLinear"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="15dp"
+            android:checked="true"
+            android:text="@string/internalreplanshment"
+            android:textColor="@color/black" />
+        <CheckBox
+            android:id="@+id/checkboxQtyCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/internal_repl"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="16dp"
