@@ -236,7 +236,7 @@ public abstract class RoomAllData extends RoomDatabase {
 
 
 
-            database.execSQL("ALTER TABLE Users_Table ADD COLUMN internal_replanshment TEXT DEFAULT '1'");
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN internal_replanshment TEXT DEFAULT '1'");
 
 
         }
