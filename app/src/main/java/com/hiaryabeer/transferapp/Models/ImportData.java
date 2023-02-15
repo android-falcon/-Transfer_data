@@ -46,6 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -85,6 +89,7 @@ public class ImportData {
     public JSONArray jsonArrayPo;
     public JSONObject stringNoObject;
     public  ApiService myAPI;
+    private String TAG;
 
     /******** Bara' *********/
 
@@ -248,14 +253,11 @@ public void getStore() {
 
 
     }
-    public void getVouchers() {
-        Log.e("importgetVouchers", "" + "getVouchers");
-        pdRepla2 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        pdRepla2.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
-        pdRepla2.setTitleText(context.getString(R.string.getStore));
-        pdRepla2.setCancelable(false);
-        pdRepla2.show();
-        fetchVoucherData();
+    public List<ReplacementModel>  getVouchers() {
+        List<ReplacementModel> alldata = new ArrayList<>();
+        alldata= fetchVoucherData();
+        Log.e("getVouchers","3"+alldata.size());
+        return  alldata;
     }
     public void getUnitData(String from,String to) {
         listAllItemsUnit.clear();
@@ -1604,48 +1606,39 @@ public void getStore() {
     }
 
     /*************/
-    public void fetchVoucherData() {
-        Log.e("myAPI", "fetchVoucherData=" + myAPI+"\tco="+CONO);
-        Call<List<ReplacementModel>> myData = myAPI.gatVoucherApi(CONO);
-        Log.e("fetchStoreData", "myData=" + myData.isExecuted());
-        myData.enqueue(new Callback<List<ReplacementModel>>() {
-            @Override
-            public void onResponse(Call<List<ReplacementModel>> call, retrofit2.Response<List<ReplacementModel>> response) {
-                if (!response.isSuccessful()) {
-                    Log.e("fetchSto", "not=" + response.message()+" "+call.request());
-                    pdRepla2.dismiss();
-                } else {
-                    voucherlist.clear();
+    public List<ReplacementModel> fetchVoucherData() {
+//        Log.e("myAPI", "fetchVoucherData=" + myAPI+"\tco="+CONO);
+        Observable<List<ReplacementModel>> myData = myAPI.gatVoucherApi(CONO);
+        List<ReplacementModel> alldata = new ArrayList<>();
+        myData.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).map(issues -> issues)
+                .subscribe(this::handleResults, this::handleError);//get issues and map to issues lis
 
-                    voucherlist.addAll(response.body());
-
+        return  alldata;
+    }
+    private void handleResults(List<ReplacementModel> dataList) {
+        Log.e("accept","2handleResults="+dataList.size());
+        if (dataList != null && dataList.size() != 0) {
+            voucherlist.clear();
+                    voucherlist.addAll(dataList);
                     Log.e("fetchSto", "voucherlist=" +voucherlist.size());
                     MainActivity.getResponce.setText("fill");
-                    pdRepla2.dismiss();
-                    Log.e("fetchStoreD", "fetchStoreData=" + response.body().size()+" "+call.request());
 
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<ReplacementModel>> call, Throwable throwable) {
-                try {
-                    Log.e("fetchStoreDataonFailure", "=" + throwable.getMessage()+" "+call.request());
 
-//                    MainActivity.respon.setText("no data");
+
+        } else {
+            Toast.makeText(context, "NO RESULTS FOUND",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void handleError(Throwable throwable) {
+
                     if (throwable.getMessage() != null) {
                         if (throwable.getMessage().toString().contains("Failed to connect to"))
                             showSweetDialog(context, 3, "Not Internet Connection", "");
                     } else showSweetDialog(context, 3, "Not Connected To DB", "");
-                    pdRepla2.dismiss();
-                    //  Toast.makeText(context, "throwable"+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                catch(Exception exception){
-
-                }
-            }
-
-        });
     }
     public void fetchStoreData() {
         Log.e("myAPI", "myAPI=" + myAPI+"\tco="+CONO);
