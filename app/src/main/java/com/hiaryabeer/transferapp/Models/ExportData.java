@@ -408,10 +408,10 @@ Log.e("cas1,==","1");
     public class JSONTask_UPdateReplacment extends AsyncTask<String, String, String> {
         private String JsonResponse = null;
 
-        List<ReplacementModel> replacementList;
+        List<ReplacementModel> replacementList1;
 
         public JSONTask_UPdateReplacment(List<ReplacementModel> replacementList) {
-            this.replacementList = replacementList;
+            this.replacementList1 = replacementList;
         }
 
         @Override
@@ -510,7 +510,9 @@ Log.e("cas1,==","1");
                     showSweetDialog(context, 0, "table or view does not exist", "");
                 } else {
                     if (result.contains("Saved Successfully")) {
-                        exportTrans(1);
+                        Log.e("checkallqty33==","here");
+                     if(checkallqty(New_replacementlist))
+                     exportTrans(1);
                         New_saverespone.setText("saved");
 
 
@@ -1212,5 +1214,24 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
         }
 
 
+    }
+    boolean checkallqty(List<ReplacementModel>replacementlist){
+        boolean flage=false;
+        try{
+        for(int i=0;i<New_replacementlist.size();i++)
+        {     Log.e("checkallqty22==",New_replacementlist.get(i).getRecQty()+"  "+New_replacementlist.get(i).getUpdatedQty());
+        if(Double.parseDouble(New_replacementlist.get(i).getRecQty())<=Double.parseDouble(New_replacementlist.get(i).getUpdatedQty()))
+            flage=true;
+        else
+        {
+            flage=false;
+            break;
+        }}}
+        catch (Exception e){
+            flage=false;
+        }
+Log.e("checkallqty==",flage+"");
+        New_replacementlist.clear();
+        return flage;
     }
 }

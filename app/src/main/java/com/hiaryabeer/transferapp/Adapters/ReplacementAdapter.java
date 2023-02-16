@@ -104,9 +104,25 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
 
         }
+        holder.   RMQTY.setVisibility(View.GONE);
         if(MainActivity.internalOrderFalge==1)
         {      holder.updatedQTY.setVisibility(View.VISIBLE);
             MainActivity.UPDATEQtyTextView.setVisibility(View.VISIBLE);
+            MainActivity. RMQtytext.setVisibility(View.VISIBLE);
+         holder.   RMQTY.setVisibility(View.VISIBLE);
+if(!list.get(position).getRMQTY().equals(""))
+            holder.RMQTY.setText(list.get(position).getRMQTY());
+            else {
+    holder.RMQTY.setText("0");
+    list.get(position).setRMQTY("0");
+}
+            if(!list.get(position).getSer_RCVQTY().equals(""))
+            holder.RCVQTY.setText(list.get(position).getSer_RCVQTY());
+            else {
+                holder.RCVQTY.setText("0");
+                list.get(position).setSer_RCVQTY("0");
+            }
+
             holder.unitSpinner.setEnabled(false);
         holder.qty.setEnabled(false);
             holder.tvRemove.setVisibility(View.GONE);
@@ -126,7 +142,11 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() != 0) {
                     if(!s.equals("0"))
-                    list.get(holder.getAdapterPosition()).setUpdatedQty(holder.updatedQTY.getText().toString());
+                    {
+                        list.get(holder.getAdapterPosition()).setUpdatedQty(holder.updatedQTY.getText().toString());
+                       // list.get(holder.getAdapterPosition()).setRMQTY(String.valueOf(Double.parseDouble(holder.qty.getText().toString())-Double.parseDouble(holder.updatedQTY.getText().toString())));
+                     // list.get(holder.getAdapterPosition()).setSer_RCVQTY(String.valueOf(Double.parseDouble(list.get(holder.getAdapterPosition()).getSer_RCVQTY())+Double.parseDouble(list.get(holder.getAdapterPosition()).getUpdatedQty())));
+                    }
              else {
                         holder.updatedQTY.setText(New_replacementlist.get(holder.getAdapterPosition()).getRecQty());
                         holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
@@ -671,7 +691,7 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
     }
 
     class replacementViewHolder extends RecyclerView.ViewHolder {
-        TextView itemname, from, to, zone, itemcode, tvRemove, itemqty, TransferNo, tvEdit;
+        TextView itemname, from, to, zone, itemcode, tvRemove, itemqty, TransferNo, tvEdit,RMQTY,RCVQTY;
 
         EditText qty,updatedQTY;
 
@@ -685,7 +705,8 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
         public replacementViewHolder(@NonNull View itemView) {
             super(itemView);
             linearLayoutColoring = itemView.findViewById(R.id.row);
-
+            RMQTY= itemView.findViewById(R.id.RMQty);
+                    RCVQTY= itemView.findViewById(R.id.RCVQty);
             updatedQTY= itemView.findViewById(R.id.updatedQTY);
             updatedQTY.setVisibility(View.GONE);
             unitSpinner= itemView.findViewById(R.id.unitspinner);

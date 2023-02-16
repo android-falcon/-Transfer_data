@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         TextView recqty,fromdate,todate;
     TextView search,scanItemCode;
     public static Button save;
+    TextView edit;
     public int indexZone = -1;
     public int indexDBZone = 0, indexDBitem = 0, indexOfReduceditem = 0;
     public static RoomAllData my_dataBase;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     AllItems Item;
     TextView itemUnit_text;
     public static List<String> voucher_no_list= new ArrayList<>();
-    public static  TextView   UPDATEQtyTextView;
+    public static  TextView   UPDATEQtyTextView,RMQtytext;
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
@@ -649,9 +650,10 @@ public class MainActivity extends AppCompatActivity {
                 VHFNO=New_replacementlist.get(0).getTransNumber();
                New_exportAllData();
                 UPDATEQtyTextView.setVisibility(View.GONE);
+                RMQtytext.setVisibility(View.GONE);
                 UpdateBtn.setVisibility(View.GONE);
                 saveBtn.setVisibility(View.VISIBLE);
-                New_replacementlist.clear();
+                //New_replacementlist.clear();
                 fillAdapter();
                 internalOrderFalge=0;
             }
@@ -679,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         replacementlist.clear();
-New_replacementlist.clear();
+//New_replacementlist.clear();
                         fillAdapter();
 
                         itemcode.setText("");
@@ -687,6 +689,7 @@ New_replacementlist.clear();
                         toSpinner.setEnabled(true);
 scanItemCode.setEnabled(true);
                         UPDATEQtyTextView.setVisibility(View.GONE);
+                        RMQtytext.setVisibility(View.GONE);
                         UpdateBtn.setVisibility(View.GONE);
                         saveBtn.setVisibility(View.VISIBLE);
                         internalOrderFalge=0;
@@ -1380,7 +1383,10 @@ scanItemCode.setEnabled(true);
     private void init() {
         replacementlist.clear();
         UPDATEQtyTextView=findViewById(R.id.UPDATEQtyTextView);
+        RMQtytext=findViewById(R.id.RMQtytext);
       UPDATEQtyTextView.setVisibility(View.GONE);
+        RMQtytext.setVisibility(View.GONE);
+
         appSettings = new ArrayList();
         try {
             appSettings = my_dataBase.settingDao().getallsetting();
@@ -1520,8 +1526,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
             @Override
             public void onClick(View view) {
                if(replacementlist.size()==0) {
-                   saveBtn.setVisibility(View.GONE);
-                   UpdateBtn.setVisibility(View.VISIBLE);
+
 
                    openOrderDialog();
                }else
@@ -3073,18 +3078,21 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         for(int i=0;i<voucherlist.size();i++){
             if(voucherlist.get(i).getTransNumber().equals(voucherNo))
             {
-                voucherlist.get(i).setUpdatedQty( voucherlist.get(i).getRecQty());
+              if(voucherlist.get(i).getRecQty().equals(""))
+                  voucherlist.get(i).setUpdatedQty( "0");
                 replacinmentlist.add(voucherlist.get(i));
 
             }
         }
         internalOrderFalge=1;
-        New_replacementlist.clear();
+        //New_replacementlist.clear();
         New_replacementlist.addAll(replacinmentlist);
         scanItemCode.setEnabled(false);
         search.setEnabled(false);
         fromSpinner.setEnabled(false);
         toSpinner.setEnabled(false);
+                       saveBtn.setVisibility(View.GONE);
+                 UpdateBtn.setVisibility(View.VISIBLE);
         New_filldata();
         Log.e("fillTransferModel",""+replacinmentlist.size());
     }
@@ -3980,24 +3988,25 @@ public void New_filldata(){
 }
     public void New_exportAllData() {
         Log.e("New_replacementlist11=",New_replacementlist.size()+"");
-        for (int i = 0; i < New_replacementlist.size(); i++) {
-
-       if(!New_replacementlist.get(i).getUpdatedQty().equals(""))
-       {
-           Log.e("CASE=",New_replacementlist.get(i).getUpdatedQty()+"  "+New_replacementlist.get(i).getRecQty());
-           if(New_replacementlist.get(i).getUpdatedQty().equals(New_replacementlist.get(i).getRecQty()))
-           {
-               New_replacementlist.remove(i);
-           i--;
-
-           }
-       }else
-       {
-           New_replacementlist.remove(i);
-           i--;
-       }
-        }
+//        for (int i = 0; i < New_replacementlist.size(); i++) {
+//
+//       if(!New_replacementlist.get(i).getUpdatedQty().equals(""))
+//       {
+//           Log.e("CASE=",New_replacementlist.get(i).getUpdatedQty()+"  "+New_replacementlist.get(i).getRecQty());
+//           if(New_replacementlist.get(i).getUpdatedQty().equals(New_replacementlist.get(i).getRecQty()))
+//           {
+//               New_replacementlist.remove(i);
+//           i--;
+//
+//           }
+//       }else
+//       {
+//           New_replacementlist.remove(i);
+//           i--;
+//       }
+//        }
         Log.e("New_replacementlist=",New_replacementlist.size()+"");
         exportData.NEW_exportReplacementList(New_replacementlist);
     }
+
 }

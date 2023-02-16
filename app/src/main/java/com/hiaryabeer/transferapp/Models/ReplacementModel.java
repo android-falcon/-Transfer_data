@@ -68,6 +68,7 @@ public class ReplacementModel implements Parcelable {
 
 
     @SerializedName("STORENAME")
+    @ColumnInfo(name = "STORENAME",defaultValue="1")
     String STORENAME;
 
     public String getSTORENAME() {
@@ -164,7 +165,7 @@ public class ReplacementModel implements Parcelable {
     public void setRecQty(String recQty) {
         this.recQty = recQty;
     }
-@SerializedName("QTY")
+@SerializedName("ORGQTY")
     @ColumnInfo(name = "RECQTY")
     private String recQty;
     @PrimaryKey(autoGenerate = true)
@@ -190,6 +191,27 @@ public class ReplacementModel implements Parcelable {
 
     @ColumnInfo(name = "UpdatedQty")
     String  UpdatedQty;
+    @ColumnInfo(name = "RMQTY")
+   String RMQTY;
+    @SerializedName(  "RCVQTY")
+    @ColumnInfo(name = "Ser_RCVQTY")
+        String    Ser_RCVQTY;
+
+    public String getRMQTY() {
+        return RMQTY;
+    }
+
+    public void setRMQTY(String RMQTY) {
+        this.RMQTY = RMQTY;
+    }
+
+    public String getSer_RCVQTY() {
+        return Ser_RCVQTY;
+    }
+
+    public void setSer_RCVQTY(String ser_RCVQTY) {
+        Ser_RCVQTY = ser_RCVQTY;
+    }
 
     public String getUpdatedQty() {
         return UpdatedQty;
@@ -406,6 +428,10 @@ public class ReplacementModel implements Parcelable {
             obj.put("TOSTR", To);
             obj.put("QTY", UpdatedQty);
             obj.put("ORGQTY", recQty);
+
+//            obj.put("RCVQTY", Ser_RCVQTY);
+//            obj.put("RMQTY", RMQTY);
+
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");
         }

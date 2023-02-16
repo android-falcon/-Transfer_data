@@ -245,4 +245,8 @@
     <string name="getitemunit">Get Items Units</string>
     <string name="selectVoucher">Select Voucher No</string>
     <string name="msg5">قم بحفظ او إلغاء سند التحويل الحالي أولا</string>
+
+    <string name="RCVQty">الكمية</string>
+    <string name="RMQty">المتبقي</string>
+    <string name="orgqty">الكمية الأصل</string>
 </resources>

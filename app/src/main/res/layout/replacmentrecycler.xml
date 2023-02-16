@@ -102,6 +102,26 @@
             android:textColor="@color/black"
             android:textFontWeight="10"
             android:textSize="13sp" />
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:gravity="center"
+            android:text="@string/RCVQty"
+            android:id="@+id/RCVQty"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:id="@+id/RMQty"
+            android:gravity="center"
+
+
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/itemqty"
