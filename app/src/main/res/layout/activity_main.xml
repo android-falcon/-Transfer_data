@@ -205,7 +205,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
+            <TextView
+                android:id="@+id/edititemCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="3dp"
+                android:layout_weight="1"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:inputType="text"
+                android:padding="1dp"
+                android:textColor="@color/darkblue_"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/ic_baseline_edit_24" />
             <EditText
                 android:id="@+id/itemcodeedt"
                 android:layout_width="match_parent"

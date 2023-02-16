@@ -96,6 +96,7 @@
     <string name="oldqty"> الكمية السابقة </string>
     <string name="back">  عودة </string>
     <string name="NODATA">  لا توجد بيانات محذوفة لاسترجاعها </string>
+
     <string name="deleteitemt2">حذف المادة </string>
     <string name="dataRet">تم استرجاع البيانات</string>
     <string name="enter"> دخول </string>
@@ -245,4 +246,5 @@
     <string name="getitemunit">Get Items Units</string>
     <string name="selectVoucher">Select Voucher No</string>
     <string name="msg5">قم بحفظ او إلغاء سند التحويل الحالي أولا</string>
+    <string name="noDataFound">لايوجد بيانات </string>
 </resources>

@@ -1628,13 +1628,15 @@ public void getStore() {
 
 
         } else {
-            Toast.makeText(context, "NO RESULTS FOUND",
-                    Toast.LENGTH_LONG).show();
+            Log.e("fetchSto", "Else+voucherlist=" +dataList.size());
+            MainActivity.getResponce.setText("noData");
+
         }
     }
 
     private void handleError(Throwable throwable) {
-
+        Log.e("fetchSto", "throwable+voucherlist=" +throwable.getMessage());
+        MainActivity.getResponce.setText("noData");
                     if (throwable.getMessage() != null) {
                         if (throwable.getMessage().toString().contains("Failed to connect to"))
                             showSweetDialog(context, 3, "Not Internet Connection", "");
