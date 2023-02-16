@@ -1483,6 +1483,7 @@ scanItemCode.setEnabled(true);
         });
         edititemCode= findViewById(R.id.edititemCode);
         edititemCode.setOnClickListener(t->{
+            if(internalOrderFalge==0)
             openEditDialog(2);
         });
         colorlastrow = findViewById(R.id.colorlastrow);
