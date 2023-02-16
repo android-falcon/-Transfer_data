@@ -191,10 +191,10 @@ public class ReplacementModel implements Parcelable {
 
     @ColumnInfo(name = "UpdatedQty")
     String  UpdatedQty;
-    @ColumnInfo(name = "RMQTY")
+    @ColumnInfo(name = "RMQTY",defaultValue = "1")
    String RMQTY;
     @SerializedName(  "RCVQTY")
-    @ColumnInfo(name = "Ser_RCVQTY")
+    @ColumnInfo(name = "Ser_RCVQTY",defaultValue = "1")
         String    Ser_RCVQTY;
 
     public String getRMQTY() {

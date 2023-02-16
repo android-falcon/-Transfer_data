@@ -513,9 +513,10 @@ Log.e("cas1,==","1");
                         Log.e("checkallqty33==","here");
                      if(checkallqty(New_replacementlist))
                      exportTrans(1);
+                     else
+                         showSweetDialog(context, 1, context.getString(R.string.savedSuccsesfule), "");
+
                         New_saverespone.setText("saved");
-
-
 
                     } else {
                         showSweetDialog(context, 0, context.getString(R.string.serverError), "");
