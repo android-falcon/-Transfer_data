@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
  AppCompatButton UpdateBtn;
     ItemSwitch itemSwitch;
     AllItems Item;
-    TextView itemUnit_text;
+    TextView itemUnit_text,edititemCode;
     public static List<String> voucher_no_list= new ArrayList<>();
     public static  TextView   UPDATEQtyTextView,RMQtytext;
    // public List<Item_Unit_Details> allUnitDetails;
@@ -1487,7 +1487,11 @@ scanItemCode.setEnabled(true);
 
             }
         });
-
+        edititemCode= findViewById(R.id.edititemCode);
+        edititemCode.setOnClickListener(t->{
+            if(internalOrderFalge==0)
+            openEditDialog(2);
+        });
         colorlastrow = findViewById(R.id.colorlastrow);
         colorlastrow.addTextChangedListener(new TextWatcher() {
             @Override
@@ -2488,7 +2492,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
                                     icScan.setOnClickListener(v14 -> openSmallCapture(6));
 
-                                    icEdit.setOnClickListener(v13 -> openEditDialog());
+                                    icEdit.setOnClickListener(v13 -> openEditDialog(1));
 
 
                                     etSerial.addTextChangedListener(new TextWatcher() {
@@ -2970,6 +2974,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         ProgressBar progressVoucher=dialog.findViewById(R.id.progressVoucher);
         ListView listview_area = dialog.findViewById(R.id.listview_area);
          getResponce=dialog.findViewById(R.id.getResponce);
+         TextView noData=dialog.findViewById(R.id.noData);
         Set<String> setVoucher=new HashSet<>();
         List<String >listVoucherNo=new ArrayList<>();
         adapter_voucher = new ArrayAdapter<String>(getBaseContext(),
@@ -3023,6 +3028,9 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                         listview_area.setVisibility(View.VISIBLE);
                         progressVoucher.setVisibility(View.GONE);
 
+                    }else if(editable.toString().equals("noData")){
+                        progressVoucher.setVisibility(View.GONE);
+                        noData.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -3542,7 +3550,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         openSmallCapture(type);
     }
 
-    private void openEditDialog() {
+    private void openEditDialog(int flagType) {
         Dialog editDialog = new Dialog(MainActivity.this);
         editDialog.setContentView(R.layout.enter_serial_layout);
         editDialog.setCancelable(true);
@@ -3551,6 +3559,10 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         TextView icClose = editDialog.findViewById(R.id.icClose);
         Button okButton = editDialog.findViewById(R.id.okButton);
 
+        TextView textView_title=editDialog.findViewById(R.id.textView_title);
+        if(flagType==2){
+            textView_title.setText(getResources().getString(R.string.barcode));
+        }
         editDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         editDialog.show();
@@ -3558,7 +3570,10 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(flagType==1)
                 etSerial.setText(editText.getText().toString().trim());
+                else  itemcode.setText(editText.getText().toString().trim());
+
                 editDialog.dismiss();
             }
         });

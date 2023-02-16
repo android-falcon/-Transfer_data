@@ -52,7 +52,7 @@
         <ProgressBar
             android:layout_height="50dp"
             android:layout_width="50dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/progressVoucher"
             android:layout_gravity="center"
             android:outlineSpotShadowColor="@color/orange"
@@ -66,8 +66,17 @@
 
 
             android:listSelector="@color/layer6"
-            android:visibility="visible"
+            android:visibility="gone"
 
+            />
+        <TextView
+            android:id="@+id/noData"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:text="@string/noDataFound"
             />
     </LinearLayout>
 
