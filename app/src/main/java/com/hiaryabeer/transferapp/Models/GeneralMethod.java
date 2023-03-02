@@ -112,9 +112,6 @@ public class GeneralMethod {
 
     }
 
-    private void deletesettings() {
-        if (appSettingsList.size() != 0)
-            my_dataBase.settingDao().deleteALL();
-    }
+
 
 }

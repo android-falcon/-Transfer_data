@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hiaryabeer.transferapp.Activities.Login;
 import com.hiaryabeer.transferapp.Activities.MainActivity;
+import com.hiaryabeer.transferapp.Models.GeneralMethod;
 import com.hiaryabeer.transferapp.Models.ItemsUnit;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.Models.ReplacementModel;
@@ -83,7 +84,7 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
         holder.from.setText(list.get(position).getFromName());
         holder.to.setText(list.get(position).getToName());
         holder.itemname.setText(list.get(position).getItemname());
-        holder.TransferNo.setText(list.get(position).getTransNumber());
+     //   holder.TransferNo.setText(list.get(position).getTransNumber());
         //   holder.zone.setText(list.get(position).getZone());
           holder.itemcode.setText(list.get(position).getItemcode());
         //    Log.e("onBindViewHolder202020",""+list.get(position).getRecQty());
@@ -105,17 +106,22 @@ public class ReplacementAdapter extends RecyclerView.Adapter<ReplacementAdapter.
 
         }
         holder.   RMQTY.setVisibility(View.GONE);
+        holder.  RCVQTY.setVisibility(View.GONE);
         if(MainActivity.internalOrderFalge==1)
         {      holder.updatedQTY.setVisibility(View.VISIBLE);
             MainActivity.UPDATEQtyTextView.setVisibility(View.VISIBLE);
+            MainActivity. RCVQtytext.setVisibility(View.VISIBLE);
             MainActivity. RMQtytext.setVisibility(View.VISIBLE);
          holder.   RMQTY.setVisibility(View.VISIBLE);
+            holder.  RCVQTY.setVisibility(View.VISIBLE);
 if(!list.get(position).getRMQTY().equals(""))
             holder.RMQTY.setText(list.get(position).getRMQTY());
             else {
     holder.RMQTY.setText("0");
     list.get(position).setRMQTY("0");
 }
+
+
             if(!list.get(position).getSer_RCVQTY().equals(""))
             holder.RCVQTY.setText(list.get(position).getSer_RCVQTY());
             else {
@@ -143,12 +149,33 @@ if(!list.get(position).getRMQTY().equals(""))
                 if (s.toString().length() != 0) {
                     if(!s.equals("0"))
                     {
+                        Log.e("ddd==",holder.updatedQTY.getText().toString()+"  "+list.get(holder.getAdapterPosition()).getRMQTY());
+                      if(Double.parseDouble(list.get(holder.getAdapterPosition()).getRMQTY())==0&&Double.parseDouble(list.get(holder.getAdapterPosition()).getSer_RCVQTY())==0){
+                          if(Double.parseDouble(holder.updatedQTY.getText().toString())<=Double.parseDouble(list.get(holder.getAdapterPosition()).getRecQty()))
+                              list.get(holder.getAdapterPosition()).setUpdatedQty(holder.updatedQTY.getText().toString());
+                          else
+                          {
+                              GeneralMethod.showSweetDialog(context, 3, "", context.getResources().getString(R.string.notvaildqty3));
+
+                              list.get(holder.getAdapterPosition()).setUpdatedQty(list.get(holder.getAdapterPosition()).getRecQty());
+                              holder.updatedQTY.setText(list.get(holder.getAdapterPosition()).getRecQty());
+                          }
+                      }else
+                      {
+                        if(Double.parseDouble(holder.updatedQTY.getText().toString())<=Double.parseDouble(list.get(holder.getAdapterPosition()).getRMQTY()))
                         list.get(holder.getAdapterPosition()).setUpdatedQty(holder.updatedQTY.getText().toString());
+                  else
+                        {
+                            GeneralMethod.showSweetDialog(context, 3, "", context.getResources().getString(R.string.notvaildqty3));
+
+                            list.get(holder.getAdapterPosition()).setUpdatedQty(list.get(holder.getAdapterPosition()).getRMQTY());
+                            holder.updatedQTY.setText(list.get(holder.getAdapterPosition()).getRMQTY());
+                        }}
                        // list.get(holder.getAdapterPosition()).setRMQTY(String.valueOf(Double.parseDouble(holder.qty.getText().toString())-Double.parseDouble(holder.updatedQTY.getText().toString())));
                      // list.get(holder.getAdapterPosition()).setSer_RCVQTY(String.valueOf(Double.parseDouble(list.get(holder.getAdapterPosition()).getSer_RCVQTY())+Double.parseDouble(list.get(holder.getAdapterPosition()).getUpdatedQty())));
                     }
              else {
-                        holder.updatedQTY.setText(New_replacementlist.get(holder.getAdapterPosition()).getRecQty());
+                        holder.updatedQTY.setText("0");
                         holder.qty.setError(context.getResources().getString(R.string.qtyerror3));
 
                     }  }
@@ -229,19 +256,32 @@ if(!list.get(position).getRMQTY().equals(""))
 
 
                list.get(holder.getAdapterPosition()).setUnitID(holder.unitSpinner.getSelectedItem().toString());
-                my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                        list.get(holder.getAdapterPosition()).getRecQty(),
-                        list.get(holder.getAdapterPosition()).getTransNumber(),
-                        list.get(holder.getAdapterPosition()).getCal_Qty()    );
+//                my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+//                        list.get(holder.getAdapterPosition()).getRecQty(),
+//                        list.get(holder.getAdapterPosition()).getTransNumber(),
+//                        list.get(holder.getAdapterPosition()).getCal_Qty()    );
 
 
 
-             int y=   my_dataBase.replacementDao().UpdateUnitId(list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getTransNumber()
-                , list.get(holder.getAdapterPosition()).getUnitID());
-                Log.e("y==",y+"");
+//             int y=   my_dataBase.replacementDao().UpdateUnitId(list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getTransNumber()
+//                , list.get(holder.getAdapterPosition()).getUnitID());
+//                Log.e("y==",y+"");
 
-                if(!holder.unitSpinner.getSelectedItem().toString().equals("One Unit"))
-                    my_dataBase.replacementDao().updateUnitSetting(list.get(holder.getAdapterPosition()).getTransNumber(),list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getRecQty(),CountOfItems,itemsUnit.getSALEPRICE(),itemsUnit.getITEMBARCODE(),itemsUnit.getUSERIAL(),itemsUnit.getITEMU());
+               if(!holder.unitSpinner.getSelectedItem().toString().equals("One Unit"))
+               {
+                   list.get(holder.getAdapterPosition()).setENTERPRICE(itemsUnit.getSALEPRICE());
+                   list.get(holder.getAdapterPosition()).setUNITBARCODE(itemsUnit.getITEMBARCODE());
+                   list.get(holder.getAdapterPosition()).setWHICHUNIT(itemsUnit.getUSERIAL());
+                   list.get(holder.getAdapterPosition()). setWHICHUQTY(CountOfItems);
+                   list.get(holder.getAdapterPosition()).setWHICHUNITSTR(itemsUnit.getITEMU());
+                   list.get(holder.getAdapterPosition()).setENTERQTY( list.get(holder.getAdapterPosition()).getRecQty());
+                   list.get(holder.getAdapterPosition()).setCALCQTY(CountOfItems );
+               }
+//                    my_dataBase.replacementDao().updateUnitSetting(list.get(holder.getAdapterPosition()).getTransNumber(),list.get(holder.getAdapterPosition()).getItemcode(),list.get(holder.getAdapterPosition()).getRecQty(),CountOfItems,itemsUnit.getSALEPRICE(),itemsUnit.getITEMBARCODE(),itemsUnit.getUSERIAL(),itemsUnit.getITEMU());
+//
+
+
+
                 Log.e("getSelectedItem",holder.unitSpinner.getSelectedItem().toString()+"");
                 Log.e("Itemcode",list.get(holder.getAdapterPosition()).getItemcode()+"");
                 Log.e("CountOfItems",CountOfItems+"");
@@ -288,8 +328,8 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
                     public void afterTextChanged(Editable s) {
 
                         if (s.toString().equals("0")) {
-                            my_dataBase.replacementDao().deleteReplacement(list.get(holder.getAdapterPosition()).getItemcode(),
-                                    list.get(holder.getAdapterPosition()).getFrom(), list.get(holder.getAdapterPosition()).getTo(), list.get(holder.getAdapterPosition()).getTransNumber());
+//                            my_dataBase.replacementDao().deleteReplacement(list.get(holder.getAdapterPosition()).getItemcode(),
+//                                    list.get(holder.getAdapterPosition()).getFrom(), list.get(holder.getAdapterPosition()).getTo(), list.get(holder.getAdapterPosition()).getTransNumber());
                             list.remove(holder.getAdapterPosition());
                             notifyDataSetChanged();
                         }
@@ -334,10 +374,15 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
                                       }
                                     list.get(holder.getAdapterPosition()).setRecQty(newqty);
                                     Log.e("Cal_Qty==",""+list.get(holder.getAdapterPosition()).getCal_Qty());
-                                 int z=  my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
-                                            list.get(holder.getAdapterPosition()).getCal_Qty()    );
-                                    Log.e("z==",""+z);
+//                                 int z=  my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+//                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
+//                                            list.get(holder.getAdapterPosition()).getCal_Qty()    );
+
+
+
+
+
+//                                    Log.e("z==",""+z);
 //                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
 
                                 } else {
@@ -404,10 +449,10 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
                                  }
                                  list.get(holder.getAdapterPosition()).setRecQty(newqty);
                                  Log.e("Cal_Qty==",""+list.get(holder.getAdapterPosition()).getCal_Qty());
-                                 int z=  my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                         list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
-                                         list.get(holder.getAdapterPosition()).getCal_Qty()    );
-                                 Log.e("z==",""+z);
+//                                 int z=  my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+//                                         list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
+//                                         list.get(holder.getAdapterPosition()).getCal_Qty()    );
+//                                 Log.e("z==",""+z);
 //                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
 
                              } else {
@@ -480,11 +525,11 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
                                         }
 
                                         list.get(holder.getAdapterPosition()).setRecQty(newqty);
-                                        my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                                list.get(holder.getAdapterPosition()).getRecQty(),
-                                                list.get(holder.getAdapterPosition()).getTransNumber(),
-                                                list.get(holder.getAdapterPosition()).getCal_Qty()
-                                        );
+//                                        my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+//                                                list.get(holder.getAdapterPosition()).getRecQty(),
+//                                                list.get(holder.getAdapterPosition()).getTransNumber(),
+//                                                list.get(holder.getAdapterPosition()).getCal_Qty()
+//                                        );
                                         list.get(holder.getAdapterPosition()).setAvailableQty(String.valueOf(totAvailableQty - Integer.parseInt(newqty)));
                                         my_dataBase.replacementDao().updateAvailableQTY(list.get(holder.getAdapterPosition()).getTransNumber(),
                                                 list.get(holder.getAdapterPosition()).getItemcode(), list.get(holder.getAdapterPosition()).getAvailableQty());
@@ -541,9 +586,9 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
 
                                         }
                                     list.get(holder.getAdapterPosition()).setRecQty(newqty);
-                                    my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
-                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
-                                            list.get(holder.getAdapterPosition()).getCal_Qty() );
+//                                    my_dataBase.replacementDao().updateQTY(list.get(holder.getAdapterPosition()).getItemcode(),
+//                                            list.get(holder.getAdapterPosition()).getRecQty(), list.get(holder.getAdapterPosition()).getTransNumber(),
+//                                            list.get(holder.getAdapterPosition()).getCal_Qty() );
 
 //                                    Log.e("case1===", s + " pos=== " + getAdapterPosition());
 
@@ -664,19 +709,19 @@ Log.e("getItemcode,hasSerial",list.get(position).getItemcode()+""+hasSerial.size
         if (position < list.size()) {
             if (Login.serialsActive == 0) {
                 Log.e("position===", position + "");
-                int f = my_dataBase.replacementDao().deleteReplacement(list.get(position).getItemcode(),
-                        list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());
-                Log.e("f===", f + "");
+//                int f = my_dataBase.replacementDao().deleteReplacement(list.get(position).getItemcode(),
+//                        list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());
+//                Log.e("f===", f + "");
                 list.remove(position);
                 // notifyItemRemoved(position);
                 notifyDataSetChanged();
             } else {
                 Log.e("position===", position + "");
-                int f = my_dataBase.replacementDao().deleteReplacement(list.get(position).getItemcode(),
-                        list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());
-                Log.e("f===", f + "");
-
-                my_dataBase.serialTransfersDao().deleteAllAdded(list.get(position).getItemcode(), list.get(position).getTransNumber());
+//                int f = my_dataBase.replacementDao().deleteReplacement(list.get(position).getItemcode(),
+//                        list.get(position).getFrom(), list.get(position).getTo(), list.get(position).getTransNumber());
+//                Log.e("f===", f + "");
+//
+            my_dataBase.serialTransfersDao().deleteAllAdded(list.get(position).getItemcode(), "A");
                 list.remove(position);
 
                 notifyDataSetChanged();

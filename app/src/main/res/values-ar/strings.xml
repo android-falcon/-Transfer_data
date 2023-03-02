@@ -247,8 +247,10 @@
     <string name="selectVoucher">Select Voucher No</string>
     <string name="msg5">قم بحفظ او إلغاء سند التحويل الحالي أولا</string>
     <string name="noDataFound">لايوجد بيانات </string>
-
-    <string name="RCVQty">الكمية</string>
+    <string name="saving3">جاري الترحيل للمستودعات</string>
+    <string name="RCVQty">الكمية المستلمة</string>
     <string name="RMQty">المتبقي</string>
     <string name="orgqty">الكمية الأصل</string>
+    <string name="notvaildqty3">يجب أن تكون الكمية مساوية أو أقل من المتبقي</string>
+    <string name="getmaxtrans">جلب أكبر رقم فاتورة تحويل  </string>
 </resources>

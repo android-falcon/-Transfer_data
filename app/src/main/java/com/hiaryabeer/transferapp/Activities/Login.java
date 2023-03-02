@@ -77,7 +77,7 @@ public class Login extends AppCompatActivity {
     public static int serialsActive;
  ImportData   importData ;
     static {
-        serialsActive =0;
+        serialsActive =1;
     }
 
     @Override
@@ -642,7 +642,7 @@ Log.e("showpassworddailog","showpassworddailog");
 
             @Override
             public void onClick(View view) {
-                deletesettings();
+
                 final String SET_IP = ip.getText().toString();
                 final String SET_conNO = conNO.getText().toString();
                 COMPANYNO = conNO.getText().toString();
@@ -725,13 +725,9 @@ Log.e("showpassworddailog","showpassworddailog");
         }
     }
 
-    private void deletesettings() {
-        if (appSettings.size() != 0)
-            my_dataBase.settingDao().deleteALL();
-    }
 
     private void saveData(appSettings settings) {
-
+        my_dataBase.settingDao().deleteALL();
         my_dataBase.storeDao().deleteall();
         my_dataBase.itemDao().dELETEAll();
         my_dataBase.itemSwitchDao().dELETEAll();

@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:gravity="center"
-            android:text="@string/RCVQty"
+
             android:id="@+id/RCVQty"
             android:visibility="gone"
             android:textColor="@color/black"
@@ -147,6 +147,7 @@
         <TextView
             android:id="@+id/trsnferNo"
             android:layout_width="120dp"
+
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="2dp"
             android:gravity="center"

@@ -60,6 +60,7 @@ import static com.hiaryabeer.transferapp.Activities.Login.getListCom;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.iraqswitch;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.itemrespons;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.maxtransRespon;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.zone;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
@@ -73,12 +74,13 @@ public class ImportData {
     public static String item_name = "";
     public static String poqty;
     private Context context;
-    public String ipAddress = "", CONO = "", headerDll = "", link = "", portIp = "";
+    public String ipAddress = "", CONO = "", link = "", portIp = "";
     public RoomAllData my_dataBase;
     public static String zonetype;
     public static List<Store> Storelist = new ArrayList<>();
     public static List<ReplacementModel> voucherlist = new ArrayList<>();
-
+// public String headerDll = "/Falcons/VAN.Dll/";
+public String   headerDll = "";
     public static ArrayList<String> BoxNolist = new ArrayList<>();
     public static ArrayList<String> PoNolist = new ArrayList<>();
     public static List<AllItems> AllImportItemlist = new ArrayList<>();
@@ -149,7 +151,7 @@ public class ImportData {
     public ImportData(Context context) {
         this.context = context;
         my_dataBase = RoomAllData.getInstanceDataBase(context);
-//headerDll = "/Falcons/VAN.Dll/";
+
 try {
 
 
@@ -157,9 +159,11 @@ try {
     link = "http://" + ipAddress.trim() + headerDll.trim();
     //link = "http://" +"10.0.0.22:8085" + headerDll.trim();
     Log.e("Link====", "" + link.toString());
-    Retrofit retrofit = RetrofitInstance.getInstance(link);
-    Log.e("retrofit====", "" + retrofit.toString());
-    myAPI = retrofit.create(ApiService.class);
+    if(!ipAddress.equals("")) {
+        Retrofit retrofit = RetrofitInstance.getInstance(link);
+        Log.e("retrofit====", "" + retrofit.toString());
+        myAPI = retrofit.create(ApiService.class);
+    }
 }catch (Exception e){
 
 }
@@ -206,7 +210,7 @@ public void getAllItems() {
             portIp = my_dataBase.settingDao().getPort().trim();
             ipAddress = ipAddress + ":" + portIp;
         }
-//        Log.e("getIpAddress","1"+ipAddress+"port="+portIp);
+        Log.e("getIpAddress","1"+ipAddress+"port="+portIp);
 
 
     }
@@ -1644,6 +1648,7 @@ public void getStore() {
     }
     public void fetchStoreData() {
         Log.e("myAPI", "myAPI=" + myAPI+"\tco="+CONO);
+
         Call<List<Store>> myData = myAPI.gatStorsDetail(CONO);
         Log.e("fetchStoreData", "myData=" + myData.isExecuted());
         myData.enqueue(new Callback<List<Store>>() {
@@ -1666,7 +1671,7 @@ public void getStore() {
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
                 try {
-                    Log.e("fetchStoreDataonFailure", "=" + throwable.getMessage());
+                    Log.e("fetchStoreDataonFailure", "=" + throwable.getMessage()+"  "+ call.request());
 
                     MainActivity.respon.setText("no data");
                     if (throwable.getMessage() != null) {
@@ -1683,6 +1688,7 @@ public void getStore() {
 
         });
     }
+
     public void fetchItemDetailData() {
         Log.e("fetchItemDetailData", "fetchItemDetailData" );
         Call<List<AllItems>> myData = myAPI.gatItemInfoDetail(CONO);
@@ -1940,4 +1946,158 @@ public void getStore() {
         RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonArrayRequest);
 
     }
+ public void   getmaxtrans(){
+        pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+        pdRepla.setTitleText(context.getString(R.string.getmaxtrans));
+        pdRepla.setCancelable(false);
+
+        pdRepla.show();
+        new JSONTask_getMaxTrans().execute();
+    }
+    private class JSONTask_getMaxTrans extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            String do_ = "my";
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                if (!ipAddress.equals("")) {
+
+
+                    link = "http://" + ipAddress.trim() + headerDll.trim() + "/getmaxtransVhfno?CONO=" + CONO.trim();
+
+                    Log.e("link===", "" + link);
+                }
+            } catch (Exception e) {
+                Log.e("getAllSto", e.getMessage());
+                pdRepla.dismiss();
+
+            }
+
+            try {
+
+                //*************************************
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                request.setURI(new URI(link));
+
+//
+
+                HttpResponse response = client.execute(request);
+
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+                Log.e("finalJson***Import", sb.toString());
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+
+                // JsonResponse = sb.toString();
+
+                String finalJson = sb.toString();
+
+
+                //JSONArray parentObject = new JSONArray(finalJson);
+
+                return finalJson;
+
+
+            }//org.apache.http.conn.HttpHostConnectException: Connection to http://10.0.0.115 refused
+            catch (HttpHostConnectException ex) {
+                ex.printStackTrace();
+                pdRepla.dismiss();
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(context, context.getString(R.string.ipConnectionFailed), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Exception", "" + e.getMessage());
+                pdRepla.dismiss();
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        try {
+                            Toast.makeText(context, "The target server failed to respond", Toast.LENGTH_SHORT).show();
+                        } catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                });
+//                progressDialog.dismiss();
+                return null;
+            }
+
+
+            //***************************
+
+        }
+
+        @Override
+        protected void onPostExecute(String array) {
+            super.onPostExecute(array);
+            pdRepla.dismiss();
+            if (array != null) {
+                Log.e("gettotransclass===",array);
+                if (array.toString().trim().contains("VHFNO")) {
+                    try {
+                        JSONObject jsonObject1 = null;
+                        JSONArray requestArray = null;
+                        requestArray = new JSONArray(array);
+
+                        for (int i = 0; i < requestArray.length(); i++) {
+
+
+                            jsonObject1 = requestArray.getJSONObject(i);
+                            String VAL = jsonObject1.getString("VHFNO");
+                            maxtransRespon.setText(VAL);
+
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }else
+                {
+                    maxtransRespon.setText("not");
+                }
+
+            } else {
+                maxtransRespon.setText("not");
+                Log.e("not ssaved44","not ssaved");
+
+            }
+        }
+
+
+    }
+
 }

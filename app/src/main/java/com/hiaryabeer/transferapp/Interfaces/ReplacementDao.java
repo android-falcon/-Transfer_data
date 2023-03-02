@@ -113,6 +113,7 @@ public interface ReplacementDao {
     @Query("UPDATE REPLACEMENT_TABLE SET WHICHUNITSTR= :WhichUnitStr, WHICHUNIT= :whichunit, UNITBARCODE= :unitbarcode, ENTERPRICE= :enterprice, WHICHUQTY= :Covrate, CALCQTY= :Covrate, ENTERQTY= :qty  WHERE ISPOSTED='0' AND TransNumber= :tranno AND ITEMCODE= :Itemno" )
     void updateUnitSetting (String tranno,String Itemno,String qty,String Covrate,String enterprice,String unitbarcode,String whichunit,String WhichUnitStr);
 
-
+    @Query("SELECT * FROM REPLACEMENT_TABLE WHERE ISPOSTED='0'")
+    List<ReplacementModel> getNOTPOSTEDReplacements();
 
 }

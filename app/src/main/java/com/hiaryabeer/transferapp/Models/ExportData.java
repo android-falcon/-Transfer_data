@@ -35,9 +35,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,12 +118,50 @@ public class ExportData {
         new JSONTask_AddReplacment(replacementlist).execute();
     }
     public void NEW_exportReplacementList(List<ReplacementModel> replacementlist) {
-        NEW_getReplacmentObject(replacementlist);
         pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
         pdRepla.setTitleText(context.getString(R.string.exportRep));
         pdRepla.setCancelable(false);
         pdRepla.show();
+        try {
+            for (int i=0;i<replacementlist.size();i++)
+            {
+                Log.e("replacementlist45==",replacementlist.get(i).getRMQTY()+"   "+replacementlist.get(i).getSer_RCVQTY()+"   "+replacementlist.get(i).getUpdatedQty()+"  "+replacementlist.get(i).getRecQty());
+//                if(replacementlist.get(i).getRMQTY().equals("0")&&replacementlist.get(i).getUpdatedQty().equals("0"))
+//                    replacementlist.get(i).setISDONE("0");
+//                else
+                {
+                    if (Double.parseDouble(replacementlist.get(i).getRMQTY())==0 &&
+                            Double.parseDouble(replacementlist.get(i).getSer_RCVQTY())==0 &&
+                            ( Double.parseDouble(replacementlist.get(i).getUpdatedQty())==Double.parseDouble(replacementlist.get(i).getRecQty())))
+                    {
+                        Log.e("v1","v1");
+                        replacementlist.get(i).setISDONE("1");
+
+                    }else if(Double.parseDouble(replacementlist.get(i).getRMQTY())==Double.parseDouble(replacementlist.get(i).getUpdatedQty()))
+                    {
+                        Log.e("v2","v2");
+                        replacementlist.get(i).setISDONE("1");
+                    }
+                    else
+                    {     Log.e("v3","v3");
+                        replacementlist.get(i).setISDONE("0");
+                    }
+//                    if(Double.parseDouble(replacementlist.get(i).getRMQTY())==Double.parseDouble(replacementlist.get(i).getUpdatedQty())||
+//                            (Double.parseDouble(replacementlist.get(i).getRMQTY())==0
+//                                    &&Double.parseDouble(replacementlist.get(i).getSer_RCVQTY())==
+//                                    Double.parseDouble(replacementlist.get(i).getUpdatedQty()) )   )
+//                        replacementlist.get(i).setISDONE("1");
+//                    else
+//                        replacementlist.get(i).setISDONE("0");
+
+                }}
+        }catch (Exception exception){
+
+        }
+        NEW_getReplacmentObject(replacementlist);
+
+
 
         new JSONTask_UPdateReplacment(replacementlist).execute();
     }
@@ -165,7 +206,7 @@ Log.e("cas1,==","1");
                    {Log.e("cas3,==","3");
                        savingDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
                        savingDialog3.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
-                       savingDialog3.setTitleText(context.getString(R.string.saving));
+                       savingDialog3.setTitleText(context.getString(R.string.saving3));
                        savingDialog3.setCancelable(false);
                        savingDialog3.show();
 
@@ -193,6 +234,7 @@ Log.e("cas1,==","1");
     }
     private void getReplacmentObject(List<ReplacementModel> replacementlist) {
         jsonArrayReplacement = new JSONArray();
+         Log.e("SIZE===",""+replacementlist.size()+"");
         for (int i = 0; i < replacementlist.size(); i++) {
 
             jsonArrayReplacement.put(replacementlist.get(i).getJSONObjectDelphi());
@@ -511,10 +553,21 @@ Log.e("cas1,==","1");
                 } else {
                     if (result.contains("Saved Successfully")) {
                         Log.e("checkallqty33==","here");
-                     if(checkallqty(New_replacementlist))
-                     exportTrans(1);
-                     else
-                         showSweetDialog(context, 1, context.getString(R.string.savedSuccsesfule), "");
+
+                        exportTrans(1);
+                    //    new JSONTask_gettotrans().execute();
+
+//                     if(checkallqty(New_replacementlist))
+//                     {
+////                         if( MainActivity.counter>0 )
+////                             showSweetDialog(context, 1, context.getString(R.string.savedSuccsesfule), "");
+////                             else
+////                     exportTrans(1);
+//
+//                     }
+
+//                     else
+//                         showSweetDialog(context, 1, context.getString(R.string.savedSuccsesfule), "");
 
                         New_saverespone.setText("saved");
 
@@ -535,7 +588,126 @@ Log.e("cas1,==","1");
         }
 
     }
-
+//    public class JSONTask_SetTransDone extends AsyncTask<String, String, String> {
+//        private String JsonResponse = null;
+//
+//
+//String VHFNO,ITEMCODE,FROMSTR,TOSTR;
+//        List<ReplacementModel> replacementList1;
+//
+//        public JSONTask_SetTransDone(String VHFNO, String ITEMCODE, String FROMSTR, String TOSTR) {
+//            this.VHFNO = VHFNO;
+//            this.ITEMCODE = ITEMCODE;
+//            this.FROMSTR = FROMSTR;
+//            this.TOSTR = TOSTR;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//
+//
+//            URLConnection connection = null;
+//            BufferedReader reader = null;
+//
+//            try {
+//                if (!ipAddress.equals("")) {
+//
+//                    http:
+//
+//                    link = "http://" + ipAddress.trim() + headerDll.trim() + "/settransdone?CONO"+CONO+"&VHFNO"+VHFNO+"&ITEMCODE="+ITEMCODE+"&FROMSTR"+FROMSTR+"&TOSTR="+TOSTR;
+//
+//
+//                    Log.e("URL_TO_HIT", "" + link);
+//                }
+//            } catch (Exception e) {
+//                //progressDialog.dismiss();
+//                pdRepla.dismissWithAnimation();
+//
+//            }
+//
+//            try {
+//                HttpClient client = new DefaultHttpClient();
+//                HttpPost request = new HttpPost();
+//                try {
+//                    request.setURI(new URI(link));
+//                } catch (URISyntaxException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+//                nameValuePairs.add(new BasicNameValuePair("CONO", CONO.trim()));
+//                nameValuePairs.add(new BasicNameValuePair("JSONSTR", ReplacmentObject.toString().trim()));
+//
+//                Log.e("JSONSTR", ReplacmentObject.toString());
+//                request.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+//                HttpResponse response = client.execute(request);
+//
+//                BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+//
+//                StringBuffer sb = new StringBuffer("");
+//                String line = "";
+//
+//                while ((line = in.readLine()) != null) {
+//                    sb.append(line);
+//                }
+//
+//                in.close();
+//
+//
+//                JsonResponse = sb.toString();
+//                Log.e("JsonResponse", "Export Replacement" + JsonResponse);
+//
+//
+//            } catch (Exception e) {
+//            }
+//            return JsonResponse;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(final String result) {
+//            super.onPostExecute(result);
+//
+//            Log.e("JSONTaskAddReplacment", "" + result);
+//            pdRepla.dismissWithAnimation();
+//            if (result != null && !result.equals("")) {
+//                Log.e("IrTransFer,result===", result+"");
+//                if (result.contains("Internal server error")) {
+//
+//                } else if (result.contains("unique constraint")) {
+//
+//
+//                } else if (result.contains("table or view does not exist")) {
+//
+//               //     showSweetDialog(context, 0, "table or view does not exist", "");
+//                } else {
+//                    if (result.contains("Saved Successfully")) {
+//
+//
+//                    } else {
+////                        showSweetDialog(context, 0, context.getString(R.string.serverError), "");
+//
+//                    }
+//                }
+//
+//
+//            } else {
+//
+////                showSweetDialog(context, 0, context.getString(R.string.checkConnection), "");
+//
+//            }
+//
+//
+//        }
+//
+//    }
 //    public class JSONTask_UPdateReplacment extends AsyncTask<String, String, String> {
 //        private String JsonResponse = null;
 //
@@ -1221,8 +1393,9 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
         try{
         for(int i=0;i<New_replacementlist.size();i++)
         {     Log.e("checkallqty22==",New_replacementlist.get(i).getRecQty()+"  "+New_replacementlist.get(i).getUpdatedQty());
-        if(Double.parseDouble(New_replacementlist.get(i).getRecQty())<=Double.parseDouble(New_replacementlist.get(i).getUpdatedQty()))
+        if(Double.parseDouble(New_replacementlist.get(i).getRecQty())>=Double.parseDouble(New_replacementlist.get(i).getUpdatedQty()))
             flage=true;
+
         else
         {
             flage=false;
@@ -1234,5 +1407,160 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
 Log.e("checkallqty==",flage+"");
         New_replacementlist.clear();
         return flage;
+    }
+    private class JSONTask_gettotrans extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            String do_ = "my";
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                if (!ipAddress.equals("")) {
+
+
+                    link = "http://" + ipAddress.trim() + headerDll.trim() + "/gettotrans?CONO=" + CONO.trim()+"&VHFNO=" + MainActivity.VHFNO;
+
+                    Log.e("link===", "" + link);
+                }
+            } catch (Exception e) {
+                Log.e("getAllSto", e.getMessage());
+
+            }
+
+            try {
+
+                //*************************************
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                request.setURI(new URI(link));
+
+//
+
+                HttpResponse response = client.execute(request);
+
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+                Log.e("finalJson***Import", sb.toString());
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+
+                // JsonResponse = sb.toString();
+
+                String finalJson = sb.toString();
+
+
+                //JSONArray parentObject = new JSONArray(finalJson);
+
+                return finalJson;
+
+
+            }//org.apache.http.conn.HttpHostConnectException: Connection to http://10.0.0.115 refused
+            catch (HttpHostConnectException ex) {
+                ex.printStackTrace();
+//                progressDialog.dismiss();
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+
+                        Toast.makeText(context, context.getString(R.string.ipConnectionFailed), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Exception", "" + e.getMessage());
+
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        try {
+                            Toast.makeText(context, "The target server failed to respond", Toast.LENGTH_SHORT).show();
+                        } catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
+                    }
+                });
+//                progressDialog.dismiss();
+                return null;
+            }
+
+
+            //***************************
+
+        }
+
+        @Override
+        protected void onPostExecute(String array) {
+            super.onPostExecute(array);
+
+            if (array != null) {
+                Log.e("gettotransclass===",array);
+                if (array.toString().trim().contains("VAL")) {
+                    try {
+                        JSONObject jsonObject1 = null;
+                        JSONArray requestArray = null;
+                        requestArray = new JSONArray(array);
+
+                        for (int i = 0; i < requestArray.length(); i++) {
+
+
+                            jsonObject1 = requestArray.getJSONObject(i);
+                            String VAL = jsonObject1.getString("VAL");
+                            if (VAL == null) VAL = "0";
+                            if (VAL.equals("")) VAL = "0";
+
+                            Log.e("VAL==", VAL);
+                            if (Integer.parseInt(VAL) >= 0)
+                                exportTrans(1);
+                            else
+                                exportTrans(1);
+
+                                //showSweetDialog(context, 1, context.getString(R.string.savedSuccsesfule), "");
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+               else if (array.toString().trim().contains("Successfully")) {
+
+
+
+                }else {
+                    Log.e("not ssaved34","not ssaved1");
+
+
+
+                }
+            } else {
+
+                Log.e("not ssaved44","not ssaved");
+
+            }
+        }
+
+
     }
 }

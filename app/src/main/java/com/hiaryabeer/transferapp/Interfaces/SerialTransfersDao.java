@@ -66,4 +66,9 @@ public interface SerialTransfersDao {
     @Query("DELETE FROM ITEM_SERIAL_TRANSFERS WHERE Voucher_No = :trans")
     void deleteAllinTransfer(String trans);
 
+
+    @Query("UPDATE ITEM_SERIAL_TRANSFERS SET Voucher_No = :tran WHERE Posted = '0' AND Voucher_No = 'A'" )
+    int updateTranNum(String tran);
+    @Query("DELETE FROM ITEM_SERIAL_TRANSFERS WHERE Voucher_No = 'A'")
+    int deleteerialnotposted();
 }

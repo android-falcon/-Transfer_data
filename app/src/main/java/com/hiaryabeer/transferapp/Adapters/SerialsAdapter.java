@@ -112,10 +112,19 @@ public class SerialsAdapter extends RecyclerView.Adapter<SerialsAdapter.SerialsV
 
                             Log.e("u===", u + "");
 
-                            int qty = Integer.parseInt(my_database.replacementDao().getQtyForItem(
-                                    serialTransfers.get(getAdapterPosition()).getItemCode(),
-                                    serialTransfers.get(getAdapterPosition()).getVoucherNo())
-                            );
+//                            int qty = Integer.parseInt(my_database.replacementDao().getQtyForItem(
+//                                    serialTransfers.get(getAdapterPosition()).getItemCode(),
+//                                    serialTransfers.get(getAdapterPosition()).getVoucherNo())
+//                            );
+                            int qty=0;
+                            try {
+                                 qty =Integer.parseInt(getqty(serialTransfers.get(getAdapterPosition()).getItemCode()));
+
+                            }catch (Exception e){
+                                Log.e("Exption=",e.getMessage());
+                                qty=1;
+                            }
+
                             my_database.replacementDao().updateQTY(serialTransfers.get(getAdapterPosition()).getItemCode(),
                                     String.valueOf(qty - 1),  serialTransfers.get(getAdapterPosition()).getVoucherNo(),        String.valueOf(qty - 1));
 
@@ -157,4 +166,18 @@ public class SerialsAdapter extends RecyclerView.Adapter<SerialsAdapter.SerialsV
         }
 
     }
+    String getqty(String ITEMCODE){
+        for(int i=0;i<replacementlist.size();i++)
+            if(replacementlist.get(i).getItemcode().equals(ITEMCODE))
+            {
+                return replacementlist.get(i).getRecQty();
+            }
+        return "1";
+    }
+
+  //  int qty = Integer.parseInt(my_database.replacementDao().getQtyForItem(
+//                                    serialTransfers.get(getAdapterPosition()).getItemCode(),
+//                                    serialTransfers.get(getAdapterPosition()).getVoucherNo())
+//                            );
+
 }

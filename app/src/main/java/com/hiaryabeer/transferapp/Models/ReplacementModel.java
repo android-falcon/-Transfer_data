@@ -18,6 +18,11 @@ import org.json.JSONObject;
 
 @Entity(tableName = "REPLACEMENT_TABLE")
 public class ReplacementModel implements Parcelable {
+    @ColumnInfo(name = "RMQTY",defaultValue = "1")
+    String RMQTY;
+    @SerializedName(  "RCVQTY")
+    @ColumnInfo(name = "Ser_RCVQTY",defaultValue = "1")
+    String    Ser_RCVQTY;
 
     @ColumnInfo(name = "UserNO")
     String UserNO;
@@ -171,6 +176,17 @@ public class ReplacementModel implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     int SERIALZONE;
 
+    @ColumnInfo(name = "ISDONE")
+    private String ISDONE;
+
+    public String getISDONE() {
+        return ISDONE;
+    }
+
+    public void setISDONE(String ISDONE) {
+        this.ISDONE = ISDONE;
+    }
+
     ////
     @ColumnInfo(name = "WHICHUNIT")
    String WHICHUNIT;
@@ -191,11 +207,7 @@ public class ReplacementModel implements Parcelable {
 
     @ColumnInfo(name = "UpdatedQty")
     String  UpdatedQty;
-    @ColumnInfo(name = "RMQTY",defaultValue = "1")
-   String RMQTY;
-    @SerializedName(  "RCVQTY")
-    @ColumnInfo(name = "Ser_RCVQTY",defaultValue = "1")
-        String    Ser_RCVQTY;
+
 
     public String getRMQTY() {
         return RMQTY;
@@ -428,7 +440,7 @@ public class ReplacementModel implements Parcelable {
             obj.put("TOSTR", To);
             obj.put("QTY", UpdatedQty);
             obj.put("ORGQTY", recQty);
-
+            obj.put("ISDONE", ISDONE);
 //            obj.put("RCVQTY", Ser_RCVQTY);
 //            obj.put("RMQTY", RMQTY);
 

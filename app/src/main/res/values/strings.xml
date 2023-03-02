@@ -259,8 +259,12 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="selectVoucher">Select Voucher No</string>
     <string name="msg5">Save or delete current Transfer data first</string>
     <string name="noDataFound">No Data Found</string>
+    <string name="saving3">Saving to Stocks</string>
 
     <string name="RCVQty">RCVQty</string>
     <string name="RMQty">RMQty</string>
     <string name="orgqty">ORG QTY</string>
+    <string name="notvaildqty3">qty must be less than or equale the RMQTY</string>
+    <string name="getmaxtrans">Getting Max Num OF Transfer  </string>
+
 </resources>
