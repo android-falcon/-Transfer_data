@@ -31,7 +31,7 @@ import com.hiaryabeer.transferapp.Models.SerialsModel;
 import com.hiaryabeer.transferapp.Models.User;
 
 
-@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class, User.class}, version = 33, exportSchema = false)
+@Database(entities = {AllItems.class, ZoneModel.class, ReplacementModel.class, appSettings.class, Store.class, ItemSerialTransfer.class, SerialsModel.class, ItemSwitch.class, ItemsUnit.class, User.class}, version = 35, exportSchema = false)
 public abstract class RoomAllData extends RoomDatabase {
     private static RoomAllData database;
     public static String dataBaseName = "DBRoomTransfer";
@@ -236,7 +236,7 @@ public abstract class RoomAllData extends RoomDatabase {
 
 
 
-            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN internal_replanshment TEXT DEFAULT '1'");
+            database.execSQL("ALTER TABLE SETTINGS_TABLE ADD COLUMN internal_replanshment TEXT DEFAULT '0'");
 
 
         }
@@ -266,7 +266,7 @@ public abstract class RoomAllData extends RoomDatabase {
 
         }
     };
-    static final Migration MIGRATION_31_33= new Migration(31, 33) {
+    static final Migration MIGRATION_31_34= new Migration(31, 35) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE REPLACEMENT_TABLE ADD COLUMN RMQTY TEXT DEFAULT '1'");
@@ -295,7 +295,7 @@ public abstract class RoomAllData extends RoomDatabase {
                             ,MIGRATION_28_29
                             , MIGRATION_29_30
                             ,MIGRATION_30_31
-                            ,MIGRATION_31_33
+                            ,MIGRATION_31_34
                           )
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()

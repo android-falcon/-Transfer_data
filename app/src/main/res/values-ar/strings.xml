@@ -251,4 +251,6 @@
     <string name="RCVQty">الكمية</string>
     <string name="RMQty">المتبقي</string>
     <string name="orgqty">الكمية الأصل</string>
+    <string name="copyData_title">نسخ البيانات</string>
+    <string name="backup_failed">backup failed</string>
 </resources>

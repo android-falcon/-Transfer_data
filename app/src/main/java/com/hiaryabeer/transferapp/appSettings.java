@@ -28,7 +28,7 @@ public class appSettings {
     //////B
     @ColumnInfo(name = "Check_Qty")
     private String checkQty;
-    @ColumnInfo(name = "internal_replanshment",defaultValue = "1")
+    @ColumnInfo(name = "internal_replanshment",defaultValue = "0")
     private String internal_replanshment;
     @ColumnInfo(name = "Rawahneh_Add_Item")
     private String rawahneh_add_item;

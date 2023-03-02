@@ -263,4 +263,6 @@ This barcode is not available in this PO, do you want to add it? </string>
     <string name="RCVQty">RCVQty</string>
     <string name="RMQty">RMQty</string>
     <string name="orgqty">ORG QTY</string>
+    <string name="copyData_title">Copy Data</string>
+    <string name="backup_failed">backup failed</string>
 </resources>
