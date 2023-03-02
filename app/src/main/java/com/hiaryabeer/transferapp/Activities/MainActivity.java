@@ -3,6 +3,7 @@ package com.hiaryabeer.transferapp.Activities;
 import static android.view.View.LAYOUT_DIRECTION_RTL;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
@@ -11,15 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -34,6 +40,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.MimeTypeMap;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -66,6 +73,10 @@ import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.RoomAllData;
 import com.hiaryabeer.transferapp.Store;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -205,6 +216,12 @@ public class MainActivity extends AppCompatActivity {
     AllItems Item;
     TextView itemUnit_text,edititemCode;
     public static List<String> voucher_no_list= new ArrayList<>();
+    public static  TextView   UPDATEQtyTextView,RMQtytext;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     public static  TextView   UPDATEQtyTextView,RMQtytext,RCVQtytext;
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
@@ -267,6 +284,108 @@ public class MainActivity extends AppCompatActivity {
 //                return false;
 //        }
 //    }
+   public static void verifyStoragePermissions(Activity activity) {
+       // Check if we have write permission
+       int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+       if (permission != PackageManager.PERMISSION_GRANTED) {
+           // We don't have permission so prompt the user
+           ActivityCompat.requestPermissions(
+                   activity,
+                   PERMISSIONS_STORAGE,
+                   REQUEST_EXTERNAL_STORAGE
+           );
+       }
+   }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void copyFile()
+    {
+        try
+        {
+            File sd = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+            File data = Environment.getDataDirectory();
+            boolean isPresent = true;
+            if (!sd.canWrite())
+            {
+                isPresent= sd.mkdir();
+
+            }
+
+
+
+            String backupDBPath = "DBRoomTransfer";
+
+            File currentDB= getApplicationContext().getDatabasePath("DBRoomTransfer");
+            File backupDB = new File(sd, backupDBPath);
+
+            if (currentDB.exists()&&isPresent) {
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(MainActivity.this, "Backup Succesfulley", Toast.LENGTH_SHORT).show();
+//                ShareFile(backupDBPath);
+                shareWhatsAppA(backupDB,1);
+            }else {
+
+                Toast.makeText(MainActivity.this, "Backup Failed", Toast.LENGTH_SHORT).show();
+            }
+            isPresent=false;
+
+
+            Log.e("backupDB.getA", backupDB.getAbsolutePath());
+        }
+        catch (Exception e) {
+            Log.e("Settings Backup", e.getMessage());
+        }
+    }
+    public void ShareFile(String path)
+    {
+        Intent shareToneIntent=new Intent(Intent.ACTION_SEND);
+        shareToneIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
+        shareToneIntent.setType(GetMimeType(Uri.parse(path)));
+        startActivity(shareToneIntent);
+    }
+
+    public String GetMimeType(Uri uri) {
+        String mimeType = null;
+
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            mimeType =getContentResolver().getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
+        }
+        return mimeType;
+    }
+    public void shareWhatsAppA(File pdfFile, int pdfExcel){
+        try {
+            Log.e("shareWhatsAppA",""+pdfFile);
+            Uri uri = Uri.fromFile(pdfFile);
+            Intent sendIntent = new Intent();
+            if (pdfFile.exists()) {
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(uri)));
+                sendIntent.setPackage("com.whatsapp");
+//                sendIntent.setType("text/plain");
+                sendIntent.setType("plain/*");
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT,
+                        pdfFile.getName() + " Sharing File...");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, pdfFile.getName() + " Sharing File");
+                Log.e("shareIntent", "shareIntent");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+                Log.e("shareIntent==", "shareIntent"+shareIntent.getData());
+            }
+
+
+//
+        }catch (Exception e){
+            Log.e("Exception==", "Exception"+e.getMessage());
+            Toast.makeText(MainActivity.this, "Storage Permission"+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
@@ -280,6 +399,19 @@ public class MainActivity extends AppCompatActivity {
                 // Toast message on menu item clicked
 
                 switch (menuItem.getItemId()) {
+
+                    case R.id.copyData:{  try {
+                        verifyStoragePermissions(MainActivity.this);
+                        copyFile();
+                    }
+                    catch (Exception e)
+                    {verifyStoragePermissions(MainActivity.this);
+
+
+                        Toast.makeText(MainActivity.this, ""+getResources().getString(R.string.backup_failed), Toast.LENGTH_SHORT).show();
+                    }
+                        return true;
+                    }
 
                     case R.id.goToReports: {
                         finish();
@@ -1981,7 +2113,6 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    Log.e("afterTextChanged","getCheckQty"+appSettings.get(0).getCheckQty());
 
                     if (appSettings.get(0).getCheckQty().equals("1")) { ///Qty Checker Active //////B
                         if (editable.toString().length() != 0) {

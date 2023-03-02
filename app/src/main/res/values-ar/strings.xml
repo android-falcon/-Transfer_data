@@ -253,4 +253,6 @@
     <string name="orgqty">الكمية الأصل</string>
     <string name="notvaildqty3">يجب أن تكون الكمية مساوية أو أقل من المتبقي</string>
     <string name="getmaxtrans">جلب أكبر رقم فاتورة تحويل  </string>
+    <string name="copyData_title">نسخ البيانات</string>
+    <string name="backup_failed">backup failed</string>
 </resources>
