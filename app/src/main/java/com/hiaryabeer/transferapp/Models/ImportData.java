@@ -1893,7 +1893,7 @@ public void getStore() {
     public void getAllUsers(GetUsersCallBack getUsersCallBack) {
 
         pDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-
+//
         pDialog3.getProgressHelper().setBarColor(Color.parseColor("#115571"));
         pDialog3.setTitleText("getting Users");
         pDialog3.setCancelable(false);
