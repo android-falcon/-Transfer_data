@@ -418,6 +418,7 @@ public class ReplacementModel implements Parcelable {
 
             if(CALCQTY!=null)    obj.put("CALCQTY", CALCQTY);
             else   obj.put("CALCQTY", "");
+
             if(ENTERQTY!=null)      obj.put("ENTERQTY", recQty);
             else  obj.put("ENTERQTY", "");
 

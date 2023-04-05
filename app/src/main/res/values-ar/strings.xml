@@ -96,7 +96,7 @@
     <string name="oldqty"> الكمية السابقة </string>
     <string name="back">  عودة </string>
     <string name="NODATA">  لا توجد بيانات محذوفة لاسترجاعها </string>
-
+    <string name="loadingItem">جاري التحميل.... </string>
     <string name="deleteitemt2">حذف المادة </string>
     <string name="dataRet">تم استرجاع البيانات</string>
     <string name="enter"> دخول </string>

@@ -15,7 +15,7 @@ public class RetrofitInstance {
             .readTimeout(
                     30, TimeUnit.MINUTES)
             .connectTimeout(30, TimeUnit.MINUTES).build();
-    private static Retrofit ourInstance;
+    public static Retrofit ourInstance;
 //    static String BASEURL="http://46.185.161.254:8085/Falcons/VAN.dll/";
 
     public static Retrofit getInstance(String BASE_URL) {

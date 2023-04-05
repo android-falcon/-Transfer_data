@@ -6,6 +6,7 @@ import com.hiaryabeer.transferapp.Models.ItemSwitch;
 import com.hiaryabeer.transferapp.Models.ItemsUnit;
 import com.hiaryabeer.transferapp.Models.ReplacementModel;
 import com.hiaryabeer.transferapp.Models.Switch;
+import com.hiaryabeer.transferapp.Models.User;
 import com.hiaryabeer.transferapp.Store;
 
 import java.util.List;
@@ -36,5 +37,5 @@ public interface ApiService {
 
  @GET("GetJrdItemUnit")
  Call<List<ItemsUnit>> GetJrdItemUnit(@Query("CONO") String ComNo,@Query("FROM_DATE") String FROM_DATE, @Query("TO_DATE") String TO_DATE  );
-
+ @GET("GetUsers")Call<List<User>> GetUsers(@Query("CONO") String ComNo);
 }

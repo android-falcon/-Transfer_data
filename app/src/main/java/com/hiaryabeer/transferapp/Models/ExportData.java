@@ -56,11 +56,13 @@ import static android.content.Context.TELECOM_SERVICE;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_replacementlist;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.New_saverespone;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.exportAllState;
+import static com.hiaryabeer.transferapp.Activities.MainActivity.internalOrderFalge;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.replacementlist;
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
 public class ExportData {
     private Context context;
+    public static String  IrTransFerSaved="";
     public String ipAddress = "", CONO = "", headerDll = "", link = "", PONO = "", portIp = "";
     public RoomAllData my_dataBase;
     public static SweetAlertDialog pdVoucher, pdshipmant, pdRepla, pdstock, pdzone;
@@ -88,7 +90,7 @@ public class ExportData {
         } catch (Exception e) {
             Toast.makeText(context, context.getString(R.string.fillIpAndComNo), Toast.LENGTH_SHORT).show();
         }
-headerDll = "/Falcons/VAN.Dll/";
+//headerDll = "/Falcons/VAN.Dll/";
 
 
       appSettings=my_dataBase.settingDao().getallsetting();
@@ -114,8 +116,33 @@ headerDll = "/Falcons/VAN.Dll/";
         pdRepla.show();
 
 //        this.reExport = reExport;
-
+        IrTransFerSaved="";
         new JSONTask_AddReplacment(replacementlist).execute();
+    }
+    public void NEW_exportReplacementList2(List<ReplacementModel> replacementlist) {
+        pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+        pdRepla.setTitleText(context.getString(R.string.exportRep));
+        pdRepla.setCancelable(false);
+        pdRepla.show();
+        try {
+            for (int i=0;i<replacementlist.size();i++)
+            {
+           //     Log.e("replacementlist45==",replacementlist.get(i).getRMQTY()+"   "+replacementlist.get(i).getSer_RCVQTY()+"   "+replacementlist.get(i).getUpdatedQty()+"  "+replacementlist.get(i).getRecQty());
+
+                replacementlist.get(0).setISDONE("1");
+                replacementlist.get(0).setRMQTY(replacementlist.get(0).getRecQty());
+                replacementlist.get(0).setUpdatedQty(   replacementlist.get(0).getRecQty());
+
+            }
+        }catch (Exception exception){
+
+        }
+        NEW_getReplacmentObject(replacementlist);
+
+
+
+        new JSONTask_UPdateReplacment(replacementlist).execute();
     }
     public void NEW_exportReplacementList(List<ReplacementModel> replacementlist) {
         pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
@@ -197,10 +224,36 @@ Log.e("cas1,==","1");
 
                }
                else {
-                   if(flage ==0)
-                   {
+                   if(flage ==0) {
+                       savingDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+                       savingDialog3.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+                       savingDialog3.setTitleText(context.getString(R.string.saving));
+                       savingDialog3.setCancelable(false);
+                       savingDialog3.show();
+                       //new JSONTask_savetrans().execute();
 
-                       Log.e("cas2,==","2");
+                       setVoucher.clear();
+                       for (int i = 0; i < MainActivity.Allreplacementlist1.size(); i++)
+                           setVoucher.add(MainActivity.Allreplacementlist1.get(i).getTransNumber());
+
+                     if(setVoucher.size()!=0) {
+                         Iterator<String> it = setVoucher.iterator();
+
+                         while (it.hasNext()) {
+                             String value = it.next();
+                             System.out.println(value);
+                             Log.e("ithasNext?=", it.hasNext() + "");
+                             if (it.hasNext())
+                                 new JSONTask_savetrans2(1, value).execute();
+                             else new JSONTask_savetrans2(0, value).execute();
+                             Log.e("cas2,==", "2");
+                         }
+                     }else
+                     {
+
+
+                         new JSONTask_savetrans().execute();
+                     }
                    }
                    else if(flage ==1)
                    {Log.e("cas3,==","3");
@@ -319,6 +372,13 @@ Log.e("cas1,==","1");
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
                 nameValuePairs.add(new BasicNameValuePair("CONO", CONO.trim()));
                 nameValuePairs.add(new BasicNameValuePair("JSONSTR", ReplacmentObject.toString().trim()));
+                String Iq="0";
+                if (MainActivity.internalOrderFalge == 1)
+                    Iq="1";
+                else Iq="0";
+
+                nameValuePairs.add(new BasicNameValuePair("IQ",Iq));
+
                 Log.e("JSONSTR", ReplacmentObject.toString());
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
                 HttpResponse response = client.execute(request);
@@ -356,27 +416,35 @@ Log.e("cas1,==","1");
                 if (result.contains("Internal server error")) {
                     exportAllState.setText("server error");
 
-                    if( appSettings.get(0).getInternal_replanshment().equals("1"))
-                        showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
-
+//                    if( appSettings.get(0).getInternal_replanshment().equals("1"))
+//                        showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+                    IrTransFerSaved="server error";
                     exportTrans(0);
                 } else if (result.contains("unique constraint")) {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         String res = jsonObject.getString("ErrorDesc");
                         exportAllState.setText("unique constraint" + res);
-                        if( appSettings.get(0).getInternal_replanshment().equals("1"))
-                            showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+//                        if( appSettings.get(0).getInternal_replanshment().equals("1"))
+//                            showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+                        IrTransFerSaved="unique constraint";
                         exportTrans(0);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                } else if (result.contains("table or view does not exist")) {
+                }else if(result.contains("invalid identifier")){
                     exportAllState.setText("server error");
-                    if( appSettings.size()!=0)
-                        if( appSettings.get(0).getInternal_replanshment().equals("1"))
-                            showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+                    IrTransFerSaved="invalid identifier for column";
+
+                    exportTrans(0);
+                }
+                else if (result.contains("table or view does not exist")) {
+                    exportAllState.setText("server error");
+            //        if( appSettings.size()!=0)
+//                        if( appSettings.get(0).getInternal_replanshment().equals("1"))
+//                            showSweetDialog(context, 0, context.getResources().getString(R.string.serverError), "");
+                    IrTransFerSaved="table or view does not exist";
                     exportTrans(0);
                 } else {
                     if (result.contains("Saved Successfully")) {
@@ -388,36 +456,43 @@ Log.e("cas1,==","1");
                                     replacementList.get(i).getTransNumber(),
                                     replacementList.get(i).getItemcode());
                         }
-
+                        IrTransFerSaved="";
 //                        my_dataBase.replacementDao().updateReplashmentPosted();
 
-                        if( appSettings.size()!=0)
-                            if( appSettings.get(0).getInternal_replanshment().equals("1"))
-                                showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
+                        //    if( appSettings.size()!=0)
+                        // if( appSettings.get(0).getInternal_replanshment().equals("1"))
+                        //  showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
                         exportAllState.setText("exported");
 
+//                        if (MainActivity.internalOrderFalge == 0) {
+//
+//                            if (Login.serialsActive == 0)
+//                                NEW_exportReplacementList2(replacementList);
+//
+//                        } else {
+                            if (Login.serialsActive == 1) {
 
-                        if (Login.serialsActive == 1) {
+                                SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+                                savingDialog.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
+                                savingDialog.setTitleText(context.getString(R.string.savingSerials));
+                                savingDialog.setCancelable(false);
+                                savingDialog.show();
+                                JSONTask_ExportSerials(savingDialog, replacementList);
 
-                            SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-                            savingDialog.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
-                            savingDialog.setTitleText(context.getString(R.string.savingSerials));
-                            savingDialog.setCancelable(false);
-                            savingDialog.show();
-                            JSONTask_ExportSerials(savingDialog, replacementList);
-
-                        } else {
+                            } else {
 
 //                            SweetAlertDialog savingDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
 //                            savingDialog.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));
 //                            savingDialog.setTitleText(context.getString(R.string.saving));
 //                            savingDialog.setCancelable(false);
 //                            savingDialog.show();
-                         //   JSONTask_ExportTrans(savingDialog);
+                                //   JSONTask_ExportTrans(savingDialog);
 
-                            exportTrans(0);
+                                exportTrans(0);
 
+//                            }
                         }
+
 
 
                     } else {
@@ -425,9 +500,9 @@ Log.e("cas1,==","1");
                         Log.e("aaaaaaa1===", "aaaaaaa");
                         exportAllState.setText("err");
 
-                        if( appSettings.size()!=0)
-                            if( appSettings.get(0).getInternal_replanshment().equals("1"))
-                                showSweetDialog(context, 0, context.getResources().getString(R.string.checkConnection), "");
+//                        if( appSettings.size()!=0)
+//                            if( appSettings.get(0).getInternal_replanshment().equals("1"))
+//                                showSweetDialog(context, 0, context.getResources().getString(R.string.checkConnection), "");
                         exportTrans(0);
                     }
                 }
@@ -438,8 +513,9 @@ Log.e("cas1,==","1");
                 Log.e("aaaaaaa2===", "aaaaaaa");
 //                Log.e("aaaaaaa2===","aaaaaaa");
                 exportAllState.setText("not");
-                if( appSettings.get(0).getInternal_replanshment().equals("1"))
-                    showSweetDialog(context, 0, context.getResources().getString(R.string.checkConnection), "");
+                IrTransFerSaved="not saved";
+//                if( appSettings.get(0).getInternal_replanshment().equals("1"))
+//                    showSweetDialog(context, 0, context.getResources().getString(R.string.checkConnection), "");
                 exportTrans(0);
             }
 
@@ -1217,7 +1293,10 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
         if (array != null) {
             Log.e("EXPORTTRANSresult===",array+"");
             if (array.toString().trim().contains("Successfully")) {
+                if(IrTransFerSaved.equals(""))
                 showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
+                else
+                    showSweetDialog(context, 0,"IRTRANSFER :  "+IrTransFerSaved+"", "");
                 savingDialog3.dismiss();
 
 
@@ -1225,7 +1304,7 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
             }else {
                 Log.e("not ssaved1","not ssaved1");
                 savingDialog3.dismiss();
-                showSweetDialog(context, 0, context.getResources().getString(R.string.Failedexported), "");
+                showSweetDialog(context, 0, array.toString()+"   ,"+ context.getResources().getString(R.string.Failedexported), "");
 
 
 
@@ -1332,7 +1411,7 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
                 return null;
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("Exception", "" + e.getMessage());
+                Log.e("Exception===", "" + e.getMessage());
                 savingDialog3.dismiss();
                 Handler h = new Handler(Looper.getMainLooper());
                 h.post(new Runnable() {
@@ -1361,7 +1440,10 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
                 Log.e("EXPORTTRANSresult===",array+""+flage);
                 if (array.toString().trim().contains("Successfully")) {
                   if(flage==0) {
+                      if(IrTransFerSaved.equals(""))
                       showSweetDialog(context, 1, context.getResources().getString(R.string.savedSuccsesfule), "");
+                      else
+                          showSweetDialog(context, 0,"IRTRANSFER :  "+IrTransFerSaved+"", "");
                       savingDialog3.dismiss();
                   }
 
@@ -1370,7 +1452,7 @@ private class JSONTask_savetrans extends AsyncTask<String, String, String> {
                     Log.e("not ssaved1","not ssaved1");
 
                     if(flage==0) {
-                        showSweetDialog(context, 0, context.getResources().getString(R.string.Failedexported), "");
+                        showSweetDialog(context, 0,array.toString()+"   ,"+ context.getResources().getString(R.string.Failedexported), "");
 
                         savingDialog3.dismiss();
 

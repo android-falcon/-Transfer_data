@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
@@ -37,13 +39,17 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observable;
@@ -56,6 +62,7 @@ import retrofit2.Retrofit;
 
 
 import static android.content.Context.TELECOM_SERVICE;
+import static com.hiaryabeer.transferapp.Activities.Login.allUsers;
 import static com.hiaryabeer.transferapp.Activities.Login.getListCom;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.iraqswitch;
 import static com.hiaryabeer.transferapp.Activities.MainActivity.itemcode;
@@ -79,7 +86,7 @@ public class ImportData {
     public static String zonetype;
     public static List<Store> Storelist = new ArrayList<>();
     public static List<ReplacementModel> voucherlist = new ArrayList<>();
-// public String headerDll = "/Falcons/VAN.Dll/";
+//public String headerDll = "/Falcons/VAN.Dll/";
 public String   headerDll = "";
     public static ArrayList<String> BoxNolist = new ArrayList<>();
     public static ArrayList<String> PoNolist = new ArrayList<>();
@@ -1764,7 +1771,7 @@ public void getStore() {
             public void onResponse(Call<List<ItemSwitch>> call, retrofit2.Response<List<ItemSwitch>> response) {
 
                 if (!response.isSuccessful()) {
-
+                    pdRepla4.dismiss();
                     Log.e("fetchItemDetailDataonResponse", "not=" + response.message());
                     iraqswitch.setText("else");
 
@@ -1900,10 +1907,18 @@ public void getStore() {
         pDialog3.show();
         if (!ipAddress.equals("")  || !CONO.equals(""))
             link = "http://" + ipAddress + headerDll.trim() + "/GetUSERS?CONO=" + CONO;
+//        try {
+//            link= URLEncoder.encode(link , "UTF-8");
+//        }catch (Exception exception){
+//
+//            Log.e("getUsers_Link", exception.getMessage());
+//        }
 
         Log.e("getUsers_Link", link);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(link, new Response.Listener<JSONArray>() {
+
+
             @Override
             public void onResponse(JSONArray response) {
 
@@ -1913,7 +1928,8 @@ public void getStore() {
                 Log.e("getUsers_Response", response + "");
 
             }
-        }, new Response.ErrorListener() {
+        },
+                new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -1940,12 +1956,53 @@ public void getStore() {
                 Log.e("getUsers_Error", error.getMessage() + "");
 
             }
+
         });
 
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonArrayRequest);
 
     }
+
+    public void fetchAllUsers() {
+        pDialog3 = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+//
+        pDialog3.getProgressHelper().setBarColor(Color.parseColor("#115571"));
+        pDialog3.setTitleText("getting Users");
+        pDialog3.setCancelable(false);
+        pDialog3.show();
+
+        Call<List<User>> myData = myAPI.GetUsers(CONO);
+
+        myData.enqueue(new Callback<List<User>>() {
+
+            @Override
+            public void onResponse(Call<List<User>> call, retrofit2.Response<List<User>> response) {
+                pDialog3.dismiss();
+                if (!response.isSuccessful()) {
+
+                    Log.e("fetchAllUsers", "not=" + response.message()+call.request());
+
+
+
+                } else {
+                    Log.e("fetchAllUsers", "onResponse=" +call.request()+ response.body());
+                    allUsers.addAll(response.body());
+                    my_dataBase.usersDao().addAll(allUsers);
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                Log.e("fetchAllUsers", "=" + t.getMessage()+call.request());
+                pDialog3.dismiss();
+            }
+        });
+    }
+
  public void   getmaxtrans(){
         pdRepla = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         pdRepla.getProgressHelper().setBarColor(Color.parseColor("#7A7A7A"));

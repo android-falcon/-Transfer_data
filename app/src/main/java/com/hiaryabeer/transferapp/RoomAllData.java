@@ -267,7 +267,7 @@ public abstract class RoomAllData extends RoomDatabase {
 
         }
     };
-    static final Migration MIGRATION_31_34= new Migration(31, 35) {
+    static final Migration MIGRATION_31_34= new Migration(31, 34) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             try {
@@ -281,7 +281,7 @@ public abstract class RoomAllData extends RoomDatabase {
 
         }
     };
-    static final Migration MIGRATION_34_34= new Migration(33, 34) {
+    static final Migration MIGRATION_34_34= new Migration(33, 35) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             try {
@@ -316,7 +316,8 @@ public abstract class RoomAllData extends RoomDatabase {
                             , MIGRATION_29_30
                             ,MIGRATION_30_31
                             ,MIGRATION_31_34
-                            ,MIGRATION_31_33,MIGRATION_34_34
+//                            ,MIGRATION_31_33,
+                           , MIGRATION_34_34
                           )
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()

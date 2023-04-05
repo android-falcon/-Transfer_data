@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,13 +17,13 @@ public class User {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "SERIAL")
     private int serial;
-
+@SerializedName("USERNO")
     @ColumnInfo(name = "User_ID")
     private String userId;
-
+    @SerializedName("USERNAME")
     @ColumnInfo(name = "User_Name")
     private String userName;
-
+    @SerializedName("USERPASS")
     @ColumnInfo(name = "User_Password")
     private String userPassword;
 

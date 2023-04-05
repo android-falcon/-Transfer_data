@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,10 +24,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -194,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
     private String MaxVo;
     public static TextView colorlastrow, colorData, getResponce;
     Calendar myCalendar;
-
+    ProgressDialog dialog_progress;
     public static int highligtedItemPosition = -1;
     public static int highligtedItemPosition2 = -1;
 
@@ -222,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    public static  TextView   UPDATEQtyTextView,RMQtytext,RCVQtytext;
+    public static  TextView   RCVQtytext;
    // public List<Item_Unit_Details> allUnitDetails;
     //    @Override
 //    public boolean onMenuItemClick(MenuItem item) {
@@ -573,7 +576,7 @@ public class MainActivity extends AppCompatActivity {
             fillSp();
         } else {
             getStors();
-            Log.e("sss4", "sss4");
+
         }
 
 
@@ -605,11 +608,11 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         String sss = "";
                         if ((AllItemDBlist.size()) > 0)
-                            opensearchDailog();
+                            new MainActivity.Task().execute();
                         else {
                             AllItemDBlist.addAll(my_dataBase.itemDao().getAll());
                             if ((AllItemDBlist.size()) > 0) {
-                                opensearchDailog();
+                                new MainActivity.Task().execute();
                             } else {
                                 Toast.makeText(MainActivity.this, getString(R.string.Empty), Toast.LENGTH_LONG).show();
                                 itemcode.setText("");
@@ -1293,7 +1296,7 @@ Log.e("isSaved==",saved+"");
         }
 
         if (!flag) position = 0;
-
+Log.e("newflag==",flag+"");
         return flag;
 
     }
@@ -1421,7 +1424,12 @@ Log.e("isSaved==",saved+"");
                 break;
             }
         }
+        if(Allreplacementlist1.size()!=0)
         exportData.exportReplacementList(Allreplacementlist1);
+        else
+        {
+            showSweetDialog(MainActivity.this, 3, getString(R.string.noUnsavedData), "");
+        }
 //        if (!posted) {
 //            exportData.exportReplacementList(Allreplacementlist1);
 ////            if (Login.serialsActive == 1) {
@@ -2367,7 +2375,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
                                 ReplacementModel replacementModel = new ReplacementModel();
 
-                             //   replacementModel.setTransNumber(max + "");
+                                replacementModel.setTransNumber(max + "");
                                 replacementModel.setFromName(From);
                                 replacementModel.setIsPosted("0");
                                 replacementModel.setToName(To);
@@ -2485,10 +2493,10 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                     if (ExsitsInItemlist(replacementModel.getItemcode())) {
                                          //new edit by ayah 4/8/2022
                                         itemcode.setError(null);
-                                        Log.e(" Case7 ", "Exists in item List");
+                                        Log.e("Case7 ", "Exists in item List");
                                         if(appSettings.get(0).getRawahneh_add_item().equals("1")) {
 
-                                            Log.e(" Case7 ", "rawqrt==1 Exists in item List");
+                                            Log.e("Case7 ", "rawqrt==1 Exists in item List");
                                             Dialog qtyDialog = new Dialog(MainActivity.this);
                                             qtyDialog.setContentView(R.layout.add_qty_dialog);
                                             qtyDialog.setCancelable(true);
@@ -2681,8 +2689,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                     dialog.show();
 
 
-                                    serialTransfers = (ArrayList<ItemSerialTransfer>) my_dataBase.serialTransfersDao().getAllAdded(s.toString().trim(), "A");
-                                  Log.e("serialTransfers==",serialTransfers.size()+"S=="+s.toString().trim()+"  "+"A");
+                                    serialTransfers = (ArrayList<ItemSerialTransfer>) my_dataBase.serialTransfersDao().getAllAdded(s.toString().trim(), String.valueOf(transNo));
                                     updateAdapter();
 
                                     etSerial.requestFocus();
@@ -2735,7 +2742,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                                     if (serialValidation == 1) {
                                                         Log.e("case1--", "case1");
                                                         ItemSerialTransfer serialTransfer =
-                                                                new ItemSerialTransfer("A",
+                                                                new ItemSerialTransfer(String.valueOf(transNo),
                                                                         deviceId, itemcode.getText().toString().trim(), code.trim(),
                                                                         (new GeneralMethod(MainActivity.this)).getCurentTimeDate(1),
                                                                         fromSpinner.getSelectedItem().toString().substring(0, (fromSpinner.getSelectedItem().toString().indexOf(" "))),
@@ -2757,7 +2764,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
                                                         etSerial.setError(null);
                                                         serialTransfers.add(serialTransfer);
-                                                      my_dataBase.serialTransfersDao().insert(serialTransfer);
+                                                        my_dataBase.serialTransfersDao().insert(serialTransfer);
                                                         updateAdapter();
 
 
@@ -2797,7 +2804,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                                                     replacementModel.setIsPosted("0");
                                                                     replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
                                                                     replacementModel.setItemname(Item.getItemNameA());
-                                                        //            replacementModel.setTransNumber(transNo + "");
+                                                                    replacementModel.setTransNumber(transNo + "");
                                                                     replacementModel.setDeviceId(deviceId);
                                                                     replacementModel.setRecQty(1 + "");
                                                                     replacementModel.setUnitID("One Unit");
@@ -2809,7 +2816,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                                                     replacementModel.setZone("");
 
                                                                     replacementlist.add(0, replacementModel);
-                                                                  //  my_dataBase.replacementDao().insert(replacementModel);
+                                                                    my_dataBase.replacementDao().insert(replacementModel);
 
                                                                     fillAdapter();
 
@@ -2969,7 +2976,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                             String numifitem=   getCountOfItems(replacementlist.get(repPosition).getItemcode(), replacementlist.get(repPosition).getUnitID());
                                             replacementlist.get(repPosition).setCal_Qty(""+Double.parseDouble( replacementlist.get(repPosition).getRecQty())*Double.parseDouble(numifitem));
 
-                                            my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo),replacementlist.get(repPosition).getCal_Qty());
+                                      //      my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), String.valueOf(sumQty), String.valueOf(transNo),replacementlist.get(repPosition).getCal_Qty());
                                             fillAdapter();
                                             replacmentRecycler.smoothScrollToPosition(repPosition);
                                             colorlastrow.setText(repPosition + "");
@@ -2989,7 +2996,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                             replacementModel.setIsPosted("0");
                                             replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
                                             replacementModel.setItemname(Item.getItemNameA());
-                                    //        replacementModel.setTransNumber(transNo + "");
+                                            replacementModel.setTransNumber(transNo + "");
                                             replacementModel.setDeviceId(deviceId);
                                             replacementModel.setRecQty(1 + "");
                                             replacementModel.setUnitID("One Unit");
@@ -3002,7 +3009,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                             replacementModel.setZone("");
 
                                             replacementlist.add(0, replacementModel);
-                                          //  my_dataBase.replacementDao().insert(replacementModel);
+                                   //         my_dataBase.replacementDao().insert(replacementModel);
 
                                             fillAdapter();
 
@@ -3070,7 +3077,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                                         String numifitem=   getCountOfItems( replacementlist.get(repPosition).getItemcode(), replacementlist.get(repPosition).getUnitID());
                                                         replacementlist.get(repPosition).setCal_Qty(""+Double.parseDouble( replacementlist.get(repPosition).getRecQty())*Double.parseDouble(numifitem));
 
-                                                        my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), qty, String.valueOf(transNo),  replacementlist.get(repPosition).getCal_Qty());
+                                                   //     my_dataBase.replacementDao().updateQTY(itemcode.getText().toString().trim(), qty, String.valueOf(transNo),  replacementlist.get(repPosition).getCal_Qty());
 
                                                         fillAdapter();
 
@@ -3106,7 +3113,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
                                                         replacementModel.setIsPosted("0");
                                                         replacementModel.setReplacementDate((new GeneralMethod(MainActivity.this)).getCurentTimeDate(1));
                                                         replacementModel.setItemname(Item.getItemNameA());
-                                                   //     replacementModel.setTransNumber(transNo + "");
+                                                        replacementModel.setTransNumber(transNo + "");
                                                         replacementModel.setDeviceId(deviceId);
                                                         replacementModel.setRecQty(qty);
                                                         replacementModel.setUnitID("One Unit");
@@ -3302,15 +3309,14 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         for(int i=0;i<voucherlist.size();i++){
             if(voucherlist.get(i).getTransNumber().equals(voucherNo))
             {
-           //     voucherlist.get(i).setUpdatedQty( voucherlist.get(i).getRecQty());
-              //if(voucherlist.get(i).getRecQty().equals(""))
+              if(voucherlist.get(i).getRecQty().equals(""))
                   voucherlist.get(i).setUpdatedQty( "0");
                 replacinmentlist.add(voucherlist.get(i));
 
             }
         }
         internalOrderFalge=1;
-       New_replacementlist.clear();
+        //New_replacementlist.clear();
         New_replacementlist.addAll(replacinmentlist);
         scanItemCode.setEnabled(false);
         search.setEnabled(false);
@@ -3468,27 +3474,9 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
                 break;
             case R.id.scanItemCode:
-                if (!isSaved()) {
 
-                    SweetAlertDialog dataNotSaved = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
-                            .setContentText(getString(R.string.unsaved_data))
-                            .setConfirmText(getResources().getString(R.string.save))
-                            .setConfirmClickListener(sweetAlertDialog -> {
+                readBarcode(5);
 
-                                exportAllData();
-                                  /*  maxVochNum = my_dataBase.replacementDao().getMaxReplacementNo();
-                                    if (maxVochNum != null) {
-                                        Log.e(" maxVochNum", maxVochNum);
-                                        max = Integer.parseInt(maxVochNum) + 1;
-                                    }*/
-
-                                sweetAlertDialog.dismissWithAnimation();
-
-                            });
-                    dataNotSaved.show();
-
-                }else
-                    readBarcode(5);
 
                 break;
         }
@@ -3731,7 +3719,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
     private void SaveRow(ReplacementModel replacement) {
         Log.e("SaveRow", "replacement" + replacement.getDeviceId());
-      //  my_dataBase.replacementDao().insert(replacement);
+       // my_dataBase.replacementDao().insert(replacement);
     }
 
     private void updateQTYOfZone() {
@@ -3815,9 +3803,7 @@ else   internalOrder.setVisibility(View.INVISIBLE);
         icClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 editDialog.dismiss();
-
             }
         });
 
@@ -4163,7 +4149,52 @@ else   internalOrder.setVisibility(View.INVISIBLE);
 
     }
    void showErrorCode(String barcode){
-        showSweetDialog(MainActivity.this,0,"",barcode);
+       Handler h = new Handler(Looper.getMainLooper());
+       h.post(new Runnable() {
+           public void run() {
+               try {
+                   showSweetDialog(MainActivity.this,0,"",barcode);
+               } catch (WindowManager.BadTokenException e) {
+                   //use a log message
+               }
+           }
+       });
+       //         //alertDialog
+//       AlertDialog alertDialog = new AlertDialog.Builder(this)
+////set icon
+//               .setIcon(getResources().getDrawable(R.drawable.ic_baseline_warning_24))
+////set title
+//               .setTitle("")
+////set message
+//               .setMessage(barcode)
+////set positive button
+//               .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                   @Override
+//                   public void onClick(DialogInterface dialogInterface, int i) {
+//                       dialogInterface.dismiss();
+//                   }
+//               })
+//
+//
+//               .show();
+
+//            //Dialog
+//       Dialog passwordDialog = new Dialog(MainActivity.this);
+//       passwordDialog.setCancelable(false);
+//       passwordDialog.setContentView(R.layout.alert);
+//       passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//       TextView barc = passwordDialog.findViewById(R.id.barc);
+//       barc.setText(barcode);
+//       Button okBtn = passwordDialog.findViewById(R.id.done);
+//       okBtn.setOnClickListener(new View.OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               passwordDialog.dismiss();
+//           }
+//       });
+//       passwordDialog.show();
+
     }
 
 
@@ -4240,28 +4271,80 @@ public void New_filldata(){
 }
     public void New_exportAllData() {
         Log.e("New_replacementlist11=",New_replacementlist.size()+"");
-        //remove items not update
-        for (int i = 0; i < New_replacementlist.size(); i++) {
-
-       if(New_replacementlist.get(i).getUpdatedQty()!=null && !New_replacementlist.get(i).getUpdatedQty().equals(""))
-       {
-           Log.e("CASE=",New_replacementlist.get(i).getUpdatedQty()+"  "+New_replacementlist.get(i).getRecQty());
-           if(Double.parseDouble(New_replacementlist.get(i).getUpdatedQty())==0)
-           {
-               New_replacementlist.remove(i);
-
-           i--;
-
-           }
-       }else
-       {
-           New_replacementlist.remove(i);
-
-           i--;
-       }
-        }
+//        for (int i = 0; i < New_replacementlist.size(); i++) {
+//
+//       if(!New_replacementlist.get(i).getUpdatedQty().equals(""))
+//       {
+//           Log.e("CASE=",New_replacementlist.get(i).getUpdatedQty()+"  "+New_replacementlist.get(i).getRecQty());
+//           if(New_replacementlist.get(i).getUpdatedQty().equals(New_replacementlist.get(i).getRecQty()))
+//           {
+//               New_replacementlist.remove(i);
+//           i--;
+//
+//           }
+//       }else
+//       {
+//           New_replacementlist.remove(i);
+//           i--;
+//       }
+//        }
         Log.e("New_replacementlist=",New_replacementlist.size()+"");
         exportData.NEW_exportReplacementList(New_replacementlist);
     }
+    class Task extends AsyncTask<String, Integer, String> {
 
+        @Override
+        protected String doInBackground(String... strings) {
+
+
+            Handler h = new Handler(Looper.getMainLooper());
+            h.post(new Runnable() {
+                public void run() {
+                    opensearchDailog();     }
+            });
+
+            return "items";
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            //  dialog_progress.dismiss();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            try {
+                dialog_progress = new ProgressDialog(MainActivity.this);
+                dialog_progress.setCancelable(false);
+                dialog_progress.setMessage(getResources().getString(R.string.loadingItem));
+                dialog_progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+                dialog_progress.show();//test
+            }
+            catch (Exception e){
+
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(final String result) {
+            super.onPostExecute(result);
+
+            try {
+                dialog_progress.dismiss();
+            }
+            catch (Exception e){}
+
+
+            if (result != null) {
+
+            } else {
+                Toast.makeText(MainActivity.this, "Not able to fetch data ", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

@@ -39,6 +39,7 @@ import com.hiaryabeer.transferapp.Models.ExportData;
 import com.hiaryabeer.transferapp.Models.GeneralMethod;
 import com.hiaryabeer.transferapp.Models.ImportData;
 import com.hiaryabeer.transferapp.Models.ReplacementModel;
+import com.hiaryabeer.transferapp.Models.RetrofitInstance;
 import com.hiaryabeer.transferapp.Models.User;
 import com.hiaryabeer.transferapp.R;
 import com.hiaryabeer.transferapp.RoomAllData;
@@ -52,6 +53,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import retrofit2.Retrofit;
 
 import static com.hiaryabeer.transferapp.Models.GeneralMethod.showSweetDialog;
 
@@ -77,7 +80,7 @@ public class Login extends AppCompatActivity {
     public static int serialsActive;
  ImportData   importData ;
     static {
-        serialsActive =1;
+        serialsActive =0;
     }
 
     @Override
@@ -101,39 +104,39 @@ public class Login extends AppCompatActivity {
        my_dataBase.usersDao().deleteAll();
        allUsers.clear();
        importData=new ImportData(Login.this);
-       importData.getAllUsers(new ImportData.GetUsersCallBack() {
-           @Override
-           public void onResponse(JSONArray response) {
-
-
-               for (int i = 0; i < response.length(); i++) {
-
-                   try {
-                       //[{"USERNO":"11","USERNAME":"HISHAM - ZENTIC","USERPASS":"hshmhggiz"}
-
-                           allUsers.add(new User(
-                                   response.getJSONObject(i).getString("USERNO"),
-                                   response.getJSONObject(i).getString("USERNAME").toLowerCase(Locale.ROOT),
-                                   response.getJSONObject(i).getString("USERPASS") ));
-
-
-                   } catch (JSONException e) {
-                       e.printStackTrace();
-                   }
-
-               }
-               my_dataBase.usersDao().addAll(allUsers);
-//               allUsers = my_dataBase.usersDao().getAllUsers();
-
-           }
-
-           @Override
-           public void onError(String error) {
-
-
-           }
-       });
-
+//       importData.getAllUsers(new ImportData.GetUsersCallBack() {
+//           @Override
+//           public void onResponse(JSONArray response) {
+//
+//
+//               for (int i = 0; i < response.length(); i++) {
+//
+//                   try {
+//                       //[{"USERNO":"11","USERNAME":"HISHAM - ZENTIC","USERPASS":"hshmhggiz"}
+//
+//                           allUsers.add(new User(
+//                                   response.getJSONObject(i).getString("USERNO"),
+//                                   response.getJSONObject(i).getString("USERNAME").toLowerCase(Locale.ROOT),
+//                                   response.getJSONObject(i).getString("USERPASS") ));
+//
+//
+//                   } catch (JSONException e) {
+//                       e.printStackTrace();
+//                   }
+//
+//               }
+//               my_dataBase.usersDao().addAll(allUsers);
+////               allUsers = my_dataBase.usersDao().getAllUsers();
+//
+//           }
+//
+//           @Override
+//           public void onError(String error) {
+//
+//
+//           }
+//       });
+       importData.fetchAllUsers();
    }
 
 
@@ -676,6 +679,7 @@ Log.e("showpassworddailog","showpassworddailog");
                         if (conNO.getText().toString().trim().length() != 0) {
 
                             saveData(setting);
+                            RetrofitInstance.ourInstance=null;
                             getusers();
                             dialog.dismiss();
                             loginBox.setVisibility(View.VISIBLE);

@@ -46,6 +46,7 @@ public class ScanActivity extends AppCompatActivity
 
     @Override
     public void onResume() {
+        Log.e("onResume", "onResume" );
         super.onResume();
         mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
         mScannerView.startCamera();          // Start camera on resume
@@ -53,8 +54,9 @@ public class ScanActivity extends AppCompatActivity
 
     @Override
     public void onPause() {
+        Log.e("onPause", "onPause" );
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+    mScannerView.stopCamera();           // Stop camera on pause
     }
 
     @Override
@@ -82,7 +84,7 @@ public class ScanActivity extends AppCompatActivity
                 break;
         }
 
-       onBackPressed();
+ onBackPressed();
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
